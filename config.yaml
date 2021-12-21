@@ -1,0 +1,20 @@
+languageCode: "en-us"
+baseUrl: ""
+title: "snowmerak"
+theme: "hugo-theme-stack"
+paginate: 10
+googleAnalytics: "G-1MV53Q3MRL"
+enableRobotsTXT: true
+
+menu:
+  main:
+  - identifier: archive
+    name: Posts
+    title: Posts
+    url: /posts/
+    weight: 0
+  - identifier: tags
+    name: Tags
+    title: Tags
+    url: /tags/
+    weight: 0
