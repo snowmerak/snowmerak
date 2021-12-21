@@ -24,4 +24,17 @@ social:
   github: github.com/snowmerak
 
 params:
+  # Site Author
+  author: snowmerak
+  # Author biography
+  bio: programmer
+  # Site Description, used in HTML meat
+  description: a note
+
   enableComments: true
+
+  enableRSS: true
+  enableGoogleAnalytics: true
+  showToc: true
+  showPowerBy: true
+  math: false
