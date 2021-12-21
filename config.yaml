@@ -1,10 +1,11 @@
 languageCode: "en-us"
 baseUrl: ""
 title: "snowmerak"
-theme: "hugo-theme-stack"
+theme: "mini"
 paginate: 10
 googleAnalytics: "G-1MV53Q3MRL"
 enableRobotsTXT: true
+disqusShortname: "snowmerak"
 
 menu:
   main:
@@ -18,3 +19,9 @@ menu:
     title: Tags
     url: /tags/
     weight: 0
+
+social:
+  github: github.com/snowmerak
+
+params:
+  enableComments: true
