@@ -2,7 +2,7 @@
 title: "Error Handling"
 date: 2021-12-26T13:12:58+09:00
 tags: ["go", "error"]
-draft: true
+draft: false
 ---
 
 ## 쉬운 에러 처리
