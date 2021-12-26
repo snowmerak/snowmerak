@@ -21,7 +21,7 @@ menu:
     weight: 0
 
 social:
-  github: github.com/snowmerak
+  github: #github.com/snowmerak
 
 params:
   # Site Author
