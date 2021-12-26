@@ -282,7 +282,7 @@ func ThrowError() error {
 }
 ```
 
-## 에러 포장
+### 에러 포장
 
 이 코드는 `os.Open` 함수가 주는 에러를 그대로 반환합니다. 그럴 경우 해당 에러가 어디서부터 왔는지, 어떤 계층을 가지는 지 파악할 수 없습니다. 그러면 `ThrowError` 함수를 거쳤음을 표현하기 위해 코드를 수정해보겠습니다.
 
@@ -330,7 +330,7 @@ no such file or directory
 
 순서대로 `ThrowError`, `open not-exist`, `no such file or directory`이 벗겨지고 마지막으로 `nil`이 나옴을 확인할 수 있습니다. 이러한 구조가 있기에 `for err != nil { ... }`같은 형태로 쉽게 반복할 수 있습니다.
 
-## 에러 추적
+### 에러 추적
 
 ```go
 func main() {
@@ -344,7 +344,7 @@ func main() {
 
 `errors` 패키지에는 `errors.Is` 함수도 제공하고 있습니다. 이 함수는 지속적인 래핑의 결과물로 나온 에러가 원본 에러와 같은 에러인가를 쉽게 확인할 수 있게 작성된 함수입니다. 위 코드를 실행하게 되면 `thirdErr`은 `firstErr`와 같다는 것을 확인할 수 있습니다. 그리고 객체지향의 상속 계층과 마찬가지로 두 패러미터의 위치가 바뀌면(`errors.Is(firstErr, thirdErr)`) 성립되지 않고 `false`를 출력합니다.
 
-## 에러 확인
+### 에러 확인
 
 ```go
 type HasStatus interface {
