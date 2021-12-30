@@ -4,3 +4,6 @@
 [submodule "themes/mini"]
 	path = themes/mini
 	url = https://github.com/nodejh/hugo-theme-mini.git
+[submodule "themes/PaperMod"]
+	path = themes/PaperMod
+	url = https://github.com/adityatelange/hugo-PaperMod.git

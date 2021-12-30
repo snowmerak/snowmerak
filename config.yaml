@@ -1,7 +1,7 @@
 languageCode: "en-us"
 baseUrl: ""
 title: "snowmerak"
-theme: "mini"
+theme: "PaperMod"
 paginate: 10
 googleAnalytics: "G-1MV53Q3MRL"
 enableRobotsTXT: true
