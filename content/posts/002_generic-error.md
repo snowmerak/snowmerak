@@ -1,6 +1,6 @@
 ---
 title: "Result를 활용한 에러처리"
-date: 2021-12-30T21:21:53+09:00
+date: 2021-12-30T19:21:53+09:00
 tags: ["go", "generic", "error", "result"]
 draft: false
 ---
