@@ -44,7 +44,7 @@ func Err[T any](err error) *Result[T] {
 
 ```go
 okInt := result.Ok(10)
-errInt := result.Err[int] (errors.New("anything"))
+errInt := result.Err[int](errors.New("anything"))
 ```
 
 `okInt`는 내부적으로 10을 가지고 `errInt`는 내부적으로 에러 인스턴스를 가집니다. 이들은 간단한 메서드로 어떤 값을 가지고 다음에 어떤 행동을 해야하는가를 정할 수 있습니다.
