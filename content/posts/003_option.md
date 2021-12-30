@@ -2,7 +2,7 @@
 title: "Option과 default parameter"
 date: 2021-12-30T21:09:32+09:00
 tags: ["go", "generic", "option"]
-draft: true
+draft: false
 ---
 
 ## option
