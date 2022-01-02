@@ -8,4 +8,3 @@ draft: false
 
 email:
 1. snowmerak@outlook.com
-2. snowmerak@proton.com
