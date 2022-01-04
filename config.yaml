@@ -17,3 +17,13 @@ menu:
     title: Tags
     url: /tags/
     weight: 0
+
+params:
+  # Site Author
+  author: snowmerak
+  # Author biography
+  bio: programmer
+
+  enableGoogleAnalytics: true
+  showToc: true
+  showPowerBy: true
