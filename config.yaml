@@ -4,8 +4,6 @@ title: "snowmerak"
 theme: "PaperMod"
 paginate: 10
 googleAnalytics: "G-1MV53Q3MRL"
-enableRobotsTXT: true
-disqusShortname: "snowmerak"
 
 menu:
   main:
@@ -19,22 +17,3 @@ menu:
     title: Tags
     url: /tags/
     weight: 0
-
-social:
-  github: #github.com/snowmerak
-
-params:
-  # Site Author
-  author: snowmerak
-  # Author biography
-  bio: programmer
-  # Site Description, used in HTML meat
-  description: a note
-
-  enableComments: true
-
-  enableRSS: true
-  enableGoogleAnalytics: true
-  showToc: true
-  showPowerBy: true
-  math: false
