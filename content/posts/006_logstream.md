@@ -2,7 +2,7 @@
 title: "logstream"
 date: 2022-01-06T13:08:40+09:00
 tags: ["go", "log"]
-draft: true
+draft: false
 ---
 
 이 글은 [제 로그 라이브러리](https://github.com/snowmerak/logstream)를 작성하며 생각한 것을 작성한 것입니다.
