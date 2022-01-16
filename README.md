@@ -7,8 +7,6 @@ Our organiztion
 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=snowmerak)](https://github.com/anuraghazra/github-readme-stats)
 
-My blog
-
-- snowmerak.pages.dev
+[My blog](https://snowmerak.pages.dev)
 
 [My notion](https://snowmerak.notion.site/yongmin-42920593de4b43e380b66dd0c7945172)
