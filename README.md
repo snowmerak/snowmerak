@@ -11,6 +11,4 @@ My blog
 
 - snowmerak.pages.dev
 
-My notion
-
-- https://snowmerak.notion.site/yongmin-42920593de4b43e380b66dd0c7945172
+[My notion](https://snowmerak.notion.site/yongmin-42920593de4b43e380b66dd0c7945172)
