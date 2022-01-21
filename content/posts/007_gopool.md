@@ -5,6 +5,8 @@ tags: ["go", "goroutine", "pool"]
 draft: falst
 ---
 
+이 글은 제 [레포](https://github.com/snowmerak/gopool)를 기반으로 작성되었습니다.
+
 ## 왜?
 
 오픈톡방에서 고루틴에 대한 이야기가 나왔었습니다. 고루틴을 안전하게 관리하기 위한 보일러플레이트에 대한 것과 join과 반환값의 처리에 대한 것이었습니다.
