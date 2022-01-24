@@ -9,8 +9,8 @@ I am a programmer using golang in south korea.
 
 golang tools of code generating
 
-[data-box](https://github.com/snowmerak/databox)
-[enum-box](https://github.com/snowmerak/enumbox)
+- [data-box](https://github.com/snowmerak/databox)
+- [enum-box](https://github.com/snowmerak/enumbox)
 
 ### Lux
 
