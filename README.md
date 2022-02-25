@@ -2,11 +2,11 @@ I am a programmer using golang in south korea.
 
 ## Our organiztion
 - github.com/unsafe-risk
-- github.com/serve-it-yourself
+- github.com/diy-cloud
 
 ### Serve it Yourself!
 
-[homepage](https://arch.weekly.ac/)
+[homepage](https://serve-it-yourself.pages.dev/)
 
 ## mines
 
@@ -16,12 +16,6 @@ golang tools of code generating
 
 - [data-box](https://github.com/snowmerak/databox)
 - [enum-box](https://github.com/snowmerak/enumbox)
-
-### Lux
-
-a simple web library collection based on net/http for restapi
-
-[repo](https://github.com/snowmerak/lux)
 
 ## github stats
 
