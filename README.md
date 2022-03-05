@@ -1,8 +1,8 @@
 I am a programmer using golang in south korea.
 
 ## Our organiztion
-- github.com/unsafe-risk
-- github.com/diy-cloud
+- https://github.com/unsafe-risk
+- https://github.com/diy-cloud
 
 ### Serve it Yourself!
 
