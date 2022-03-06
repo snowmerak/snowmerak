@@ -185,15 +185,122 @@ CTR decrypted: Hello, World!
 
 대칭키 암호화 방식인 aes에 같은 비밀번호를 사용했음에도 서로 다른 암호문이 나온걸 확인할 수 있습니다.
 
-팩토리 패턴에도 상충하는 부분이 존재합니다. 자바에는 이러한 형식, 전략을 선택하는 과정에서 팩토리 패턴으로 구현된 케이스가 많이 산재해있습니다.
+팩토리 패턴에도 상충하는 부분이 존재합니다.
 
 ---
 
-## 
+## 결제 수단 선택하기
+
+```dart
+import 'dart:io';
+
+abstract class Payment {
+  void pay(int amount);
+}
+
+class CheckCard implements Payment {
+  late int amount;
+
+  CheckCard(this.amount);
+
+  @override
+  void pay(int amount) {
+    if (amount <= this.amount) {
+      print('Paying $amount using check card');
+      this.amount -= amount;
+      return;
+    } 
+    print('Not enough money');
+  }
+}
+
+class CreditCard implements Payment {
+  @override
+  void pay(int amount) {
+    print('Paying $amount using credit card');
+  }
+}
+
+class DartPay implements Payment {
+  int points = 0;
+
+  @override
+  void pay(int amount) {
+    if (points > 0) {
+      var paid = points % (amount+1);
+      points -= paid;
+      print('Paying $paid using dart pay\'s points');
+      amount -= paid;
+    }
+    print('Paying $amount using dart pay');
+    points += (amount * 0.15).toInt();
+    print('You have $points points');
+  }
+}
+```
+
+1. 체크카드: 은행 잔고만큼 결제할 수 있는 카드입니다.
+2. 신용카드: 신용을 담보로 한도까지 결제할 수 있는 카드입니다.
+3. 다트페이: 높은 포인트 적립율을 보여주는 페이 서비스입니다.
+
+```dart
+class Consumer {
+  late String name;
+  late Payment payment;
+
+  Consumer(this.name, this.payment);
+
+  void changePayment(Payment payment) {
+    this.payment = payment;
+  }
+
+  void pay(int amount) {
+    stdout.write("$name: ");
+    payment.pay(amount);
+  }
+}
+```
+
+소비자 클래스는 이름과 결제수단을 가지고 있습니다.
+
+```dart
+void main(List<String> args) {
+  var consumer = Consumer("merak", CheckCard(10000));
+
+  consumer.pay(8000); // 2000
+  consumer.pay(8000); // -6000 ?
+  print("------------------");
+
+  consumer.changePayment(CreditCard());
+  consumer.pay(10000); // 마음의 빚
+  print("------------------");
+
+  consumer.changePayment(DartPay());
+  consumer.pay(10000);
+  consumer.pay(2000);
+}
+```
+
+결제 수단을 바꿔가며 결제합니다.
+
+```bash
+merak: Paying 8000 using check card
+merak: Not enough money
+------------------
+merak: Paying 10000 using credit card
+------------------
+merak: Paying 10000 using dart pay
+You have 1500 points
+merak: Paying 1500 using dart pay's points
+Paying 500 using dart pay
+You have 75 points
+```
+
+선택한 수단에 따라 적절한 결과를 출력합니다.
 
 ---
 
-## 특징 및 장점
+## 특징
 
 1. 서로 다른 알고리즘을 `런타임`에 변경하고 적용할 때 사용합니다.
   위 3가지 예시 모두 런타임에 어떤 계산 방식, 어떤 암호화 방식, 어떤 버퍼를 쓸지 정할 수 있습니다.
