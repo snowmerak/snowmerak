@@ -5,7 +5,7 @@ tags: ["go", "log"]
 draft: false
 ---
 
-이 글은 [제 로그 라이브러리](https://github.com/snowmerak/logstream)를 작성하며 생각한 것을 작성한 것입니다.
+이 글은 [제 로그 라이브러리](https://github.com/diy-cloud/logstream)를 작성하며 생각한 것을 작성한 것입니다.
 
 ## 개요
 
