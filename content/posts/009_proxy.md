@@ -2,7 +2,7 @@
 title: "간단한 로드밸런서와 HTTP 프록시 서버 구현"
 date: 2022-03-11T06:45:51+09:00
 tags: ["go", "http", "rate limiter", "circuit breaker", "load balancer", "reverse proxy"]
-draft: true
+draft: false
 ---
 
 ## 레이트 리미터
@@ -377,6 +377,8 @@ func (c *CountBreaker) IsBrokeDown(target string) bool {
 
 ## 프록시
 
+### proxy interface
+
 ```go
 package proxy
 
@@ -392,3 +394,160 @@ type Proxy interface {
 ```
 
 `Proxy` 인터페이스는 주소와 레이트 리미터, 또 레이트 리미터, 차단기, 로드 밸런서를 받아서 서버를 실행하는 `Serve` 메서드가 정의되어 있습니다.
+
+### http_proxy
+
+```go
+package http_proxy
+
+type HttpProxy struct {
+	proxyCache map[string]*httputil.ReverseProxy
+	l          *lock.Lock
+}
+
+func NewHttp() *HttpProxy {
+	return &HttpProxy{
+		proxyCache: make(map[string]*httputil.ReverseProxy),
+		l:          new(lock.Lock),
+	}
+}
+```
+
+`HttpProxy` 객체는 `httputil` 패키지의 리버스 프록시 객체를 사용합니다. 미리 연결했던 업스트림서버에 대한 리버스 프록시 인스턴스를 저장하고 있다가 재요청이 있을 경우 가져와서 사용합니다.
+
+```go
+func (hp *HttpProxy) ServeHTTP(name string, w http.ResponseWriter, r *http.Request) {
+	var upstreamServer *httputil.ReverseProxy
+	hp.l.Lock()
+	if l, ok := hp.proxyCache[name]; ok {
+		hp.proxyCache[name] = l
+	}
+	if upstreamServer == nil {
+		url, err := url.Parse(name)
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		upstreamServer = httputil.NewSingleHostReverseProxy(url)
+	}
+	hp.l.Unlock()
+
+	upstreamServer.ServeHTTP(w, r)
+
+	hp.l.Lock()
+	if _, ok := hp.proxyCache[name]; !ok {
+		hp.proxyCache[name] = upstreamServer
+	}
+	hp.l.Unlock()
+}
+```
+
+`ServeHTTP` 메서드는 위에 작성된 것처럼 미리 연결된 리버스 프록시 인스턴스가 있는 지 체크하고 있다면 그걸 사용하고 없다면 새로운 인스턴스는 만들어서 요청하는 동작을 합니다.
+
+```go
+func (hp *HttpProxy) Serve(address string, limiter limiter.Limiter, acc limiter.Limiter, breaker breaker.Breaker, balancer balancer.Balancer) error {
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		remote := []byte(r.RemoteAddr)
+
+		wr := NewResponse()
+
+		if b, code := limiter.TryTake(remote); !b {
+			log.Println("HttpProxy.Serve: limiter.TryTake: false from", r.RemoteAddr)
+			w.WriteHeader(code)
+			return
+		}
+
+		if b, code := acc.TryTake(remote); !b {
+			log.Println("HttpProxy.Serve: acl.TryTake: false from", r.RemoteAddr)
+			w.WriteHeader(code)
+			return
+		}
+
+		for count := 0; count < 10; count++ {
+			upstreamAddress, err := balancer.Get(r.RemoteAddr)
+			if err != nil {
+				log.Println("HttpProxy.Serve: balancer.Get:", err, "from", r.RemoteAddr)
+				w.Write([]byte(err.Error()))
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			defer balancer.Restore(upstreamAddress)
+
+			if ok := breaker.IsBrokeDown(upstreamAddress); ok {
+				log.Println("HttpProxy.Serve: breaker.IsBrokeDown: true from", r.RemoteAddr, "to", upstreamAddress)
+				continue
+			}
+
+			hp.ServeHTTP(upstreamAddress, wr, r)
+
+			if _, ok := statusCodeSet[wr.StatusCode]; ok {
+				log.Println("HttpProxy.Serve: breakDown: true from", r.RemoteAddr, "to", upstreamAddress)
+				breaker.BreakDown(upstreamAddress)
+				continue
+			}
+
+			breaker.Restore(upstreamAddress)
+
+			if _, ok := statusCodeSet[wr.StatusCode]; !ok {
+				w.Write(wr.Body)
+				w.WriteHeader(wr.StatusCode)
+				break
+			}
+		}
+	}
+	server := http.Server{
+		Addr:    address,
+		Handler: http.HandlerFunc(handler),
+	}
+	return server.ListenAndServe()
+}
+```
+
+`Serve` 메서드는 간단한 핸들러를 기반으로 동작합니다. 해당 핸들러는 레이트 리미터를 통해 요청을 처리할 수 있는 여유가 있는지 확인합니다. `acc` 객체를 통해 개별 클라이언트 당 요청을 처리할 수 있는 여유가 있는지 확인합니다.
+
+로드 밸런서를 호출하여 적절한 업스트림서버를 받고 브레이커 객체를 통해 해당 업스트림서버가 정상적인지 확인합니다. 만약 아니라면 반복문을 다시 반복하여 밸런서에서 새로운 업스트림서버를 받아옵니다. 
+
+성공적으로 동작할 경우 브레이커 객체의 `Restore` 메서드를 호출하고 요청을 끝냅니다.
+
+## main.go
+
+```go
+package main
+
+import (
+	"time"
+
+	"github.com/diy-cloud/virtual-gate/balancer/least"
+	"github.com/diy-cloud/virtual-gate/breaker/count_breaker"
+	"github.com/diy-cloud/virtual-gate/limiter/slide_count"
+	"github.com/diy-cloud/virtual-gate/limiter/slide_count/acc"
+	"github.com/diy-cloud/virtual-gate/proxy/http_proxy"
+)
+
+func main() {
+	limiter := slide_count.New(30000, time.Microsecond)
+	acc := acc.New(60, time.Microsecond)
+	breaker := count_breaker.New(200, 10)
+	balancer := least.New()
+	balancer.Add("http://127.0.0.1:8080")
+	balancer.Add("http://127.0.0.1:8081")
+	balancer.Add("http://127.0.0.1:8082")
+	balancer.Add("http://127.0.0.1:8083")
+	balancer.Add("http://127.0.0.1:8084")
+	balancer.Add("http://127.0.0.1:8085")
+	balancer.Add("http://127.0.0.1:8086")
+	balancer.Add("http://127.0.0.1:8087")
+	balancer.Add("http://127.0.0.1:8088")
+	balancer.Add("http://127.0.0.1:8089")
+	proxy := http_proxy.NewHttp()
+
+	if err := proxy.Serve("0.0.0.0:9999", limiter, acc, breaker, balancer); err != nil {
+		panic(err)
+	}
+}
+```
+
+마이크로세컨드 당 30000회의 요청을 수락하고 사용자 별로 마이크로세컨드 당 60회의 요청을 수락하는 레이트 리미터를 생성하였습니다. 브레이커는 최대 200회의 누적 실패 수를 기록하고 10%의 최소 연결 시도를 보장하는 인스턴스로 생성합니다. 밸런서는 최소 연결 방식이며 로컬 호스트 8080~8089까지 연결했습니다.
+
+프록시는 HTTP 리버스 프록시로 로컬 호스트의 9999 포트에 연결하였습니다. 정상적으로 8080~8089 포트에 http 서버를 띄워놓았다면 9999 포트로 접속했을 때 돌아가며 요청을 처리하는 걸 확인할 수 있습니다.
