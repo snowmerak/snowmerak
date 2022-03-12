@@ -39,6 +39,8 @@ type SimpleTester struct {}
 func New() tester.Tester {
     return new(SimpleTester)
 }
+
+func (s *SimpleTester) Test(values ...interface{}) {}
 ```
 
 ```go
@@ -49,9 +51,11 @@ type FuzzTester struct {}
 func New() tester.Tester {
     return new(FuzzTester)
 }
+
+func (f *FuzzTester) Test(values ...interface{}) {}
 ```
 
-각각 테스터 역할을 수행할 수 있지만 세부 동작은 다른 형태로 작성되어 동작하게 될 것입니다. 
+각각 테스터 역할을 수행할 수 있지만 세부 기능은 다른 형태로 작성되어 동작하게 될 것입니다. 
 
 ## 파생과 포함
 
