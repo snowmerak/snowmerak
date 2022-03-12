@@ -2,7 +2,7 @@
 title: "[A] enum in go"
 date: 2022-03-12T18:41:20+09:00
 tag: ["go", "enum", "class", "project A"]
-draft: true
+draft: false
 ---
 
 > 이 페이지의 고 코드는 제네릭이 포함되어 있습니다.
