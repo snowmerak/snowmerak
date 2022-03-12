@@ -91,7 +91,7 @@ func New() tester.Tester {
 
 `log` 밑의 `logbuffer` 패키지와 `loglevel` 패키지의 경우 `log`의 객체를 직접 활용하고 있으므로 바로 하위에 위치하고 있습니다. 
 
-### 여러 역할에서 파생될 경우
+### 여러 역할에서 파생될 경우 혹은 여러 역할을 포함할 경우
 
 여러 역할에서 파생될 경우에는 최소 공통 최상위 디렉토리에 작성하게 됩니다. virtual-gate 레포([github](https://github.com/diy-cloud/virtual-gate))가 그런 구조입니다.
 
