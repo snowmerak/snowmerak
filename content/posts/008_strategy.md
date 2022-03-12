@@ -1,5 +1,5 @@
 ---
-title: "전략 패턴에 대해서"
+title: "[A] 전략 패턴에 대해서"
 date: 2022-03-04T15:57:12+09:00
 tags: ["go", "rust", "java", "kotlin", "design pattern", "strategy"]
 draft: false
