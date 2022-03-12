@@ -13,9 +13,29 @@ draft: false
 
 ## 역할
 
-각 패키지는 고유의 역할을 가지게 됩니다. 상위일수록 더욱 추상적인 역할을 가지고 하위일수록 더욱 구체적인 역할을 가지게 됩니다.
+각 패키지는 고유의 역할을 가지게 됩니다. 역할은 2가지 경우로 나뉩니다. 
 
-### 간단한 예시
+1. 역할에 대해 여러 구현체가 존재할 경우
+2. 역할에 대해 단일 구현체만 존재할 경우
+
+### 단일 구현체가 존재할 경우
+
+여러 서비스 간 주고 받는 로그 객체를 만든다고 가정합시다. 저는 `log`라는 패키지를 만들 것입니다.
+
+```go
+package log
+
+type Log struct {
+	UnixTime int64  `parquet:"name=unix_time, type=INT64" json:"unix_time"`
+	AppID    int32  `parquet:"name=app_id, type=INT32" json:"app_id"`
+	Level    int32  `parquet:"name=level, type=INT32" json:"level"`
+	Message  string `parquet:"name=message, type=BYTE_ARRAY, convertedtype=UTF8, encoding=PLAIN_DICTIONARY" json:"message"`
+}
+```
+
+`log`라는 패키지 아래에 `Log` 구조체를 직접 생성하여 `log` 패키지를 클래스처럼 작성합니다. 여기에 `func New() Log`로 생성자도 만들어주면 다른 패키지에서 `log.New()`로 클래스를 쓰듯이 `Log` 구조체의 인스턴스를 생성할 수 있습니다.
+
+### 여러 구현체가 존재할 경우
 
 `Tester`라는 역할이 있다고 가정합시다. 저는 `tester`라는 패키지를 만들게 될 것입니다.
 
