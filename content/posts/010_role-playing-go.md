@@ -1,7 +1,7 @@
 ---
 title: "[A] role playing go"
 date: 2022-03-11T20:09:47+09:00
-tags: ["go", "oop", "class", "package"]
+tags: ["go", "oop", "class", "package", "project A"]
 draft: false
 ---
 
