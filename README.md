@@ -8,7 +8,11 @@ I am a programmer using golang in south korea.
 
 [homepage](https://serve-it-yourself.pages.dev/)
 
-## mines
+### follow the metric
+
+[heroku-link](https://follow-the-metric.herokuapp.com/)
+
+## cli
 
 ### boxes
 
@@ -26,5 +30,3 @@ golang tools of code generating
 ## external link
 
 [My blog](https://snowmerak.pages.dev)
-
-[My notion](https://snowmerak.notion.site/yongmin-42920593de4b43e380b66dd0c7945172)
