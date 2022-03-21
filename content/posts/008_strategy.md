@@ -340,28 +340,139 @@ OOP의 전략 패턴은 객체를 중심으로 생각하기에 각 알고리즘�
 package main
 
 import (
-    "crypto/sha256"
-    "fmt"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
+	"crypto/sha256"
+	"crypto/x509"
+	"fmt"
+	"math/big"
 
-    "golang.org/x/crypto/blake2b"
-    "golang.org/x/crypto/blake2s"
+	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/blake2s"
 )
 
+type Secp521r1 struct {
+	hasher     func([]byte) [32]byte
+	privateKey *ecdsa.PrivateKey
+	publicKey  *ecdsa.PublicKey
+}
+
+func NewSecp521r1(hasher func([]byte) [32]byte) *Secp521r1 {
+	return &Secp521r1{
+		hasher:     hasher,
+		privateKey: nil,
+		publicKey:  nil,
+	}
+}
+
+func (s *Secp521r1) GenerateKey() error {
+	privateKey, err := ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
+	if err != nil {
+		return err
+	}
+	s.privateKey = privateKey
+	s.publicKey = &privateKey.PublicKey
+	return nil
+}
+
+func (e *Secp521r1) Sign(key []byte) (*big.Int, *big.Int, error) {
+	if e.privateKey == nil {
+		return nil, nil, fmt.Errorf("private key is not set")
+	}
+	pass := e.hasher(key)
+	return ecdsa.Sign(rand.Reader, e.privateKey, pass[:])
+}
+
+func (e *Secp521r1) Verfy(key, data []byte, r, s *big.Int) bool {
+	if e.publicKey == nil {
+		return false
+	}
+	pass := e.hasher(key)
+	return ecdsa.Verify(e.publicKey, pass[:], r, s)
+}
+
+func (e *Secp521r1) ExportPrivateKey() ([]byte, error) {
+	return x509.MarshalECPrivateKey(e.privateKey)
+}
+
+func (e *Secp521r1) ImportPrivateKey(key []byte) error {
+	priv, err := x509.ParseECPrivateKey(key)
+	if err != nil {
+		return err
+	}
+	e.privateKey = priv
+	return nil
+}
+
+func (e *Secp521r1) ExportPublicKey() ([]byte, error) {
+	if e.publicKey == nil {
+		return nil, fmt.Errorf("public key is not set")
+	}
+	return elliptic.Marshal(elliptic.P521(), e.publicKey.X, e.publicKey.Y), nil
+}
+
+func (e *Secp521r1) ImportPublicKey(key []byte) error {
+	x, y := elliptic.Unmarshal(elliptic.P521(), key)
+	if x == nil || y == nil {
+		return fmt.Errorf("invalid public key")
+	}
+	publicKey := &ecdsa.PublicKey{
+		Curve: elliptic.P521(),
+		X:     x,
+		Y:     y,
+	}
+	e.publicKey = publicKey
+	return nil
+}
+
 func main() {
-    var hasher func([]byte) [32]byte = nil
+	password := []byte("password")
 
-    hasher = sha256.Sum256
-    fmt.Println(hasher([]byte("hello")))
-
-    hasher = blake2b.Sum256
-    fmt.Println(hasher([]byte("hello")))
-
-    hasher = blake2s.Sum256
-    fmt.Println(hasher([]byte("hello")))
+	secp521r1s := []*Secp521r1{NewSecp521r1(sha256.Sum256), NewSecp521r1(blake2b.Sum256), NewSecp521r1(blake2s.Sum256)}
+	for _, secp521r1 := range secp521r1s {
+		if err := secp521r1.GenerateKey(); err != nil {
+			panic(err)
+		}
+		key, err := secp521r1.ExportPrivateKey()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("private key: %x\n", key)
+		r, s, err := secp521r1.Sign(password)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("signature: %x %x\n", r, s)
+		pub, err := secp521r1.ExportPublicKey()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("public key: %x\n", pub)
+		if !secp521r1.Verfy(password, []byte("hello world"), r, s) {
+			panic("verify failed")
+		}
+		fmt.Println("verified")
+	}
 }
 ```
 
-로그 버퍼 선택하는 예시와 마찬가지로 객체 자체를 넘기기 보다 특정 동작을 하는 함수를 기반으로 전략 패턴을 구현한 케이스입니다.
+```bash
+private key: 3081dc0201010442005af683aaa7b3103cc5a893a2d5edcd12c94d6c25c603938fb8db3605d4018d742ee8a83c5b9fd8ceb15f25b2aa57f1c8b78b829bfe8c2a8e3b407027828d384834a00706052b81040023a1818903818600040041a0d4653a1b88f9ad0554c2ec7a549e0ccd2a6c5fb91b420a8ee18d12eafd2e14b34fc4c73af89b49800254e3e90137fc1ac193d0fbfbbb9873a31a533a55a3180147f9c4a35502adc5f9a82fffc6f3ec2738bb54a80407218e6c83af18bc730a5cc4bd3c6db7c3abec90e784d92970ec6693e10c453fd28b6a83295a077918572699
+signature: 1ca9495865d94e57edcd971c1aaf0cb20009e1f6bad62b304e4eb7267b1fddae24a429a865a52471c095cc4978d8161667a933e6f80b73b24dcd921eed58fca30b1 1dbf3033500a1544d89b7f9669d51d6ff5be404cd2f496fe661ce931bb4e17547b336cb57b0404d9b40aea7d63febb68d6f899105b32b4668a4dc35ec2b522df08
+public key: 040041a0d4653a1b88f9ad0554c2ec7a549e0ccd2a6c5fb91b420a8ee18d12eafd2e14b34fc4c73af89b49800254e3e90137fc1ac193d0fbfbbb9873a31a533a55a3180147f9c4a35502adc5f9a82fffc6f3ec2738bb54a80407218e6c83af18bc730a5cc4bd3c6db7c3abec90e784d92970ec6693e10c453fd28b6a83295a077918572699
+verified
+private key: 3081dc0201010442013f9bd30fb3e9c3b7938b1460afb5dd2b387276a2ad3972d02b207cc17c1a2c936d30def3ff553a82705d1ff6707ca92faa05ebf29151e7cd397e688def7eb986dea00706052b81040023a18189038186000401926686d54c17305d36ce85781afb4b37af3d0c6600c1c2f86966fdf9141fe1bb764abb797d2dc5587756f3bd3b59f24218007d7b26c5c21912d74900578f2803ff01cfb76b3433c47bcacbec67cb1e604ca39df3ac1b71a504b0587f232389d2612a3372296d8f9ddb0ff1fa178eaeb9ac775cc2c21d09efebe5fa28eca6cd81e1af25
+signature: 47181b97a7593ff886bdb048e28aad3aff6b070c0f092de442566b10f84e3ca44a4f489bb1715e8fa2db8afb47b892173bde915153a1b97bcb9aa24fc8877f4e12 612fbb3ea9eef240ae28763448efa8ccc796d11c235448be14da6a28969d58597aea2f95fcbc6fcef873b7e8f55d7ed23f482fd1a25ed7974a23d79e22a32bcdef
+public key: 0401926686d54c17305d36ce85781afb4b37af3d0c6600c1c2f86966fdf9141fe1bb764abb797d2dc5587756f3bd3b59f24218007d7b26c5c21912d74900578f2803ff01cfb76b3433c47bcacbec67cb1e604ca39df3ac1b71a504b0587f232389d2612a3372296d8f9ddb0ff1fa178eaeb9ac775cc2c21d09efebe5fa28eca6cd81e1af25
+verified
+private key: 3081dc02010104420038c726ef8a57cce983c52f16c9ff9e726567b1b3a7f65b8e18bc4d9330c4556d20fb450f1d1f1ebe4792a38946d90e4d3c6e51930deaf4934f820dc1532c028d58a00706052b81040023a181890381860004001005cdde06ca3f8552237c5a9e120a2e5ee58a1b44d8f4db46e311bd61a67bf00b38912e5daf4ebadfe71959044feb6e6809caffcc125eba28c0bd4fc9c356db93011128764b2fb69cffab80a6970af7c2c4b3f13390905843600e6d722d5089dc0fc4b3408a230d59cf261f3ccc213d034bb043744e33d1eed9cbf41bc5f04afaded2
+signature: 14531b9b3bd2fe9f41c1cd69f6d2fa29bc59d3a4e91bff256b231af34d910786c094503a726f53174a228cfaaba8b93655014205baefd09307f53c2440a7fc8b2b7 1987d0e1cc57416b8c9ce7ced1e0b760b1f586f9ccc1e3cbc3271cb2615911caef1aa56b40702abb11b6207acead199cd995c4a4debbb6fd838a689f07abece349a
+public key: 04001005cdde06ca3f8552237c5a9e120a2e5ee58a1b44d8f4db46e311bd61a67bf00b38912e5daf4ebadfe71959044feb6e6809caffcc125eba28c0bd4fc9c356db93011128764b2fb69cffab80a6970af7c2c4b3f13390905843600e6d722d5089dc0fc4b3408a230d59cf261f3ccc213d034bb043744e33d1eed9cbf41bc5f04afaded2
+verified
+```
+
+객체 자체를 넘기기 보다 특정 동작을 하는 함수를 기반으로 전략 패턴을 구현한 케이스입니다.
 
 어떠한 해시 함수(알고리즘 구현부)와 일급 함수 변수가 느슨하게 결합되어 있으며 런타임에 유연하게 교체하여 적용할 수 있습니다. 또한 동일 레이어, 각 해시 함수들은 서로에게 영향을 주지 않고 각자의 로직을 함수 정의에 포함시켰습니다. 확장 또한 새로운 함수를 구현하면 되기에 쉽습니다.
 
