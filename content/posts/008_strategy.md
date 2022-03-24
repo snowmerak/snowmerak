@@ -562,10 +562,269 @@ on!
 
 ---
 
-### 그 외
+### 커맨드(Command)
 
-1. 어댑터 패턴을 이용하면 기존에 전략으로 채택할 수 없던 코드도 선택할 수 있게 됩니다.
-  
-2. 데코레이터 패턴에 적용하면 각 레이어에 각기 다른 전략을 적용할 수 있게 됩니다.
-  
-3. 브릿지 패턴과의 관계는 관점 차이라고 생각합니다.
+```rust
+pub trait Command {
+    fn excute(&self);
+}
+
+pub struct SaveCommand {
+    name: String,
+}
+
+impl SaveCommand {
+    pub fn new(name: &str) -> Self {
+        Self {
+            name: name.to_string(),
+        }
+    }
+}
+
+impl Command for SaveCommand {
+    fn excute(&self) {
+        println!("{} save command excuted!", self.name);
+    }
+}
+
+pub struct ExitCommand {
+    name: String,
+}
+
+impl ExitCommand {
+    pub fn new(name: &str) -> Self {
+        Self {
+            name: name.to_string(),
+        }
+    }
+}
+
+impl Command for ExitCommand {
+    fn excute(&self) {
+        println!("{} exit command excuted!", self.name);
+    }
+}
+
+pub struct OpenCommand {
+    name: String,
+}
+
+impl OpenCommand {
+    pub fn new(name: &str) -> Self {
+        Self {
+            name: name.to_string(),
+        }
+    }
+}
+
+impl Command for OpenCommand {
+    fn excute(&self) {
+        println!("{} open command excuted!", self.name);
+    }
+}
+
+pub struct Button<'a> {
+    command: Box<&'a dyn Command>,
+}
+
+impl<'a> Button<'a> {
+    pub fn new(command: Box<&'a dyn Command>) -> Self {
+        Self {
+            command,
+        }
+    }
+
+    pub fn press(&self) {
+        self.command.excute();
+    }
+}
+
+pub fn main() {
+    let save_command = SaveCommand::new("app");
+    let exit_command = ExitCommand::new("app");
+    let open_command = OpenCommand::new("app");
+
+    let save_button = Button::new(Box::new(&save_command));
+    let exit_button = Button::new(Box::new(&exit_command));
+    let open_button = Button::new(Box::new(&open_command));
+
+    save_button.press();
+    exit_button.press();
+    open_button.press();
+
+    let save_touch = Button::new(Box::new(&save_command));
+    let exit_touch = Button::new(Box::new(&exit_command));
+    let open_touch = Button::new(Box::new(&open_command));
+
+    save_touch.press();
+    exit_touch.press();
+    open_touch.press();
+}
+```
+
+전략 패턴은 한가지 문제 해결에 대해서 여러 전략을 선택할 수 있는 여러 전략이 하나의 기능에 대응하는 형태라면 커맨드 패턴은 여러 기능에 대해 하나 이상의 전략이 대응되는 형태입니다. 
+
+이를 두고 책에서는 커맨드 패턴과 비교한 전략 패턴의 차이점을 ‘letting you swap these algo­rithms with­in a sin­gle con­text class’, 단일 문맥에 대한 알고리즘들의 교체로 표현하였습니다.
+
+---
+
+### 데코레이터(Decorator)
+
+```go
+package main
+
+import (
+	"bytes"
+	"crypto/rand"
+	"fmt"
+
+	"github.com/andybalholm/brotli"
+	"github.com/golang/snappy"
+	"github.com/itchio/lzma"
+)
+
+func main() {
+	{
+		buffer := bytes.NewBuffer(nil)
+		brotliWriter := brotli.NewWriter(buffer)
+		snappyWriter := snappy.NewBufferedWriter(brotliWriter)
+		lzmaWriter := lzma.NewWriter(snappyWriter)
+
+		data := [512]byte{}
+		rand.Read(data[:])
+		lzmaWriter.Write(data[:])
+
+		lzmaWriter.Close()
+		snappyWriter.Close()
+		brotliWriter.Close()
+
+		fmt.Println(buffer.Bytes())
+	}
+
+	{
+		buffer := bytes.NewBuffer(nil)
+		lzmaWriter := lzma.NewWriter(buffer)
+		snappyWriter := snappy.NewBufferedWriter(lzmaWriter)
+		brotliWriter := brotli.NewWriter(snappyWriter)
+
+		data := [512]byte{}
+		rand.Read(data[:])
+		lzmaWriter.Write(data[:])
+
+		brotliWriter.Close()
+		snappyWriter.Close()
+		lzmaWriter.Close()
+
+		fmt.Println(buffer.Bytes())
+	}
+}
+```
+
+```bash
+[11 28 129 255 6 0 0 115 78 97 80 112 89 1 43 2 0 228 245 231 207 93 0 0 128 0 255 255 255 255 255 255 255 255 0 16 42 90 225 96 215 49 150 191 231 81 102 136 62 95 77 104 92 78 75 16 204 0 91 238 30 145 117 113 242 30 249 138 121 187 208 255 110 204 123 92 139 9 184 87 109 246 142 142 64 250 231 128 158 65 192 100 179 48 32 61 117 150 229 36 110 141 9 125 96 158 5 47 105 93 232 198 47 240 40 123 12 177 172 44 197 38 236 247 246 18 136 238 55 128 131 124 96 125 246 134 126 235 152 114 229 37 169 53 176 129 105 177 57 106 70 6 92 174 203 182 84 237 143 84 150 57 79 64 213 25 26 68 240 131 177 129 101 195 128 69 26 15 191 166 62 51 131 51 114 193 191 70 232 222 139 174 146 210 179 91 213 188 122 46 135 189 31 43 231 105 224 119 213 25 109 75 94 120 32 114 102 220 103 90 211 172 173 57 204 26 171 160 37 223 59 115 18 250 105 171 103 37 81 100 136 178 53 119 160 72 166 232 253 48 44 30 167 148 253 215 171 250 110 207 119 207 201 186 132 197 52 171 81 224 46 4 247 12 73 149 65 217 49 123 177 50 25 92 46 70 37 173 171 195 135 120 126 149 156 126 124 22 225 37 195 43 58 97 16 121 167 1 218 48 129 232 244 104 158 120 164 141 64 130 135 114 188 148 91 206 118 206 230 88 98 108 143 23 180 148 153 12 95 168 70 177 68 143 95 21 82 185 162 15 189 218 12 58 244 103 221 60 94 9 66 143 75 126 82 47 124 206 65 205 146 106 204 119 149 195 214 19 45 114 37 167 11 234 100 183 203 134 219 69 182 201 85 156 131 165 195 135 2 50 146 76 37 39 241 5 51 23 197 36 137 66 189 79 161 42 228 40 228 205 26 88 161 197 38 83 248 152 104 203 6 25 220 250 245 46 134 221 215 72 76 165 92 164 112 89 88 150 69 18 140 129 140 93 111 251 113 228 85 107 67 242 26 39 181 81 60 64 114 145 201 95 52 26 156 1 141 238 129 213 241 254 62 67 2 187 92 209 178 166 117 21 95 30 208 213 10 75 22 68 243 63 192 211 181 244 185 97 64 64 49 174 120 142 230 53 56 236 255 173 170 85 249 202 56 112 212 133 220 38 231 104 220 99 96 58 131 195 128 47 28 227 233 29 103 207 54 236 45 227 128 74 148 160 187 214 27 255 189 34 57 209 163 130 105 170 255 255 245 237 64 0 3]
+[93 0 0 128 0 255 255 255 255 255 255 255 255 0 122 24 25 194 85 84 33 139 74 229 139 76 80 79 119 247 20 8 180 11 199 251 57 222 145 219 179 232 15 99 78 167 85 109 155 143 3 112 15 46 200 161 250 235 38 83 203 221 91 21 123 255 195 115 53 232 201 174 65 204 178 84 213 46 219 6 83 215 195 107 148 132 55 56 158 202 122 122 146 146 223 196 40 207 7 232 218 43 161 11 73 101 163 87 239 20 19 42 43 172 10 35 106 234 153 225 23 183 188 193 192 131 134 50 21 83 175 32 184 76 108 229 232 108 125 3 5 233 157 20 205 10 60 32 176 41 116 13 196 133 51 99 157 158 93 93 170 20 223 84 164 188 113 227 2 73 109 159 67 174 247 178 57 133 164 115 16 12 93 69 138 74 227 94 118 64 51 90 172 170 0 37 82 86 235 237 36 234 56 116 50 57 192 83 78 95 251 54 201 67 79 64 15 35 24 175 138 139 134 197 60 248 169 85 231 89 52 70 60 71 170 179 123 183 237 156 14 161 140 40 106 133 246 252 2 187 217 39 47 50 2 82 141 81 116 81 28 13 173 187 210 148 199 125 124 167 173 133 50 218 157 97 85 55 17 179 33 52 120 96 12 125 96 87 109 43 70 95 57 135 254 20 143 230 12 17 216 105 82 97 91 159 90 188 216 149 170 118 196 160 77 61 75 18 71 247 176 204 136 10 53 5 10 115 138 167 172 238 176 152 229 99 14 45 37 105 37 254 87 195 87 131 114 209 83 33 21 125 48 42 236 109 93 68 179 15 183 123 251 71 130 255 222 121 247 46 60 8 119 201 102 241 201 166 189 187 32 178 18 67 39 224 48 18 243 213 102 174 31 7 233 64 131 46 251 82 95 65 95 200 245 191 206 208 160 177 149 204 212 151 138 144 240 31 235 249 2 215 154 70 208 55 110 32 102 129 227 29 146 169 117 158 103 232 59 161 223 115 38 146 119 194 54 111 41 154 170 191 159 124 216 56 77 56 120 139 124 54 127 144 19 36 40 170 228 168 121 76 26 108 17 232 3 141 158 240 20 127 55 126 87 161 143 246 10 254 249 206 118 243 86 73 14 12 29 231 108 156 139 253 223 10 38 47 15 204 142 174 194 20 175 116 114 227 74 141 110 237 129 30 57 194 48 7 133 234 17 45 98 38 123 123 189 128 3 221 61 2 208 34 175 173 221 150 147 90 135 6 153 52 38 66 21 228 209 48 58 65 22 56 255 255 183 120 0 0]
+```
+
+데코레이터 패턴의 예는 편의를 위해 외부 라이브러리를 사용하였습니다. 각각 `brotli`, `snappy`, `lzma`의 `writer`를 순차적으로 데코레이팅 했습니다. 필요에 따라 서로 다른 순서로 맞추게 되면 서로 다른 목적에 따른 압축 결과물이 나오게 됩니다. 
+
+`http server`의 미들웨어와 비슷하다고 봅니다. 여기서는 단순 압축이었지만 어떤 단어를 필터링한다거나 어떤 문장을 말미에 추가한다는 식의 기능도 선택하여 추가할 수 있을 것입니다. 
+
+그래서 데코레이터와 전략 패턴의 관계는 여러 전략을 여러 층으로 데코레이팅하는 일종의 상호 보완적 관계에 있다고 생각합니다. 
+
+---
+
+### 템플릿 메서드(Template Method)
+
+책에서는 템플릿 메서드 패턴은 클래스 단위에서 상속을 통해 처리하기에 컴파일 타임에 기능이 지정되어 런타임에 안정적(stable)이고, 전략 패턴은 런타임에 전략이 정해지기에 안정적(stable)이지 않다고 표현합니다. 단순히 생각하면 정적 타입 언어와 동적 타입 언어를 생각하면 편리합니다.
+
+```java
+// BaseCalculator.java
+public abstract class BaseCalculator {
+    public abstract int method(int a, int b);
+
+    final int calculate(int a, int b) {
+        return method(a, b);
+    }
+}
+
+// AddCalculator.java
+public class AddCalculator extends BaseCalculator {
+    @Override
+    public int method(int a, int b) {
+        return a + b;
+    }
+}
+
+// SubCalculator.java
+public class SubCalculator extends BaseCalculator {
+    @Override
+    public int method(int a, int b) {
+        return a - b;
+    }
+}
+
+// App.java
+public class App {
+    public static void main(String[] args) {
+        var addCalculator = new AddCalculator();
+        System.out.println(addCalculator.calculate(6, 1));
+				// 7
+
+        var subCalculator = new SubCalculator();
+        System.out.println(subCalculator.calculate(10, 3));
+				// 7
+    }
+}
+```
+
+템플릿 메서드로 간단한 하나의 계산 방법을 가지는 계산기를 만들었습니다. `BaseCalculator` 추상 클래스의 `method` 메서드를 구현함으로 각기 다른 계산기를 구현합니다. 이걸 고도화하는 건 제 파트가 아니니 넘어가겠습니다.
+
+```java
+// BaseCalculator.java
+public class BaseCalculator {
+    public interface Method {
+        int calculate(int a, int b);
+    }
+
+    private Method method;
+
+    public BaseCalculator(Method method) {
+        this.method = method;
+    }
+
+    final int calculate(int a, int b) {
+        return method.calculate(a, b);
+    }
+}
+
+// App.java
+public class App {
+    public static void main(String[] args) {
+        var addCalculator = new BaseCalculator((a, b) -> a + b);
+        System.out.println(addCalculator.calculate(1, 2));
+				// 3
+
+        var subCalculator = new BaseCalculator((a, b) -> a - b);
+        System.out.println(subCalculator.calculate(1, 2));
+				// -1
+    }
+}
+```
+
+전략 패턴으로 작성하면 단일 계산 방법의 명세를 정의하는 `Method` 인터페이스를 정의하고 `Method` 인터페이스의 값을 `BaseCalculator`가 가집니다. 그리고 `BaseCalculator`의 `calculate`는 `method`의 `calculate`를 호출하여 값을 반환합니다. 
+
+`App.java` 파일에서는 자바의 람다식을 이용하여 간편하게 `Method` 인터페이스의 구현체를 만들어 생성자에 넘겨줍니다.  동작은 완전히 동일함을 확인할 수 있습니다. 
+
+두 방식의 큰 차이는 역시 템플릿 메서드는 미리 컴파일 때 구현된 클래스가 메서드 영역에 포함되어 실행되어 안정적으로 호출할 수 있지만 전략 패턴은 힙 영역에 올라가서 비교적 덜 안정적입니다.
+
+---
+
+### 브릿지(Bridge)
+
+브릿지 패턴은 관점의 차이로 어떤 전략을 선택하느냐가 아니라 어떤 전략을 특정 객체에 붙이기 위해 중간 인터페이스를 두는 방식을 취한 것이기에 결과 자체는 전략 패턴과 비슷하지만, 전략 패턴이 가지는 여러 전략을 선택하여 사용할 수 있게 하는 의의에 있어 두 패턴은 차이가 있습니다.
+
+---
+
+### 어댑터(Adapter)
+
+어댑터 패턴 또한 어떤 기능을 특정 객체에 붙이기 위한 중간 다리를 제공하기 위해 나온 패턴이라 전략 패턴과 비슷하게 구성될 수는 있지만 두 패턴이 한번에 가지는 뎁스의 차이와 브릿지 패턴과 마찬가지로 의의에 차이가 있다고 생각합니다.
