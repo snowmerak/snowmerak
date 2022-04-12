@@ -177,3 +177,65 @@ fn main() {
 단순한 형태의 스택 순회입니다. `push()` 메서드로 벡터의 끝에 값을 추가합니다. `while` 반복문의 조건에 `is_empty()` 메서드를 넣어 벡터가 빌 때까지 반복합니다. `pop()` 메서드를 통해 벡터의 마지막 값의 `Option` 객체를 받아 출력합니다.
 
 이때 사용된 `Option<T>`의 `unwrap()`은 옵션 객체가 `Some`일 경우 값을 반환하고, `None`일 경우 런타임 패닉이 발생합니다. 알고리즘 테스트의 경우 `None`이 예상치 못한 곳에서 발생할 가능성이 적으니 부담없이 사용할 수 있습니다.
+
+#### 정렬 및 이진 탐색
+
+```rust
+fn main() {
+    let mut v = vec![7, 3, 5, 4, 1, 2, 9, 10, 6, 8];
+    v.sort();
+    println!("sorted: {:?}", v);
+}
+```
+
+러스트는 벡터가 가변이고 내부 타입이 비교 가능할 경우 `sort()` 메서드를 사용하여 벡터를 정렬할 수 있습니다. 위 예시를 실행하면 `sorted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`로 정렬된 벡터를 출력함을 확인할 수 있습니다.
+
+```rust
+fn main() {
+    let v = vec![1, 2, 3, 4, 6, 7, 8, 9, 10, 11];
+    
+    match v.binary_search(&4) {
+        Ok(index) => println!("found 4 at index {}", index),
+        Err(index) => println!("4 is not found, but index is {}", index),
+    }
+
+    match v.binary_search(&5) {
+        Ok(index) => println!("found 5 at index {}", index),
+        Err(index) => println!("5 is not found, but index is {}", index),
+    }
+}
+```
+
+```rust
+found 4 at index 3
+5 is not found, but index is 4
+```
+
+정렬된 벡터일 경우 `binary_search()` 메서드를 사용하여 값을 이진 탐색할 수 있습니다. 각각 4와 5를 탐색했을 때, 4는 존재하는 값이기에 인덱스 값인 3을 `Ok`를 통해 반환했고, 5는 존재하지 않는 값이기에 삽입(`insert`)하면 되는 인덱스인 4를 `Err`를 통해 반환했습니다.
+
+```rust
+fn main() {
+    let mut v = vec![1, 2, 3, 4, 6, 7, 8, 9, 10, 11];
+    
+    v.insert(4, 5);
+    println!("inserted: {:?}", v);
+}
+```
+
+벡터가 가변일 경우에 `insert(index, value)` 메서드를 통해 해당 인덱스에 값을 추가하여 정렬 상태를 유지할 수 있습니다.
+
+### 덱(VecDeque)
+
+#### 큐
+
+#### 스택
+
+### 이진 힙(BinaryHeap)
+
+#### 다익스트라
+
+### HashMap, BTreeMap
+
+### HashSet, BTreeSet
+
+### 문자열(String)
