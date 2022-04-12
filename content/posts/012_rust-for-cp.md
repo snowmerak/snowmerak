@@ -1,8 +1,8 @@
 ---
-title: "러스트로 알고리즘 문제을 풀어봅시다"
+title: "[Draft] 러스트로 알고리즘 테스트를 풀어봅시다"
 date: 2022-04-12T00:08:40+09:00
 tags: ["rust", "cp", "fast io"]
-draft: true
+draft: false
 ---
 
 ## 왜 러스트?
@@ -226,16 +226,293 @@ fn main() {
 
 ### 덱(VecDeque)
 
+```rust
+use std::collections::VecDeque;
+
+fn main() {
+    let mut a = VecDeque::new();
+}
+```
+
+덱은 벡터와 비슷하지만 맨 처음과 마지막에 값을 추가 삭제할 때 코스트가 더 싸지만 순회는 더 비싸다는 특징을 가지고 있습니다. `use std::collections::VecDeque`으로 `VecDeque`를 가져와야 사용할 수 있습니다. 다른 구조체와 마찬가지로 `::new()` 메서드로 새로운 객체를 만들 수 있습니다.
+
 #### 큐
+
+```rust
+use std::collections::VecDeque;
+
+fn main() {
+    let mut a = VecDeque::new();
+    a.extend(vec![1, 2, 3, 4, 5].iter());
+
+    a.push_back(6);
+    let first = match a.pop_front() {
+        Some(x) => x,
+        None => 0,
+    };
+    println!("{}", first);
+}
+```
+
+덱을 가변으로 선언하고 `push_back(value)` 메서드를 사용하면 덱의 마지막에 값을 추가할 수 있습니다. 그리고 `pop_front()` 메서드를 통해 덱의 맨 앞의 값의 `Option<T>`을 받습니다. 이렇게 덱의 맨 뒤에 넣고 맨 앞에서 빼는 방식으로 간단한 큐를 구현할 수 있습니다. 반대로 `push_front(value)`와 `pop_back()` 메서드를 사용하면 맨 앞에 넣고 맨 뒤에서 빼는 형식의 큐를 만들 수 있습니다.
 
 #### 스택
 
+```rust
+use std::collections::VecDeque;
+
+fn main() {
+    let mut a = VecDeque::new();
+    a.extend(vec![1, 2, 3, 4, 5].iter());
+
+    a.push_back(6);
+    let first = match a.pop_back() {
+        Some(x) => x,
+        None => 0,
+    };
+    println!("{}", first);
+}
+```
+
+스택의 예시에서 조금 틀어서 `push_back(value)`로 맨 끝에 값을 넣고 `pop_back()`으로 맨 끝에서 값을 꺼내면 덱의 마지막에 넣고 빼는 스택이 됩니다. 반대로 `push_front(value)`와 `pop_front()` 메서드를 사용하면 맨 앞에서 넣고 빼는 스택이 됩니다.
+
 ### 이진 힙(BinaryHeap)
 
-#### 다익스트라
+```rust
+use std::collections::BinaryHeap;
+
+fn main() {
+    let mut heap: BinaryHeap<i32> = BinaryHeap::new();
+    heap.extend(vec![1, 9, 2, 8, 3, 7, 4, 6, 5].iter());
+    while !heap.is_empty() {
+        print!("{:?} ", heap.pop().unwrap());
+    }
+}
+```
+
+이진 힙은 벡터를 베이스로 동작하는 우선순위 큐입니다. 이진 힙도 덱과 마찬가지로 `::new()` 메서드로 새로운 인스턴스를 생성합니다. 순서대로 `1, 9, 2, 8, 3, 7, 4, 6, 5`을 입력합니다. 러스트의 이진 힙은 최대 값을 먼저 반환하는 최대 힙입니다. 위 예시의 출력은 `9 8 7 6 5 4 3 2 1`입니다.
+
+#### 최소 힙
+
+```rust
+use std::{collections::BinaryHeap, cmp::Reverse};
+
+fn main() {
+    let mut heap = vec![1, 9, 2, 8, 3, 7, 4, 6, 5].into_iter().map(Reverse).collect::<BinaryHeap<_>>();
+    while !heap.is_empty() {
+        print!("{:?} ", heap.pop().unwrap().0);
+    }
+}
+```
+
+이진 힙은 타입에 정의된 비교 메서드를 통해 이루어지는데, 이 비교를 역전하여 적용할 수 있는 `Reverse`라는 구조체가 존재합니다. 벡터를 기반으로 이터레이터를 만들고 모든 원소에 `map()` 메서드를 통해 `Reverse` 구조체를 적용하여 `Reverse<T>` 인스턴스의 이터레이터로 변환합니다. 이후 `collect::<BinaryHeap<_>>()` 메서드로 `BinaryHeap<Reverse<T>>` 인스턴스로 수집합니다.
+
+```rust
+use std::{collections::BinaryHeap, cmp::Reverse};
+
+fn main() {
+    let mut heap = BinaryHeap::new();
+    heap.push(Reverse(5));
+    heap.push(Reverse(4));
+    heap.push(Reverse(3));
+    heap.push(Reverse(2));
+    heap.push(Reverse(1));
+
+    while let Some(Reverse(x)) = heap.pop() {
+        print!("{} ", x);
+    }
+}
+```
+
+이번에는 처음의 예처럼 일반적인 방법으로 이진 힙을 만듭니다. 이후 `Reverse` 구조체로 감싼 값을 추가합니다. 그럼 모든 비교가 역전되어 적용되어 이진 힙이 최소 힙으로 만들어집니다. 
 
 ### HashMap, BTreeMap
 
+`HashMap`은 SipHash 1-3 해시 알고리즘을 기반으로 만들어진 해시 맵 자료구조입니다.  
+`BTreeMap`은 B-Tree를 기반으로 만들어진 트리 맵 자료구조입니다.
+
+#### 추가
+
+```rust
+use std::collections::{HashMap, BTreeMap};
+
+fn main() {
+    let mut m = HashMap::new();
+    m.insert(0, "zero");
+    m.insert(1, "one");
+    m.insert(2, "two");
+
+    for (k, v) in &m {
+        println!("{} -> {}", k, v);
+    }
+
+    let mut m = BTreeMap::new();
+    m.insert(0, "zero");
+    m.insert(1, "one");
+    m.insert(2, "two");
+
+    for (k, v) in &m {
+        println!("{} -> {}", k, v);
+    }
+}
+```
+
+`insert(key, value)` 메서드는 값이 없을 때는 키와 값 페어를 추가하고, 이미 키가 맵에 있을 경우 키에 해당하는 값을 변경합니다. 또한 `HashMap`과 `BTreeMap`은 위 예시에서 보듯이 키와 값을 추가하는 메서드가 동일합니다. 이는 다른 메서드들, 조회나 삭제도 동일합니다.
+
+#### 조회
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut m: HashMap<_, _> = HashMap::from([(1, 2), (2, 3), (3, 4)]);
+
+    println!("contains key 2: {}", m.contains_key(&2));
+
+    match m.get(&1) {
+        Some(v) => println!("{} of key 1", v),
+        None => println!("not contains"),
+    }
+
+    println!("keys: {:?}", m.keys());
+
+    println!("values: {:?}", m.values());
+
+    print!("for loop: ");
+    for (k, v) in &m {
+        print!("{} -> {}, ", k, v);
+    }
+    println!();
+}
+```
+
+두 맵은 동일한 메서드를 사용하므로 `HashMap`만 사용하였습니다. `contains_key(&key)`는 입력받은 키가 존재하는 지를 반환합니다. 당연하게도 있다면 `true`를 반환합니다. `get(&key)` 메서드는 입력받은 키에 해당하는 값의 `Option<T>` 객체를 반환합니다. `Some(value)` 분기로 빌린 값에 접근할 수 있고, `None` 분기를 통해 없을 때의 동작을 정의할 수 있습니다.
+
+#### 삭제
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut m: HashMap<_, _> = HashMap::from([(1, 2), (2, 3), (3, 4)]);
+
+    match m.remove(&2) {
+        Some(x) => println!("{} of key 2", x),
+        None => println!("not exists"),
+    };
+
+    println!("{:?}", m);
+
+    m.clear();
+
+    println!("{:?}", m);
+}
+```
+
+`remove(&key)` 메서드를 사용하여 맵에 저장된 키와 값을 삭제합니다. 결과는 `Option<T>`로 반환하며 성공했을 경우, `Some(value)` 분기에서 값을 받아서 다룰 수 있으며, 실패했을 경우 `None` 분기에서 적절한 처리를 할 수 있습니다. `clear()` 메서드는 맵 내부 데이터를 모두 삭제합니다.
+
 ### HashSet, BTreeSet
 
+`HashSet`은 해시 맵과 마찬가지로 해시로 동작하는 해시 셋십니다.  
+`BTreeSet`은 비트리 맵과 마찬가지로 B-Tree를 기반으로 동작하는 트리 셋입니다.
+
+#### 추가
+
+```rust
+use std::collections::HashSet;
+
+fn main() {
+    let mut s = HashSet::new();
+    s.insert(1);
+    s.insert(3);
+    s.insert(5);
+}
+```
+
+`insert(value)` 메서드를 통해 값을 셋에 추가할 수 있습니다. 이 때, `true`가 반환되면 셋에 존재하지 않았다가 추가된 것이고, `false`가 반환되면 셋에 존재하고 있는 값을 추가한 것입니다.
+
+#### 조회
+
+```rust
+use std::collections::HashSet;
+
+fn main() {
+    let s = HashSet::from([1, 2, 3, 4, 5]);
+    println!("key 5 is exists? {:?}", s.contains(&5));
+    println!("key 6 is exists? {:?}", s.contains(&6));
+}
+```
+
+`contains(&value)` 메서드를 통해 값이 존재하는 지 확인할 수 있습니다.
+
+#### 삭제
+
+```rust
+use std::collections::HashSet;
+
+fn main() {
+    let mut s = HashSet::from([1, 3, 5, 7, 9, 11]);
+    
+    println!("5 is removed? {}", s.remove(&5));
+    println!("13 is removed? {}", s.remove(&13));
+}
+```
+
+`remove(&value)` 메서드를 통해 특정 값을 삭제할 수 있습니다. 반환값은 `bool` 타입으로 존재한 것을 삭제했을 경우 `true`를 반환하고, 존재하지 않는 값을 삭제하려고 했을 경우 `false`를 반환합니다.
+
+#### 집합 연산
+
+```rust
+use std::collections::HashSet;
+
+fn main() {
+    let a = HashSet::from([1, 3, 5, 7, 9, 11]);
+    let b = HashSet::from([1, 2, 3, 4, 5, 6]);
+
+    println!("intersection: {:?}", a.intersection(&b).collect::<HashSet<_>>());
+
+    println!("union: {:?}", a.union(&b).collect::<HashSet<_>>());
+
+    println!("subtract: {:?}", a.difference(&b).collect::<HashSet<_>>());
+
+    println!("symmetric_difference: {:?}", a.symmetric_difference(&b).collect::<HashSet<_>>());
+
+    println!("is_disjoint: {}", a.is_disjoint(&b));
+
+    println!("is_subset: {}", a.is_subset(&b));
+
+    println!("is_superset: {}", a.is_superset(&b));
+
+    println!("is_empty: {}", a.is_empty());
+}
+```
+
+```bash
+intersection: {1, 5, 3}
+union: {4, 3, 2, 6, 7, 11, 5, 9, 1}
+subtract: {9, 11, 7}
+symmetric_difference: {2, 9, 7, 11, 6, 4}
+is_disjoint: false
+is_subset: false
+is_superset: false
+is_empty: false
+```
+
+`intersection(&other)`, `union(&other)`, `difference(&other)`, `symmetric_difference(&other)` 메서드는 각각 교집합, 합집합, 차집합, 대칭 차집합을 의미합니다. 이 네 가지 메서드들은 각각 `collect()` 메서드로 특정 자료구조로 수집할 수 있습니다.
+
+`is_disjoint(&other)`, `is_subset(&other)`, `is_superset(&other)`는 각각 서로소 집합인지, `other`의 부분집합인지, `other`가 부분집합인지를 반환합니다.
+
 ### 문자열(String)
+
+러스트에는 수 많은 문자열이 있지만 `String` 구조체만 생각합니다.
+
+```rust
+fn main() {
+    let from_str = String::from("hello");
+    let new_constuctor = String::new();
+    let from_literal = "hello".to_string();
+}
+```
+
+`String` 구조체는 `::from(&str)` 메서드로 문자열 리터럴을 받아 생성하는 방법, `&str`의 `to_string()` 메서드로 반환받는 방법, `::new()` 생성자로 생성하는 방법, 3가지가 존재합니다. 
+
