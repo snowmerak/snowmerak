@@ -1145,3 +1145,82 @@ fn main() {
 #### 그 외
 
 그 외에도 이터레이터에는 더 많은 유용한 메서드들이 존재하고, 추가되고 있습니다.
+
+---
+
+## 몇 문제 풀죠
+
+### LeetCode 393. UTF-8 Validation
+
+문제는 UTF8 인코딩의 적법성을 테스트하는 것입니다.
+
+```bash
+   Char. number range  |        UTF-8 octet sequence
+      (hexadecimal)    |              (binary)
+   --------------------+---------------------------------------------
+   0000 0000-0000 007F | 0xxxxxxx
+   0000 0080-0000 07FF | 110xxxxx 10xxxxxx
+   0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
+   0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+```
+
+리트코드 문제에 나와 있는 대로 UTF8은 바이트 개수에 따라 첫번째 바이트 포맷이 달라지고 따라오는 바이트 들은 비트가 10으로 시작합니다. 그래서 첫번째 바이트의 포맷과 나머지 바이트들이 정상적으로 구성되어 있는 지만 테스트 하면 됩니다.
+
+```rust
+impl Solution {
+    pub fn valid_utf8(data: Vec<i32>) -> bool {
+        if data.len() == 0 {
+            return true;
+        }
+        let pre = data.iter().scan(0, |state, x| {
+            match *state {
+                0 => {
+                    if x >> 5 == 0b110 {
+                        *state = 1;
+                        Some(*state)
+                    } else if x >> 4 == 0b1110 {
+                        *state = 2;
+                        Some(*state)
+                    } else if x >> 3 == 0b11110 {
+                        *state = 3;
+                        Some(*state)
+                    } else if x >> 7 == 0 {
+                        *state = 0;
+                        Some(*state)
+                    } else {
+                        *state = 0;
+                        None
+                    }
+                }
+                _ => {
+                    if x >> 6 == 0b10 {
+                        *state -= 1;
+                        Some(*state)
+                    } else {
+                        *state = 0;
+                        None
+                    }
+                }
+            }
+        });
+        if pre.clone().count() != data.len() || pre.last().unwrap() != 0 {
+            return false;
+        }
+        true
+    }
+}
+```
+
+먼저 데이터를 이터레이터로 변환한 후 스캔을 시작합니다. `state`는 헤더를 검사하여 몇개의 바이트가 10으로 시작해야하는지 저장합니다. 그리고 `x`는 당연히 이터레이터의 각 값이 들어옵니다. `state`가 0일 때 헤더라고 파악하고 검사합니다. 검사에 따라 남아있는 바이트 수를 갱신하고 상태를 `Some()`으로 감싸서 반환합니다. `state`가 0이 아닐 때는 바이트가 10으로 시작하는 지 체크하고 현재 `state`를 반환합니다.
+
+계속 반복하여 바이트를 검사한 후 스캔한 후의 이터레이터의 길이와 입력받은 데이터의 길이가 동일한지 파악합니다. 만약 중간에 문제가 생겨 `None`이 반환되면 순회를 멈추기 때문에 길이가 부족하게 됩니다. 이를 통해 중간에 문제가 있었는 지 파악합니다. 그리고 문제가 없다면 이터레이터의 마지막 값을 가져와서 `0`인지 확인합니다. 만약 `0`이 아니면 더 확인해야하는 바이트가 존재한다는 뜻이기 때문입니다.
+
+이렇게 풀면 시간복잡도와 공간복잡도는 O(N)입니다. 
+
+```text
+Success
+Runtime: 2 ms, faster than 42.86% of Rust online submissions for UTF-8 Validation.
+Memory Usage: 2 MB, less than 100.00% of Rust online submissions for UTF-8 Validation.
+```
+
+테스트 결과는 통과입니다. 이터레이터가 아니라 `for`나 `while` 반복문으로 작성하면 더 빠르게 작성할 수 있을 것입니다.
