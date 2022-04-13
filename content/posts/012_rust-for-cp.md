@@ -504,7 +504,7 @@ is_empty: false
 
 ### 문자열(String)
 
-러스트에는 수 많은 문자열이 있지만 `String` 구조체만 생각합니다.
+러스트에는 수 많은 문자열이 있지만 `String` 구조체만 생각합니다. `String`은 내부적으로 UTF8 인코딩을 따르고 있기에 범용성이 좋습니다.
 
 ```rust
 fn main() {
@@ -516,3 +516,156 @@ fn main() {
 
 `String` 구조체는 `::from(&str)` 메서드로 문자열 리터럴을 받아 생성하는 방법, `&str`의 `to_string()` 메서드로 반환받는 방법, `::new()` 생성자로 생성하는 방법, 3가지가 존재합니다. 
 
+#### 추가
+
+러스트의 `String`은 바이트 배열로 이루어져 있지만 UTF8 인코딩을 기본으로 하고 있기에 스트링 리터럴 및 바이트 접근과 `char` 타입을 통한 UTF8 접근이 가능합니다. 
+
+```rust
+fn main() {
+    let mut s = String::new();
+
+    s.push_str("아이스아메리카노");
+    s.push(char::from('리'));
+
+    println!("{}", s);  
+}
+```
+
+`push_str(&str)` 메서드는 입력받은 문자열 리터럴을 단순하게 뒤에 붙입니다.  
+`push(char)` 메서드는 `char` 타입 변수 하나를 뒤에 추가합니다. 러스트에서는 UTF8 인코딩의 한 글자를 `char`로 표기합니다.
+
+ #### 조회
+
+ ```rust
+fn main() {
+    let mut s = String::from("qpsdosssxclvwemfwjkbssscbzxyugadasdefsssdfv");
+
+    match s.find("sss") {
+        Some(index) => println!("Found 'sss' at index {}", index),
+        None => println!("Didn't find 'sss'"),
+    }
+
+    for (i, v) in s.matches("sss").enumerate() {
+        println!("{}: {}", i, v);
+    }
+
+    println!("'sss' is contains? {}", s.contains("sss"));
+}
+ ```
+
+`String` 구조체의 조회 방법은 크게 3가지가 있습니다. `find(pattern)`, `matches(pattern)`, `contains(pattern)` 메서드는 문자열 리터럴, `char` 타입 문자, `char` 타입 배열, 혹은 `char` 타입 문자를 받아 판별하는 함수를 입력 받아 해당 패턴에 맞는 결과를 반환합니다.
+
+일반적인 문자열 리터럴과 `char` 문자, `char` 배열이 아닌 `char` 타입 문자를 판별하는 함수는 러스트에서 기본적으로 몇가지 제공해주고 있습니다.
+
+```rust
+fn main() {
+    let mut s = String::from("A little copying is better than a little dependency.");
+
+    let pat = char::is_lowercase;
+    let pat = char::is_uppercase;
+    let pat = char::is_alphabetic;
+    let pat = char::is_numeric;
+    let pat = char::is_alphanumeric;
+    let pat = char::is_whitespace;
+    let pat = char::is_control;
+
+    match s.find(pat) {
+        Some(i) => {
+            println!("Found at {}", i);
+        }
+        None => {
+            println!("No found!");
+        }
+    }
+
+    for (i, v) in s.matches(pat).enumerate() {
+        println!("{}: {}", i, v);
+    }
+
+    println!("contains? {}", s.contains(pat));
+}
+```
+
+각각 `is_lowercase`, `is_uppercase`, `is_alphabetic`, `is_numeric`, `is_alphanumeric`, `is_whitespace`, `is_control`은 유니코드 상에서 소문자인지, 유니코드 상에서 대문자인지, 글자인지, 숫자인지, 문자 혹은 숫자인지, 공백인지, 컨트롤 문자인지 반환합니다. 이 함수들을 패턴으로 입력함으로 원하는 패턴을 검색할 수 있습니다.
+
+#### 삭제, 교체
+
+```rust
+fn main() {
+    let mut s = String::from("A little copying is better than a little dependency.");
+
+    let result = s.replace(char::is_whitespace, "");
+
+    println!("{}", result);
+}
+```
+
+다른 언어와 마찬가지로 `replace(from, to)` 메서드로 제거합니다. `from` 매개변수는 위 `char`의 함수들도 사용할 수 있습니다. 
+
+```rust
+fn main() {
+    let mut s = String::from("A little copying is better than a little dependency.");
+
+    let result = s.remove(0);
+
+    println!("{}", result);
+}
+```
+
+`remove(index)` 메서드는 `String` 변수가 가변일 때 사용할 수 있습니다. 입력된 인덱스에 해당하는 문자를 삭제하고 반환합니다. 만약 인덱스가 문자열 전체 길이를 넘어갔을 경우 런타임 패닉이 발생하기 때문에 주의해서 사용해야합니다.
+
+---
+
+## Iterator
+
+러스트는 거의 모든 자료구조가 이터레이터로 변환되어 동작할 수 있습니다. 다른 자료구조들, 벡터, 덱, 셋은 `iter()` 메서드나 `into_iter()` 메서드로 이터레이터를 만들 수 있습니다. `iter()` 메서드는 내부 값들을 빌려주기 때문에 기존 자료구조를 그대로 재활용할 수 있습니다. 하지만 `into_iter()`의 경우 내부 값들을 이동 시키기 때문에 기존 자료구조를 재활용할 수 없습니다.
+
+```rust
+fn main() {
+    let v = vec![1, 2, 3, 4, 5];
+
+    let a = v.iter().map(|x| x + 1).collect::<Vec<_>>();
+
+    println!("prev: {:?}", v);
+    println!("new: {:?}", a);
+}
+```
+
+이터레이터를 활용하여 벡터의 모든 원소에 1을 더한 새로운 벡터를 생성하는 간단한 코드입니다. 이전 변수도 그대로 활용할 수 있습니다.
+
+```rust
+fn main() {
+    let mut v = vec![1, 2, 3, 4, 5];
+
+    v.iter_mut().for_each(|x| *x += 1);
+
+    println!("prev: {:?}", v);
+}
+```
+
+이번엔 `iter_mut()` 메서드를 이용해 가변 자료구조 변수의 값을 가변 변수로 빌렸습니다. 포인터 참조를 하듯이 `*`을 사용하여 1을 더함으로 모든 벡터의 값이 1이 더해져 있음을 확인할 수 있습니다.
+
+```rust
+fn main() {
+    let v = vec![1, 2, 3, 4, 5];
+
+    let a  = v.into_iter().map(|x| x + 1).collect::<Vec<_>>();
+
+    println!("prev: {:?}", v); // error
+    println!("new: {:?}", a);
+}
+```
+
+이 코드는 실행되지 않습니다. `into_iter()` 메서드는 내부 값을 모두 이터레이터에게 빌려주지 않고 그냥 주기 때문에 기존 자료구조 변수를 재사용할 수 없습니다. `v`를 출력하려고 할 때 에러가 납니다. 대신 이터페리터 연산 시 거추장스러운 `*`을 보지 않아도 됩니다.
+
+```rust
+fn main() {
+    let v = vec![1, 2, 3, 4, 5];
+
+    let v  = v.into_iter().map(|x| x + 1).collect::<Vec<_>>();
+
+    println!("prev: {:?}", v);
+}
+```
+
+마지막으로 `into_iter()` 메서드를 사용할 때는 이렇게 같은 이름의 새로운 변수로 할당하는 방식을 쓰기도 합니다. 이를 러스트에서는 쉐도잉(shadowing)이라고 합니다. 이렇게 사용하게 되면 기존의 `v`는 접근할 수 없게 되고 새로 만든 `v`만 접근할 수 있게 되어 자연스럽게 쓸 수 있습니다. 주의할 점은 쉐도잉된 기존 `v`는 사라지는게 아니라 가려지는 것이기 때문에 의도치 않게 메모리를 낭비할 수 있습니다.
