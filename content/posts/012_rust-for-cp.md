@@ -1,5 +1,5 @@
 ---
-title: "[Draft] 러스트로 알고리즘 테스트를 풀어봅시다"
+title: "러스트로 알고리즘 테스트를 풀어봅시다"
 date: 2022-04-12T00:08:40+09:00
 tags: ["rust", "cp", "fast io"]
 draft: false
@@ -960,3 +960,188 @@ fn main() {
 
 `scan(init_state, func)` 메서드는 초기화된 상태와 함수를 가집니다. 이 함수는 `state`와 이터레이터의 값을 받습니다. 이 때 함수가 취하는 `state`는 빌려온 변수로 이후에도 적용된 값이 계속 적용됩니다. 그리고 이터레이터의 값은 `map(...)`이나 `for_each(...)` 메서드처럼 순차적으로 들어옵니다. 그리고 매 단계의 출력값은 `Option<T>` 타입으로 반환해야하며 중간에 종료해야할 경우 `None`을 반환하면 됩니다.
 
+#### 평탄화(flatten)
+
+```rust
+fn main() {
+    let mut i = vec![vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]].into_iter();
+
+    let flatten = i.flatten();
+
+    flatten.for_each(|x| print!("{} ", x));
+}
+```
+
+`flatten()` 메서드는 이터레이터 내부에 이터레이터, 혹은 이터레이터로 변환할 수 있는 타입이 있을 경우에 하나의 이터레이터로 만듭니다.
+
+#### 중간 점검하기(inspect)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    i.inspect(|x| print!("{} ", x)).map(|x| x + 1).for_each(|x| print!("{} ", x));
+    // 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11
+}
+```
+
+`inspect(func)` 메서드는 `for_each(func)` 메서드와 동일한 동작을 하지만 `for_each(func)`와 다르게 동일한 이터레이터를 반환함으로 메서드 체인을 추가로 연결할 수 있도록 합니다.
+
+#### 수집하기(collect)
+
+```rust
+use std::collections::HashSet;
+
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let set = i.map(|x| x + 1).collect::<HashSet<i32>>();
+
+    println!("{:?}", set);
+    // {2, 7, 4, 10, 9, 5, 3, 6, 8, 11}
+}
+```
+
+`collect()` 메서드는 지정된 타입으로 이터레이터의 값을 수집하여 만들어줍니다.
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let map = i.map(|x| (x, x + 1)).collect::<HashMap<i32, i32>>();
+
+    println!("{:?}", map);
+    // {2: 3, 5: 6, 4: 5, 8: 9, 9: 10, 6: 7, 1: 2, 3: 4, 10: 11, 7: 8}
+}
+```
+
+맵의 경우엔 값을 2개 가지는 튜플로 만들어주어야 합니다.
+
+#### 접기(fold, rfold)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let folded = i.clone().fold(0, |acc, x| acc + x);
+
+    println!("{:?}", folded);
+
+    let rfolded = i.rfold(0, |acc, x| acc + x);
+
+    println!("{:?}", rfolded);
+}
+```
+
+`fold(init, func)` 메서드는 `init`을 시작으로 이전 계산 결과와 이터레이터의 시작부터 끝까지의 값을 입력받은 함수의 결과 값을 반환합니다. `rfold(init, func)`는 반대로 끝에서부터 시작합니다.
+
+#### 줄이기(reduce)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let reduced = i.reduce(|acc, x| acc + x);
+
+    println!("{:?}", reduced);
+}
+```
+
+`reduce(func)`은 `fold(init, func)`에서 초기값이 첫번째 인자인 상태와 동일한 동작을 보여줍니다.
+
+#### 테스트 통과(all, any)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let all_even = i.all(|x| x % 2 == 0);
+    let any_even = i.any(|x| x % 2 == 0);
+
+    println!("{:?}, {:?}", all_even, any_even); 
+    // false, true
+}
+```
+
+`all(pred)` 메서드는 입력된 판별 함수가 모두 `true`를 반환할 때 `true`를 반환하고, `any(pred)` 메서드는 판별 함수가 하나라도 `true`를 반환하면 `true`를 반환합니다. 둘 다 그 외의 상황에는 `false`를 반환합니다.
+
+#### 찾기(find)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let found = i.find(|&x| x % 2 == 0);
+
+    println!("{:?}", found);
+    // Some(2)
+}
+```
+
+`find(pred)` 메서드는 이터레이터를 순회하며 판별 함수가 처음으로 `true`를 반환하는 값을 반환합니다.
+
+#### 위치 찾기(position, rposition)
+
+```rust
+fn main() {
+    let s = String::from("A little copying is better than a little dependency.");
+
+    let pos = s.chars().position(|x| x == 'b');
+
+    println!("{:?}", pos);
+}
+```
+
+`position(pred)` 함수는 이터레이터를 순회하며 가장 먼저 판별 함수를 만족하는 값이 등장한 인덱스를 반환합니다. 이 메서드는 문자열의 인덱스를 찾는 것에 유용하게 쓰일 수 있습니다.
+
+#### 최대, 최소(max, min)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let max = i.clone().max();
+    let min = i.min();
+
+    println!("{:?} {:?}", max, min);
+    // Some(10) Some(1)
+}
+```
+
+`max()`는 이터레이터의 최대값을, `min()`은 이터레이터의 최소값을 반환합니다.
+
+#### 역전(rev)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let rev = i.rev();
+
+    rev.for_each(|x| print!("{} ", x));
+}
+```
+
+`rev()` 메서드는 이터레이터의 순서를 역전시킵니다.
+
+#### 계산하기(sum, product)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let sum: i32 = i.clone().sum();
+    let prod: i32 = i.product();
+
+    println!("sum: {}", sum); // sum: 55
+    println!("prod: {}", prod); // prod: 3628800
+}
+```
+
+`sum()`과 `product()` 메서드는 각각 값들의 합과 곱을 반환합니다.
+
+#### 그 외
+
+그 외에도 이터레이터에는 더 많은 유용한 메서드들이 존재하고, 추가되고 있습니다.
