@@ -359,6 +359,31 @@ fn main() {
 
 `insert(key, value)` 메서드는 값이 없을 때는 키와 값 페어를 추가하고, 이미 키가 맵에 있을 경우 키에 해당하는 값을 변경합니다. 또한 `HashMap`과 `BTreeMap`은 위 예시에서 보듯이 키와 값을 추가하는 메서드가 동일합니다. 이는 다른 메서드들, 조회나 삭제도 동일합니다.
 
+```rust
+use std::collections::HashMap;
+
+
+fn main() {
+    let mut m = HashMap::new();
+
+    match m.get_mut(&'b') {
+        Some(v) => {
+            *v += 1;
+        },
+        None => {
+            m.insert('b', 1);
+        },
+    }
+
+    let v = m.entry('a').or_insert(0);
+    *v += 1;
+
+    println!("{:?}", m);
+}
+```
+
+어떤 숫자나 문자의 개수를 세는 경우, 맵의 기본 값이 0으로 초기화 되어 있고 없는 값은 추가하면서 1을 설정하는 경우가 있습니다. 전통적인 방법으로는 `'b'`를 카운팅할 때처럼 값을 받아오고 있으면 1을 더하고 없으면 1을 설정하는 방식을 쓰겠지만, `entry(key).or_insert(default)` 메서드를 사용하면 쉽게 처리할 수 있습니다. 키가 존재하면 원래 값을 가변으로 가져오고 없다면 `default` 값으로 추가한 후, 맵의 값을 가변으로 가져옵니다. 저희가 할 일은 이렇게 나온 가변 변수에 1을 더하는 것 뿐입니다.
+
 #### 조회
 
 ```rust
@@ -669,3 +694,269 @@ fn main() {
 ```
 
 마지막으로 `into_iter()` 메서드를 사용할 때는 이렇게 같은 이름의 새로운 변수로 할당하는 방식을 쓰기도 합니다. 이를 러스트에서는 쉐도잉(shadowing)이라고 합니다. 이렇게 사용하게 되면 기존의 `v`는 접근할 수 없게 되고 새로 만든 `v`만 접근할 수 있게 되어 자연스럽게 쓸 수 있습니다. 주의할 점은 쉐도잉된 기존 `v`는 사라지는게 아니라 가려지는 것이기 때문에 의도치 않게 메모리를 낭비할 수 있습니다.
+
+### 생성 패턴
+
+이터레이터는 다양한 자료구조 구조체에서 만들 수 있기 때문에 다양한 생성 패턴이 존재합니다.
+
+#### Vector
+
+1. `drain(range)`: 범위에 해당하는 값들을 벡터에서 추출하여 이터레이터로 반환합니다.
+2. `drain(filter)`: 필터 함수를 만족하는 값들을 벡터에서 추출하여 이터레이터로 반환합니다.
+3. `chunk(size)`: 입력받은 크기마다 값을 나누어 이터레이터로 반환합니다.
+4. `rchunk(size)`: `chunk(size)` 메서드의 동작을 끝에서부터 수행하여 반환합니다.
+5. `group_by(comparer)`: `comparer`에 순차적으로 값을 넣어 연속적으로 `true`가 나온 값들을 하나의 그룹으로 엮은 이터레이터를 반환합니다.
+6. `split(pred)`: `pred` 함수가 `true`를 반환하는 값을 기준으로 벡터를 잘라 이터레이터로 반환합니다.
+
+#### VecDeque
+
+1. `drain(range)`: 범위에 해당하는 값들을 덱에서 추출하여 이터레이터로 반환합니다.
+2. `range(range)`: 범위에 해당하는 값들의 이터레이터를 반환합니다.
+
+#### HashMap, BTreeMap
+
+1. `keys()`: 맵의 모든 키를 빌린 이터레이터를 반환합니다.
+2. `into_keys()`: 맵의 모든 키를 위임 받은 이터레이터를 반환합니다.
+3. `values()`: 맵의 모든 값을 빌린 이터레이터를 반환합니다.
+4. `into_values()`: 맵의 모든 값을 위임 받은 이터레이터를 반환합니다.
+5. `drain()`: 맵의 모든 키와 값 쌍을 위임 받은 이터레이터를 반환합니다.
+6. `drain_filter(filter)`: 필터 함수에 걸러지는 모든 맵의 키와 값 쌍을 위임 받은 이터레이터를 반환합니다.
+
+#### HashSet, BTreeSet
+
+1. `drain()`: 셋의 값을 위임 받은 이터레이터를 반환합니다.
+2. `drain_filter(filter)`: 필터 함수에 걸러지는 모든 셋의 값을 위임 받은 이터레이터를 반환합니다.
+3. `difference(&other)`: 차집합의 값들을 이터레이터로 반환합니다.
+4. `symmetric_difference(&other)`: 대칭 차집합의 값들을 이터레이터로 반환합니다.
+5. `intersection(&other)`: 교집합의 값들을 이터레이터로 반환합니다.
+6. `union(&other)`: 합집합의 값들을 이터레이터로 반환합니다.
+
+#### String
+
+1. `bytes()`: 문자열의 바이트(`u8`) 타입 값들을 이터레이터로 반환합니다.
+2. `chars()`: 문자열의 UTF8 캐릭터(`char`) 값들을 이터레이터로 반환합니다.
+3. `char_indices()`: 문자열의 UTF8 캐릭터 인덱스를 이터레이터로 반환합니다.
+4. `drain(range)`: 범위에 해당하는 값들을 문자열에서 추출하여 이터레이터로 반환합니다.
+5. `split_whitespace()`: 문자열을 공백 기준으로 나누어 이터레이터로 반환합니다.
+6. `split_ascii_whitespace()`: 문자열을 아스키 공백 기준으로 나누어 이터레이터로 반환합니다.
+7. `lines()`: 문자열을 줄바꿈 기준으로 나누어 이터레이터로 반환합니다.
+8. `encode_utf16()`: 문자열을 UTF16으로 인코딩하여 이터레이터로 반환합니다.
+9. `split(pat)`: 문자열을 패턴 기준으로 나누어 이터레이터로 반환합니다.
+10. `split_inclusive(pat)`: 문자열을 패턴 기준으로 나누어 반환합니다. 패턴은 삭제되지 않고 앞 문자열의 마지막에 포함됩니다.
+11. `split_terminator(pat)`: `split(pat)`과 같은 동작을 수행하지만 마지막 값이 공백 문자열일 경우 제거합니다.
+12. `rsplit_terminator(pat)`: `split_terminator(pat)`과 같은 동작을 수행하지만 끝에서부터 시작합니다.
+13. `matches(pat)`: 패턴에 해당하는 문자열을 이터레이터로 반환합니다.
+14. `match_indices(pat)`: 문자열에서 패턴에 해당하는 인덱스를 이터레이터로 반환합니다.
+
+#### 그 외
+
+러스트 언어 공식 문서를 보시면 더 많은 이터레이터 구현체들을 확인할 수 있습니다.
+
+### 메서드
+
+#### 개수 세기
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    println!("{:?}", i.count()); // 10
+}
+```
+
+`count()` 메서드는 이터레이터에 포함된 값의 개수를 반환합니다.
+
+#### 마지막 값에 접근하기
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    println!("{:?}", i.last()); // Some(10)
+}
+```
+
+`last()` 메서드는 이터레이터의 마지막 값을 반환합니다. `Option<T>` 객체로 반환되며 `Some(&value)` 분기가 있을 때, `None` 분기가 이터레이터가 비어 있을 때 입니다.
+
+#### 인덱스 접근
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    println!("{:?}", i.nth(3)); // Some(4)
+    println!("{:?}", i.nth(100)); // None
+}
+```
+
+`nth(n)` 메서드는 이터레이터에서 `n`번째 값을 가져옵니다. 반환값은 `Option<T>`입니다.
+
+#### n만큼 뛰어서 순회하기(step_by)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let mut stepped = i.step_by(3);
+
+    stepped.for_each(|x| print!("{} ", x)); // 1 4 7 10
+}
+```
+
+`step_by(step)` 메서드는 다음 값으로 이동할 때 입력받은 스텝 수만큼 인덱스가 증가합니다. 예시처럼 3을 입력하면 0 번째 다음 3칸 움직여서 3 번째 값을 출력하고 이후는 6 번째, 9 번째, ..., 이렇게 나아갑니다.
+
+#### 이어붙이기(chain)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let mut chained = i.chain(vec![11, 12, 13].into_iter());
+
+    chained.for_each(|x| print!("{} ", x)); // 1 2 3 4 5 6 7 8 9 10 11 12 13
+}
+```
+
+`chain(other)` 메서드는 한 이터레이터 뒤에 새로운 이터레이터를 이어 붙여줍니다.
+
+#### 합성하기(zip)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let mut zipped = i.zip(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter());
+
+    zipped.for_each(|x| print!("{:?} ", x)); // (1, 1) (2, 2) (3, 3) (4, 4) (5, 5) (6, 6) (7, 7) (8, 8) (9, 9) (10, 10)
+}
+```
+
+`zip(other)` 메서드는 한 이터레이터와 입력받은 이터레이터의 값을 1:1 매칭하여 만든 튜플의 이터레이터를 반환합니다.
+
+#### 모든 값 변경하기(map)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let mut mapped = i.map(|x| x * 2);
+
+    mapped.for_each(|x| print!("{} ", x));
+}
+```
+
+`map(func)` 메서드는 입력받은 이터레이터를 순회하며 값을 순차적으로 입력받은 함수에 대입하고 반환된 결과로 이터레이터를 구성하여 반환합니다.
+
+#### 순회하기(for_each)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    i.for_each(|x| print!("{} ", x));
+}
+```
+
+`for_each(func)` 메서드는 `map(func)` 메서드와 마찬가지로 순차적으로 입력받은 함수에 값을 대입하여 실행합니다. 함수의 반환값은 쓰이지 않고 `()`만 허용됩니다. 러스트에서 `()`를 반환하는 방법은 `;`을 함수 마지막에 두거나 명시적으로 `return ()`을 호출하는 방법이 있습니다.
+
+#### 거르기(filter)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let mut filtered = i.filter(|x| x % 2 == 0);
+
+    filtered.for_each(|x| print!("{} ", x)); // 2 4 6 8 10
+}
+```
+
+`filter(pred)` 메서드는 입력받은 조건 함수를 통과한 값으로 이터레이터를 구성하여 반환합니다.
+
+#### 나열하기(enumerate)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    for (i, v) in i.enumerate() {
+        print!("({}, {}) ", i, v);
+    }
+    // (0, 1) (1, 2) (2, 3) (3, 4) (4, 5) (5, 6) (6, 7) (7, 8) (8, 9) (9, 10) 
+}
+```
+
+`enumerate()` 메서드는 반복문에서 인덱스와 값으로 구조 분해하여 순회할 수 있게 이터레이터를 나열해줍니다.
+
+#### 찍먹하기(peekable, peek)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter().peekable();
+
+    println!("{:?}", i.peek());
+    println!("{:?}", i.next());
+    // Some(1)
+    // Some(1)
+    println!("{:?}", i.peek());
+    println!("{:?}", i.next());
+    // Some(2)
+    // Some(2)
+}
+```
+
+`peekable()` 메서드는 이터레이터의 값을 찍먹할 수 있는 객체로 만들어 반환합니다. 변환 후에는 `peek()` 메서드로 현재 값을 찍먹할 수 있고 `next()`로 받아서 다음 인덱스로 넘길 수 있습니다. 
+
+#### 생략하기(skip, skip_while)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter().peekable();
+
+    let skipped = i.clone().skip(2);
+    skipped.for_each(|x| print!("{} ", x));
+    println!("");
+    // 3 4 5 6 7 8 9 10
+
+    let skipped = i.skip_while(|x| *x < 5);
+    skipped.for_each(|x| print!("{} ", x));
+    // 5 6 7 8 9 10
+}
+```
+
+`skip(lenth)` 메서드는 입력받은 길이만큼 값을 생략합니다. `skip_while(pred)` 메서드는 입력받은 함수가 `false`를 반환할 때까지 스킵합니다.
+
+#### 뽑아내기(take, take_while)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter().peekable();
+
+    let took = i.clone().take(2);
+    took.for_each(|x| print!("{} ", x));
+    println!("");
+
+    let took = i.take_while(|x| *x < 5);
+    took.for_each(|x| print!("{} ", x));
+}
+```
+
+`take(size)` 메서드는 입력받은 크기만큼의 값을 가져와서 이터레이터로 만듭니다. `take_while(pred)` 메서드는 입력받은 함수가 `false`를 반환할 때까지 뽑아내서 이터레이터로 만듭니다.
+
+#### 훑어보기(scan)
+
+```rust
+fn main() {
+    let mut i = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].into_iter();
+
+    let scanned = i.scan(0, |state, x| {
+        *state += x;
+        Some(*state)
+    });
+
+    scanned.for_each(|x| print!("{} ", x));
+}
+```
+
+`scan(init_state, func)` 메서드는 초기화된 상태와 함수를 가집니다. 이 함수는 `state`와 이터레이터의 값을 받습니다. 이 때 함수가 취하는 `state`는 빌려온 변수로 이후에도 적용된 값이 계속 적용됩니다. 그리고 이터레이터의 값은 `map(...)`이나 `for_each(...)` 메서드처럼 순차적으로 들어옵니다. 그리고 매 단계의 출력값은 `Option<T>` 타입으로 반환해야하며 중간에 종료해야할 경우 `None`을 반환하면 됩니다.
+
