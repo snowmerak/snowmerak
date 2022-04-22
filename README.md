@@ -16,7 +16,7 @@ I am a programmer using golang in south korea.
 
 ### boxes
 
-golang tools of code generating
+golang tools for code generating
 
 - [data-box](https://github.com/snowmerak/databox)
 - [enum-box](https://github.com/snowmerak/enumbox)
