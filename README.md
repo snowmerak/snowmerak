@@ -6,7 +6,7 @@ I am a programmer using golang in south korea.
 
 ### Serve it Yourself!
 
-[![pages](https://img.shields.io/badge/Pages-000000?style=flat&logo=CloudFlare)](https://serve-it-yourself.pages.dev/)
+[![pages](https://img.shields.io/badge/-Pages-eaeff9?style=flat&logo=CloudFlare)](https://serve-it-yourself.pages.dev/)
 
 ---
 
@@ -14,7 +14,7 @@ I am a programmer using golang in south korea.
 
 ### follow the metric
 
-[![link](https://img.shields.io/badge/-heroku-000000?style=flat&logo=HEROKU)](https://follow-the-metric.herokuapp.com/)
+[![link](https://img.shields.io/badge/-heroku-e0707e?style=flat&logo=HEROKU)](https://follow-the-metric.herokuapp.com/)
 
 ---
 
@@ -31,10 +31,10 @@ golang tools for code generating
 
 ## languages
 
-![golang](https://img.shields.io/badge/-Go-000000?style=flat&logo=GO)
-![rust](https://img.shields.io/badge/-Rust-000000?style=flat&logo=RUST)
-![javascript](https://img.shields.io/badge/-JavaScript-000000?style=flat&logo=JAVASCRIPT)
-![flutter](https://img.shields.io/badge/-Flutter-000000?style=flat&logo=FLUTTER)
+![golang](https://img.shields.io/badge/-Go-eaeff9?style=flat&logo=GO)
+![rust](https://img.shields.io/badge/-Rust-e0707e?style=flat&logo=RUST)
+![javascript](https://img.shields.io/badge/-JavaScript-e0707e?style=flat&logo=JAVASCRIPT)
+![flutter](https://img.shields.io/badge/-Flutter-e0707e?style=flat&logo=FLUTTER)
 
 ### used languages in myt git
 
@@ -46,12 +46,12 @@ golang tools for code generating
 
 ## OSs
 
-![arch](https://img.shields.io/badge/Arch-Linux-000000?style=flat&logo=ARCH-Linux)
-![kubuntu](https://img.shields.io/badge/Kubuntu-000000?style=flat&logo=KUBUNTU)
-![mac](https://img.shields.io/badge/macOS-000000?style=flat&logo=MAC)
+![arch](https://img.shields.io/badge/Arch-Linux-e0707e?style=flat&logo=ARCH-Linux)
+![kubuntu](https://img.shields.io/badge/Kubuntu-e0707e?style=flat&logo=KUBUNTU)
+![mac](https://img.shields.io/badge/macOS-eaeff9?style=flat&logo=MAC)
 
 ---
 
 ## external link
 
-[![pages](https://img.shields.io/badge/Pages-000000?style=flat&logo=CloudFlare)](https://snowmerak.pages.dev)
+[![pages](https://img.shields.io/badge/Pages-eaeff9?style=flat&logo=CloudFlare)](https://snowmerak.pages.dev)
