@@ -33,7 +33,6 @@ golang tools for code generating
 
 ![golang](https://img.shields.io/badge/-Go-eaeff9?style=flat&logo=GO)
 ![rust](https://img.shields.io/badge/-Rust-e0707e?style=flat&logo=RUST)
-![javascript](https://img.shields.io/badge/-JavaScript-e0707e?style=flat&logo=JAVASCRIPT)
 ![flutter](https://img.shields.io/badge/-Flutter-e0707e?style=flat&logo=FLUTTER)
 
 ### used languages in myt git
