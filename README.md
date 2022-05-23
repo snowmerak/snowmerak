@@ -8,6 +8,8 @@ I am a programmer using golang in south korea.
 
 [github-org](https://github.com/unsafe-risk)
 
+[unsafe-go-coding-guide-kr](https://github.com/unsafe-risk/unsafe-go-coding-guide)
+
 ### Serve it Yourself!
 
 [![pages](https://img.shields.io/badge/-Pages-eaeff9?style=flat&logo=CloudFlare)](https://serve-it-yourself.pages.dev/)
