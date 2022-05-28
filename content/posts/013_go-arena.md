@@ -305,3 +305,112 @@ um_arena.NewOf[Person] 605.33101ms
 new(Person) 1.780729601s
 ----------
 ```
+
+AMD CPU 위에서 돌아가는 엔데버 리눅스에서는 의외의 결과가 나왔습니다. `mi`의 아레나와 `umem` 아레나가 고랭의 힙 얼록보다 압도적으로 좋은 성능을 냈습니다. 
+
+## VM.Standard.A1.Flex 4 core + 24 GB RAM + ubuntu 20.04 LTS
+
+```bash
+run 0
+mi_arena.NewOf[Person] 899.135806ms
+um_arena.NewOf[Person] 1.608942063s
+new(Person) 1.042926849s
+----------
+run 1
+mi_arena.NewOf[Person] 673.01307ms
+um_arena.NewOf[Person] 1.541169038s
+new(Person) 1.03111711s
+----------
+run 2
+mi_arena.NewOf[Person] 676.642329ms
+um_arena.NewOf[Person] 1.522097134s
+new(Person) 1.04476466s
+----------
+run 3
+mi_arena.NewOf[Person] 679.230132ms
+um_arena.NewOf[Person] 1.557731721s
+new(Person) 1.046741541s
+----------
+run 4
+mi_arena.NewOf[Person] 672.149124ms
+um_arena.NewOf[Person] 1.529814563s
+new(Person) 1.023961251s
+----------
+run 5
+mi_arena.NewOf[Person] 680.811916ms
+um_arena.NewOf[Person] 1.51833373s
+new(Person) 1.062553117s
+----------
+run 6
+mi_arena.NewOf[Person] 675.201313ms
+um_arena.NewOf[Person] 1.542328673s
+new(Person) 1.074607165s
+----------
+run 7
+mi_arena.NewOf[Person] 681.393444ms
+um_arena.NewOf[Person] 1.512692101s
+new(Person) 1.077051723s
+----------
+run 8
+mi_arena.NewOf[Person] 669.76937ms
+um_arena.NewOf[Person] 1.524577016s
+new(Person) 1.06534106s
+----------
+run 9
+mi_arena.NewOf[Person] 675.44887ms
+um_arena.NewOf[Person] 1.577183616s
+new(Person) 1.05808632s
+----------
+run 10
+mi_arena.NewOf[Person] 674.658638ms
+um_arena.NewOf[Person] 1.537940919s
+new(Person) 1.066595986s
+----------
+run 11
+mi_arena.NewOf[Person] 673.966267ms
+um_arena.NewOf[Person] 1.519762315s
+new(Person) 1.056903625s
+----------
+run 12
+mi_arena.NewOf[Person] 672.388159ms
+um_arena.NewOf[Person] 1.564616569s
+new(Person) 1.08661528s
+----------
+run 13
+mi_arena.NewOf[Person] 674.368798ms
+um_arena.NewOf[Person] 1.538319624s
+new(Person) 1.042340413s
+----------
+run 14
+mi_arena.NewOf[Person] 672.64999ms
+um_arena.NewOf[Person] 1.507898405s
+new(Person) 1.066702277s
+----------
+run 15
+mi_arena.NewOf[Person] 678.127841ms
+um_arena.NewOf[Person] 1.531630673s
+new(Person) 1.082662027s
+----------
+run 16
+mi_arena.NewOf[Person] 670.635165ms
+um_arena.NewOf[Person] 1.523355386s
+new(Person) 1.066508946s
+----------
+run 17
+mi_arena.NewOf[Person] 674.90926ms
+um_arena.NewOf[Person] 1.517348364s
+new(Person) 1.068849214s
+----------
+run 18
+mi_arena.NewOf[Person] 672.172436ms
+um_arena.NewOf[Person] 1.54097949s
+new(Person) 1.054280329s
+----------
+run 19
+mi_arena.NewOf[Person] 675.249671ms
+um_arena.NewOf[Person] 1.546346365s
+new(Person) 1.063903989s
+----------
+```
+
+오라클 클라우드의 ARM 기반 VM 위의 우분투 20.04 LTS에서의 결과는 오히려 `umem` 아레나의 성능이 매우 안좋아졌고, 고랭 힙 얼록은 계속 유지하고 있습니다. 
