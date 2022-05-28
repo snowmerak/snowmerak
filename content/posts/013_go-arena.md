@@ -201,6 +201,111 @@ new(Person) 647.659917ms
 
 환경은 2019 맥북프로 15.6인치 CTO 버전입니다. 맥OS는 빅서이고 해당 환경에서는 `mi`의 아레나가 가장 좋은 성능을 보였습니다. 이는 `mi`의 바탕이 되는 `mimalloc`이 그 자체적으로도 메모리 풀을 가지고 있어서 처음 할당받은 메모리를 꾸준히 반복하다가 한번씩 해제되고 재할당 받아 사용하는 것으로 보입니다. `umem`의 아레나는 지속적으로 안좋은 성능을 보였는데, 이는 아마 맥OS에서 고랭의 메모리 관리 방식이 바로 할당 받고 바로 해제 하는 방식이라 그런 것으로 보입니다. 그래서 사실 `cgo`의 오버헤드를 고려하지 않는 다면, 이 환경에서는 고랭의 힙 메모리 관리가 가장 빠른 성능을 보여주었습니다.
 
+## intel i5-7200U 2.5GHz + 16GB RAM + Endeavour OS (linux kernel 5.17.9-arch1-1)
+
+```bash
+run 0
+mi_arena.NewOf[Person] 795.95791ms
+um_arena.NewOf[Person] 1.062033327s
+new(Person) 839.291678ms
+----------
+run 1
+mi_arena.NewOf[Person] 396.569712ms
+um_arena.NewOf[Person] 1.066348839s
+new(Person) 837.256203ms
+----------
+run 2
+mi_arena.NewOf[Person] 385.870643ms
+um_arena.NewOf[Person] 1.06360359s
+new(Person) 831.406443ms
+----------
+run 3
+mi_arena.NewOf[Person] 388.6257ms
+um_arena.NewOf[Person] 1.071579415s
+new(Person) 837.403844ms
+----------
+run 4
+mi_arena.NewOf[Person] 399.121844ms
+um_arena.NewOf[Person] 1.066338214s
+new(Person) 836.208868ms
+----------
+run 5
+mi_arena.NewOf[Person] 379.348393ms
+um_arena.NewOf[Person] 1.063961963s
+new(Person) 844.226271ms
+----------
+run 6
+mi_arena.NewOf[Person] 397.723731ms
+um_arena.NewOf[Person] 1.065401424s
+new(Person) 837.79799ms
+----------
+run 7
+mi_arena.NewOf[Person] 378.827023ms
+um_arena.NewOf[Person] 1.066494561s
+new(Person) 834.058677ms
+----------
+run 8
+mi_arena.NewOf[Person] 381.745933ms
+um_arena.NewOf[Person] 1.073471729s
+new(Person) 833.066386ms
+----------
+run 9
+mi_arena.NewOf[Person] 380.965805ms
+um_arena.NewOf[Person] 1.067476917s
+new(Person) 834.996951ms
+----------
+run 10
+mi_arena.NewOf[Person] 383.04734ms
+um_arena.NewOf[Person] 1.070420747s
+new(Person) 844.206539ms
+----------
+run 11
+mi_arena.NewOf[Person] 387.810161ms
+um_arena.NewOf[Person] 1.069904868s
+new(Person) 838.887909ms
+----------
+run 12
+mi_arena.NewOf[Person] 378.925585ms
+um_arena.NewOf[Person] 1.064038388s
+new(Person) 833.340752ms
+----------
+run 13
+mi_arena.NewOf[Person] 386.974357ms
+um_arena.NewOf[Person] 1.074266838s
+new(Person) 837.094079ms
+----------
+run 14
+mi_arena.NewOf[Person] 382.46079ms
+um_arena.NewOf[Person] 1.074960561s
+new(Person) 836.290958ms
+----------
+run 15
+mi_arena.NewOf[Person] 387.463868ms
+um_arena.NewOf[Person] 1.065748122s
+new(Person) 852.484311ms
+----------
+run 16
+mi_arena.NewOf[Person] 380.998084ms
+um_arena.NewOf[Person] 1.079310765s
+new(Person) 833.070706ms
+----------
+run 17
+mi_arena.NewOf[Person] 381.524621ms
+um_arena.NewOf[Person] 1.066957039s
+new(Person) 834.581445ms
+----------
+run 18
+mi_arena.NewOf[Person] 398.605824ms
+um_arena.NewOf[Person] 1.06494471s
+new(Person) 835.045067ms
+----------
+run 19
+mi_arena.NewOf[Person] 378.341909ms
+um_arena.NewOf[Person] 1.065161378s
+new(Person) 835.493472ms
+----------
+```
+
 ## AMD Ryzen 7 4800H 2.9GHz + DDR4 16GB PC4-25600 + Endeavour OS (linux kernel 5.17.9-arch1-1)
 
 ```bash
