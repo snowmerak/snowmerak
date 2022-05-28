@@ -204,4 +204,104 @@ new(Person) 647.659917ms
 ## AMD Ryzen 7 4800H 2.9GHz + DDR4 16GB PC4-25600 + Endeavour OS (linux kernel 5.17.9-arch1-1)
 
 ```bash
+run 0
+mi_arena.NewOf[Person] 313.266058ms
+um_arena.NewOf[Person] 590.335916ms
+new(Person) 1.770269764s
+----------
+run 1
+mi_arena.NewOf[Person] 182.821873ms
+um_arena.NewOf[Person] 583.297921ms
+new(Person) 1.785889625s
+----------
+run 2
+mi_arena.NewOf[Person] 218.119579ms
+um_arena.NewOf[Person] 584.478094ms
+new(Person) 1.815812476s
+----------
+run 3
+mi_arena.NewOf[Person] 215.87333ms
+um_arena.NewOf[Person] 592.284205ms
+new(Person) 1.881928694s
+----------
+run 4
+mi_arena.NewOf[Person] 180.617046ms
+um_arena.NewOf[Person] 584.381467ms
+new(Person) 1.795567192s
+----------
+run 5
+mi_arena.NewOf[Person] 187.673419ms
+um_arena.NewOf[Person] 603.881602ms
+new(Person) 1.82451288s
+----------
+run 6
+mi_arena.NewOf[Person] 194.497021ms
+um_arena.NewOf[Person] 599.756583ms
+new(Person) 1.601986995s
+----------
+run 7
+mi_arena.NewOf[Person] 171.368032ms
+um_arena.NewOf[Person] 584.226676ms
+new(Person) 1.588895594s
+----------
+run 8
+mi_arena.NewOf[Person] 214.75927ms
+um_arena.NewOf[Person] 585.090548ms
+new(Person) 1.550436602s
+----------
+run 9
+mi_arena.NewOf[Person] 177.639392ms
+um_arena.NewOf[Person] 582.322318ms
+new(Person) 1.405216087s
+----------
+run 10
+mi_arena.NewOf[Person] 217.573979ms
+um_arena.NewOf[Person] 586.24109ms
+new(Person) 1.543233978s
+----------
+run 11
+mi_arena.NewOf[Person] 221.992077ms
+um_arena.NewOf[Person] 589.619367ms
+new(Person) 1.641417817s
+----------
+run 12
+mi_arena.NewOf[Person] 218.787456ms
+um_arena.NewOf[Person] 585.08243ms
+new(Person) 1.887542282s
+----------
+run 13
+mi_arena.NewOf[Person] 200.249853ms
+um_arena.NewOf[Person] 583.41756ms
+new(Person) 1.739301954s
+----------
+run 14
+mi_arena.NewOf[Person] 217.323503ms
+um_arena.NewOf[Person] 585.424778ms
+new(Person) 1.669410363s
+----------
+run 15
+mi_arena.NewOf[Person] 181.252355ms
+um_arena.NewOf[Person] 583.059308ms
+new(Person) 1.618188073s
+----------
+run 16
+mi_arena.NewOf[Person] 214.468414ms
+um_arena.NewOf[Person] 583.155749ms
+new(Person) 1.686771928s
+----------
+run 17
+mi_arena.NewOf[Person] 204.783087ms
+um_arena.NewOf[Person] 593.721027ms
+new(Person) 1.843041095s
+----------
+run 18
+mi_arena.NewOf[Person] 211.047277ms
+um_arena.NewOf[Person] 601.431416ms
+new(Person) 1.814632052s
+----------
+run 19
+mi_arena.NewOf[Person] 170.1031ms
+um_arena.NewOf[Person] 605.33101ms
+new(Person) 1.780729601s
+----------
 ```
