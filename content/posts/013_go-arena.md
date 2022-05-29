@@ -15,7 +15,151 @@ draft: false
 
 어느 쪽이든 아레나를 사용하게 되면 필요에 따라 힙에 데이터를 할당할 수 있고, 이 힙 메모리는 GC에 영향을 받지 않기 때문에 GC 부담을 줄일 수 있습니다. 또한 한번에 힙 메모리를 할당 받아 사용하기에 일종의 메모리 풀 역할 또한 수행할 수 있습니다. 단점은 어느 쪽이든 고랭에서 정상적으로 지원하는 방법이 아니기에, 불안함이 존재할 수밖에 없다는 것과 페이지 내에 충분한 양의 메모리가 존재하지 않을 경우 새로운 페이지를 할당 받게 되는데, 이 때 메모리 파편화가 발생하여 메모리를 낭비할 수 있습니다.
 
-어디까지나 아레나의 활용도는 일련의 기능을 실행함에 있어 힙에 할당되는 메모리를 하나의 연속된 공간에 기록하고, 한번에 할당 해제하는 것으로 GC 부담을 줄이는 것입니다. 의의를 GC가 동작하지 않아, 로직이 실행되는 동안 프로그램이 멈추는 일이 없다는 것과 하나의 아레나가 해제되는 동안 다른 로직에 영향을 끼치지 않는다는 것으로, 다소의 메모리 파편화나 할당 해제의 코스트는 비교적 후순위로 평가됩니다. 그럼에도 아래 벤치마크는 편의성을 위해 장점 외의 부분도 포함하여 작성되었습니다. 
+## mi 아레나 코드
+
+아레나 코드는 제가 `umem`에서 가져와서 수정한 `mi`의 아레나 코드를 보여드리겠습니다. 당연하게도 99% lemon-mint님 코드이고 `mimalloc`을 사용하게 바꾼 부분만 제가 작성하였습니다. 
+
+```go
+package arena
+
+import (
+	"reflect"
+	"runtime"
+	"syscall"
+	"unsafe"
+
+	"github.com/unsafe-risk/mi/mimalloc"
+)
+
+// This code is implemented by lemon-mint.
+// I brought the code from unsafe-risk/umem.
+
+// This Implementation is based on the proposal in the following url: https://github.com/golang/go/issues/51317
+
+// Thread-unsafe Allocation Arena.
+type Arena struct {
+	// The start address of the region.
+	head uintptr
+	// Tail of the region.
+	tail uintptr
+}
+
+func NewFinalizer() *Arena {
+	a := &Arena{}
+	runtime.SetFinalizer(a, arenaFinalizer)
+	return a
+}
+
+func New() *Arena {
+	a := &Arena{}
+	return a
+}
+
+func arenaFinalizer(a *Arena) {
+	a.Free()
+}
+
+// Page Structure
+/*
+	|  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |
+	|-----|-----|-----|-----|-----|-----|-----|-----|
+	|  page size            |  page head            |
+	|-----|-----|-----|-----|-----|-----|-----|-----|
+	|  Next Page Ptr                                |
+	|-----|-----|-----|-----|-----|-----|-----|-----|
+	|                                               |
+	|                                               |
+	|                                               |
+	|                      Data                     |
+	|                                               |
+	|                                               |
+	|                                               |
+	|-----|-----|-----|-----|-----|-----|-----|-----|
+*/
+```
+
+아레나는 연결리스트로 다음 노드의 포인터를 가지고 있습니다. 이 모양은 lemon-mint님이 그리신 `page structure`에 잘 표현되어 있습니다. 그리고 아레나를 참조하고 있는 변수가 드랍될 때 자동으로 해제 되게끔 파이널라이저가 설정되어 있습니다. 
+
+```go
+func (r *Arena) newPage(size int) {
+	// println("Allocating new page", size)
+	sptr := mimalloc.Malloc(size + 16)
+	pagesize := (*uint32)(unsafe.Pointer(sptr))
+	pagehead := (*uint32)(unsafe.Pointer(uintptr(sptr) + 4))
+	nextpage := (*uint64)(unsafe.Pointer(uintptr(sptr) + 8))
+
+	*pagesize = uint32(size)
+	*pagehead = 0
+	*nextpage = 0
+
+	if r.tail != 0 {
+		// Add to the tail of the region.
+		tailNextPage := (*uint64)(unsafe.Pointer(r.tail + 8))
+		if *tailNextPage != 0 {
+			*nextpage = *tailNextPage
+		}
+		*tailNextPage = uint64(uintptr(sptr))
+	}
+	r.tail = uintptr(sptr)
+	if r.head == 0 {
+		r.head = uintptr(sptr)
+	}
+	// println("New page allocated", size, sptr)
+}
+
+var defaultPageSize = syscall.Getpagesize()*4 - 16
+
+func (r *Arena) allocate(size int) uintptr {
+retry:
+	if r.tail == 0 {
+		// println("tail is 0, allocating new page")
+		if size > defaultPageSize {
+			r.newPage(size)
+		} else {
+			r.newPage(defaultPageSize)
+		}
+	}
+
+	pagesize := (*uint32)(unsafe.Pointer(r.tail))
+	pagehead := (*uint32)(unsafe.Pointer(r.tail + 4))
+	nextpage := (*uint64)(unsafe.Pointer(r.tail + 8))
+	if *pagesize-*pagehead < uint32(size) {
+		if *nextpage != 0 {
+			r.tail = uintptr(*nextpage)
+			goto retry
+		}
+		if size > defaultPageSize {
+			r.newPage(size)
+		} else {
+			r.newPage(defaultPageSize)
+		}
+		pagesize = (*uint32)(unsafe.Pointer(r.tail))
+		pagehead = (*uint32)(unsafe.Pointer(r.tail + 4))
+		nextpage = (*uint64)(unsafe.Pointer(r.tail + 8))
+	}
+
+	data := r.tail + 16 + uintptr(*pagehead)
+	*pagehead += uint32(size)
+	return data
+}
+```
+
+`newPage` 함수는 입력받은 크기로 새로운 페이지를 만듭니다. 여기에 입력받는 크기는 상황에 따라 변하게 되는 데 이 부분은 `allocate` 함수의 실행 과정에 따릅니다. 일반적으로는 `defaultPageSize` 변수의 값을 사용하여 하드웨어 페이지 사이즈에 따라 자동으로 지정됩니다. `mi`의 아레나는 하드웨어에서 지원하는 페이지의 4배 크기를 사용합니다. 이는 `umem`도 비슷합니다. 만약 만들어야 할 페이지의 크기가 `defaultPageSize` 보다 클 경우, 해당 사이즈를 그대로 가져가서 페이지를 만듭니다. 
+
+```go
+func (r *Arena) Free() {
+	for r.head != 0 {
+		_ = (*uint32)(unsafe.Pointer(r.head))
+		nextpage := (*uint64)(unsafe.Pointer(r.head + 8))
+		nexthead := uintptr(*nextpage)
+		mimalloc.Free(unsafe.Pointer(r.head))
+		r.head = nexthead
+	}
+	r.tail = 0
+}
+```
+
+마지막으로 `Free` 함수는 모든 아레나를 돌면서 할당된 페이지를 반환합니다. 이 함수가 호출되면 해당 아레나에서 할당받은 모든 포인터는 접근 불가가 됩니다. 하지만 `mimalloc`을 기반으로 하고 있는 `mi`는 메모리를 풀에 캐싱하기 때문에, 접근 에러를 바로 띄우지는 않습니다.
 
 ## umem 아레나 벤치마크
 
