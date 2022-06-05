@@ -12,7 +12,7 @@ I am a programmer using golang in south korea.
 
 ### Serve it Yourself!
 
-[![pages](https://img.shields.io/badge/-Pages-eaeff9?style=flat&logo=CloudFlare)](https://serve-it-yourself.pages.dev/)
+[github-org](https://github.com/unsafe-risk)
 
 ---
 
