@@ -8,7 +8,7 @@ I am a programmer using golang in south korea.
 
 [github-org](https://github.com/unsafe-risk)
 
-[unsafe-go-coding-guide-kr](https://github.com/unsafe-risk/unsafe-go-coding-guide)
+[unsafe-coding-guide-kr](https://unsafe.v8.run)
 
 ### Serve it Yourself!
 
