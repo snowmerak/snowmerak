@@ -2,7 +2,7 @@
 title: "하나의 프로세스 안에서 데이터 브로드캐스팅 하기 - 리스트 설계"
 date: 2022-11-19T20:28:16+09:00
 tags: ["go", "concurrency", "broadcast", "channel"]
-draft: true
+draft: false
 ---
 
 ## 목적
