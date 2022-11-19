@@ -1,0 +1,39 @@
+@startuml BroadcasterRemoved
+
+actor producer1
+actor producer2
+
+producer1 -[hidden]right-> producer2
+producer1 -[hidden]down-> Broadcaster
+producer2 -[hidden]down-> Broadcaster
+
+package Broadcaster {
+    queue input
+
+    queue receiver1
+    queue receiver2
+    queue receiver3
+}
+
+receiver1 -[hidden]right-> receiver2
+receiver2 -[hidden]right-> receiver3
+
+actor consumer1
+actor consumer2
+actor consumer3
+
+consumer1 -[hidden]right-> consumer2
+consumer2 -[hidden]right-> consumer3
+
+producer1 -down-> input: input message
+producer2 -down-> input: input message
+
+input -down-> receiver1: copy message
+input -down-> receiver2: copy message
+input -down-> receiver3: copy message
+
+receiver1 -down-> consumer1
+receiver2 -down-> consumer2
+receiver3 -down-> consumer3
+
+@enduml
