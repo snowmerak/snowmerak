@@ -1,7 +1,7 @@
 ---
-title: "하나의 프로세스 안에서 데이터 브로드캐스팅 하기 - 리스트 설계"
+title: "하나의 프로세스 안에서 데이터 브로드캐스팅 하기 - 리스트"
 date: 2022-11-19T20:28:16+09:00
-tags: ["go", "concurrency", "broadcast", "channel"]
+tags: ["go", "concurrency", "broadcast"]
 draft: false
 ---
 
@@ -82,6 +82,4 @@ func (i Iterator) Next() bool {
 
 사실 논리적으로 `head`와 `tail`이 수정되는 부분은 원자성 있게 진행되는 게 맞다고 생각하고 있습니다. 그리고 그렇게 진행하기 위해 처음에 `sync.Mutex`를 사용할까 생각했습니다. 하지만 제가 이 라이브러리를 써야할 곳이 데이터가 들어온 순서를 어느정도는 보장해 주는 것이 중요하다고 판단했습니다. 그래서 `chan []byte`나 [`go-datastructurs`](https://github.com/Workiva/go-datastructures)의 [`ringbuffer`](https://github.com/Workiva/go-datastructures/blob/master/queue/ring.go)를 사용해서 데이터를 입력 받고, 하나의 고루틴 안에서 실행되는 `for range`나 `for {}` 구문을 통해 입력 데이터를 하나 씩, 순차적으로 처리하는 걸 생각하고 있습니다. 입력에 당연히 어느정도의 코스트가 쓰일 것으로 예상이 되나, 전달해 주는 부분이 문제라고 파악했기에 일단은 이렇게 설계합니다. 이 부분은 다음 포스트에서 다시 작성하겠습니다.
 
-### 끝으로 
-
-데이터를 복제해서 전달해주는 방식이 아니라, 클라이언트가 어느정도의 위험성을 가지고 데이터를 가지고 가는 방식이라 충분히 성능 상의 이점이 있지 않을까 기대하고 있습니다. 두가지 정도 거슬리는 부분은 연결 리스트라서 메모리의 로컬리티를 살리기 어렵다는 것과, `sync.Pool`을 사용하면 어느정도 객체를 풀링하였을 때 과하게 많아지면 OOM에 근접할 수 있지 않을까하는 부분입니다.
+## 끝
