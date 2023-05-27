@@ -148,10 +148,10 @@ func main() {
 
 `timerCtx`는 다음 4가지 함수로 생성할 수 있습니다.
 
-1. `func WithDeadlineCause(parent Context, d time.Time, cause error) (Context, CancelFunc)`
-2. `func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)`
-3. `func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)`
-4. `func WithTimeoutCause(parent Context, timeout time.Duration, cause error) (Context, CancelFunc)`
+1. func WithDeadlineCause(parent Context, d time.Time, cause error) (Context, CancelFunc)
+2. func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)
+3. func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
+4. func WithTimeoutCause(parent Context, timeout time.Duration, cause error) (Context, CancelFunc)
 
 `WithDeadlineCause` 함수가 이 중 가장 베이스가 되는 함수입니다.  
 해당 함수의 동작은 입력받은 컨텍스트를 상속받아서, `d` 시각이 되면 `ctx`를 입력받은 이유(`cause`)로 취소하는 `timerCtx`를 생성합니다.  
