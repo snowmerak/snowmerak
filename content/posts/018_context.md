@@ -148,21 +148,18 @@ func main() {
 
 `timerCtx`는 다음 4가지 함수로 생성할 수 있습니다.
 
-1. func WithDeadlineCause(parent Context, d time.Time, cause error) (Context, CancelFunc)
-2. func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)
-3. func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
-4. func WithTimeoutCause(parent Context, timeout time.Duration, cause error) (Context, CancelFunc)
-
-`WithDeadlineCause` 함수가 이 중 가장 베이스가 되는 함수입니다.  
-해당 함수의 동작은 입력받은 컨텍스트를 상속받아서, `d` 시각이 되면 `ctx`를 입력받은 이유(`cause`)로 취소하는 `timerCtx`를 생성합니다.  
-`context.Cause`를 통해 해당 이유를 조회할 수 있습니다.
-
-`WithDeadline` 함수는 위 `WithDeadlineCause` 함수를 호출하고, `cause`를 `nil`로 전달하는 함수입니다.  
-그래서 `context.Cause`로 취소 사유를 조회할 수 없습니다.
-
-`WithTimeout`은 `WithDeadline` 함수를 내부적으로 호출하는데, `d`의 값으로 현재 시각(`time.Now()`)에 `timeout` 값을 더한 시각을 전달합니다.
-
-`WithTimeoutCause` 함수는 `WithTimeout` 함수처럼 시각을 계산해서 `WithDeadlineCause`의 `d` 매개변수로 넘겨주고, `cause`를 그대로 넘겨줍니다.
+1. `WithDeadlineCause(parent Context, d time.Time, cause error) (Context, CancelFunc)`  
+   1. `WithDeadlineCause` 함수가 이 중 가장 베이스가 되는 함수입니다.  
+   2. 입력받은 컨텍스트를 상속받아서, `d` 시각이 되면 `ctx`를 입력받은 이유(`cause`)로 취소하는 `timerCtx`를 생성합니다.  
+   3. `context.Cause`를 통해 해당 이유를 조회할 수 있습니다.
+2. `WithDeadline(parent Context, d time.Time) (Context, CancelFunc)`
+   1. `WithDeadline` 함수는 위 `WithDeadlineCause` 함수를 호출하고, `cause`를 `nil`로 전달하는 함수입니다.  
+   2. 그래서 `context.Cause`로 취소 사유를 조회할 수 없습니다.
+3. `WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)`
+   1. `WithTimeout`은 `WithDeadline` 함수를 내부적으로 호출합니다.
+   2. `d`의 값으로 현재 시각(`time.Now()`)에 `timeout` 값을 더한 시각을 전달합니다.
+4. `WithTimeoutCause(parent Context, timeout time.Duration, cause error) (Context, CancelFunc)`
+   1. `WithTimeoutCause` 함수는 `WithTimeout` 함수처럼 시각을 계산해서 `WithDeadlineCause`의 `d` 매개변수로 넘겨주고, `cause`를 그대로 넘겨줍니다.
 
 이러한 `timerCtx`들은 특정 시점까지, 혹은 특정 시간 동안 작업을 수행해야하고 그 외에는 장애일 때 사용하게 됩니다.
 
