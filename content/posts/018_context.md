@@ -2,7 +2,7 @@
 title: "Context 패키지 (기초)"
 date: 2023-05-26T14:14:06+09:00
 tags: ["go", "context"]
-draft: true
+draft: false
 ---
 
 ## 패키지 구성

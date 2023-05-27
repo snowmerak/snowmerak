@@ -2,7 +2,7 @@
 title: "ChatGPT야, 좋은 개발자란 뭐라고 생각해?"
 date: 2023-04-12T22:23:54+09:00
 tags: ["developer", "development", "programming"]
-draft: false
+draft: true
 ---
 
 ## 무슨 글이죠?
