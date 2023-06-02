@@ -1,0 +1,17 @@
+@startuml context
+
+component main {
+    card ctx
+}
+
+component AuthServer
+
+component SearchServer
+
+component UpdateServer
+
+main -down-> AuthServer: WithCancel
+main -down-> SearchServer: WithCancel
+main -down-> UpdateServer: WithCancel
+
+@enduml

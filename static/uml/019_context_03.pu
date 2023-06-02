@@ -1,0 +1,21 @@
+@startuml context
+
+component main {
+    card ctx
+}
+
+collections RequestPool
+collections ResponsePool
+
+actor User
+
+component SearchServer
+
+main -down-> SearchServer: WithCancel
+
+User -left-> SearchServer: 1. request search with ctx
+SearchServer <-left-> RequestPool: 2. get reqeust object
+SearchServer <-down-> ResponsePool: 3. get response object
+SearchServer -right-> User: 4. return response and cancel ctx
+
+@enduml

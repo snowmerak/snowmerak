@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="219px" preserveAspectRatio="none" style="width:461px;height:219px;background:#FFFFFF;" version="1.1" viewBox="0 0 461 219" width="461px" zoomAndPan="magnify"><defs/><g><!--MD5=[a70b0d373322012744ecc119c63f921b]
+cluster main--><g id="cluster_main"><rect fill="none" height="89.49" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="108" x="215" y="7"/><rect fill="none" height="10" style="stroke:#181818;stroke-width:1.0;" width="15" x="303" y="12"/><rect fill="none" height="2" style="stroke:#181818;stroke-width:1.0;" width="4" x="301" y="14"/><rect fill="none" height="2" style="stroke:#181818;stroke-width:1.0;" width="4" x="301" y="18"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="36" x="251" y="33.5352">main</text></g><!--MD5=[5b83e40b5c67491cbafc419e94657df7]
+entity ctx--><g id="elem_ctx"><rect fill="#F1F1F1" height="22.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="41" x="258.5" y="50"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="21" x="268.5" y="66.5352">ctx</text></g><!--MD5=[77359a80dce242e245ab309072a510dc]
+entity AuthServer--><g id="elem_AuthServer"><rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="116" x="7" y="167.49"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="103" y="172.49"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="101" y="174.49"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="101" y="178.49"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="22" y="201.0252">AuthServer</text></g><!--MD5=[269d10e65fa0ae5ac934f98547a8b807]
+entity SearchServer--><g id="elem_SearchServer"><rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="129" x="158.5" y="167.49"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="267.5" y="172.49"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="265.5" y="174.49"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="265.5" y="178.49"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89" x="173.5" y="201.0252">SearchServer</text></g><!--MD5=[5192e9b862ed8c705239da9cd3550be6]
+entity UpdateServer--><g id="elem_UpdateServer"><rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="132" x="323" y="167.49"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="435" y="172.49"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="433" y="174.49"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="433" y="178.49"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="338" y="201.0252">UpdateServer</text></g><!--MD5=[05d7f73b3ffbb868577a7bcce596e592]
+link main to AuthServer--><g id="link_main_AuthServer"><path d="M214.831,67.8056 C214.5311,68.0113 214.2241,68.222 213.9102,68.4377 C208.8878,71.8878 202.1006,76.5956 194.3612,82.0813 C178.8825,93.0525 159.595,107.135 143,120.49 C126.12,134.07 107.99,150.08 93.46,163.28 " fill="none" id="main-to-AuthServer" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="90.07,166.28,99.4166,163.1749,93.7658,162.9124,94.0284,157.2616,90.07,166.28" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70" x="144" y="134.0584">WithCancel</text></g><!--MD5=[c2d3248d3ecf67ee7066c6c1a0dd1923]
+link main to SearchServer--><g id="link_main_SearchServer"><path d="M223,96.7499 C223,96.9021 223,97.0545 223,97.2072 C223,97.8179 223,98.4331 223,99.0525 C223,118.8725 223,142.95 223,161.31 " fill="none" id="main-to-SearchServer" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="223,166,227,157,223,161,219,157,223,166" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70" x="224" y="134.0584">WithCancel</text></g><!--MD5=[8c49bb750c853880ae42c3c4b1603c5d]
+link main to UpdateServer--><g id="link_main_UpdateServer"><path d="M231.0366,96.6885 C231.0758,96.7714 231.1151,96.8543 231.1546,96.9371 C231.4709,97.5996 231.7995,98.2572 232.1406,98.9083 C234.87,104.1169 238.41,108.91 243,112.49 C264.22,129.03 278.28,109.89 303,120.49 C326.06,130.38 348.02,148.27 363.98,163.38 " fill="none" id="main-to-UpdateServer" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="366.91,166.15,363.2079,157.0234,363.3108,162.6793,357.6549,162.7822,366.91,166.15" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70" x="333" y="134.0584">WithCancel</text></g><!--MD5=[d4c7eb64c279d222a2b9340ed3dd19bc]
+@startuml context
+
+component main {
+    card ctx
+}
+
+component AuthServer
+
+component SearchServer
+
+component UpdateServer
+
+main -down-> AuthServer: WithCancel
+main -down-> SearchServer: WithCancel
+main -down-> UpdateServer: WithCancel
+
+@enduml
+
+PlantUML version 1.2022.7(Tue Aug 23 02:01:30 KST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: KR
+--></g></svg>

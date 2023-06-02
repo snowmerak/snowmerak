@@ -1,0 +1,31 @@
+backgroud: {
+    ctx: context.Backgroud
+}
+
+injected: {
+    ctx: context.WithValue
+}
+
+dipose: {
+    ctx: context.AfterFunc
+    stop: context.StopFunc
+}
+
+cancelableJob: {
+    ctx: context.WithCancel
+    cancel: context.CancelFunc
+}
+
+timerJob: {
+    ctx: context.WithDeadline
+    cancel: context.CancelFunc
+}
+
+backgroud.ctx --> injected.ctx
+injected.ctx --> cancelableJob.ctx
+injected.ctx --> timerJob.ctx
+cancelableJob.ctx --> dipose.ctx
+timerJob.ctx --> dipose.ctx
+
+cancelableJob.cancel --> dipose.stop
+timerJob.cancel --> dipose.stop

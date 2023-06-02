@@ -1,0 +1,19 @@
+@startuml context
+
+component main {
+    card ctx
+}
+
+component AuthServer
+
+main -down-> AuthServer: WithCancel, WithValue(redis), WithValue(postgres)
+
+usecase CheckToken
+
+AuthServer -down-> CheckToken: WithTimeout
+
+usecase GetUserInfo
+
+AuthServer -down-> GetUserInfo: WithTimeout
+
+@enduml
