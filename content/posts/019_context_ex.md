@@ -1,5 +1,5 @@
 ---
-title: "Context 패키지 (활용)"
+title: "Context 패키지 (실전)"
 date: 2023-05-26T18:47:21+09:00
 tags: ["go", "context"]
 draft: false
