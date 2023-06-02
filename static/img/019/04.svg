@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="289px" preserveAspectRatio="none" style="width:633px;height:289px;background:#FFFFFF;" version="1.1" viewBox="0 0 633 289" width="633px" zoomAndPan="magnify"><defs/><g><!--MD5=[53ccf4b3ee6cf4337a0ab93ac09644f3]
+entity main--><g id="elem_main"><rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="74" x="199.48" y="7"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="253.48" y="12"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="251.48" y="14"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="251.48" y="18"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="34" x="214.48" y="40.5352">main</text></g><!--MD5=[7d8a41cc988086b9a019c15880a86be4]
+entity JobA--><g id="elem_JobA"><rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="72" x="127.48" y="130.48"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="179.48" y="135.48"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="177.48" y="137.48"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="177.48" y="141.48"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="32" x="142.48" y="164.0152">JobA</text></g><!--MD5=[0412a718baf2cf944f66d723ba676552]
+entity JobB--><g id="elem_JobB"><rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="70" x="304.48" y="130.48"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="354.48" y="135.48"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="352.48" y="137.48"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="352.48" y="141.48"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="319.48" y="164.0152">JobB</text></g><g id="elem_JobA1"><ellipse cx="46.4767" cy="268.629" fill="#F1F1F1" rx="40.4767" ry="14.659" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="25.9767" y="271.92">JobA1</text></g><g id="elem_JobA2"><ellipse cx="163.4767" cy="268.629" fill="#F1F1F1" rx="40.4767" ry="14.659" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="142.9767" y="271.92">JobA2</text></g><g id="elem_JobB1"><ellipse cx="339.4824" cy="268.629" fill="#F1F1F1" rx="39.0624" ry="14.659" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="319.9824" y="271.92">JobB1</text></g><g id="elem_JobB2"><ellipse cx="515.4824" cy="268.629" fill="#F1F1F1" rx="39.0624" ry="14.659" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="495.9824" y="271.92">JobB2</text></g><!--MD5=[272871a1904838b0705f797d38b742ad]
+reverse link main to JobA--><g id="link_main_JobA"><path d="M219.56,58.68 C214.67,66.67 209.34,75.41 204.48,83.48 C195.11,99.04 184.68,116.66 176.69,130.22 " fill="none" id="main-backto-JobA" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="222.54,54.82,214.4217,60.3961,219.9235,59.0807,221.2389,64.5825,222.54,54.82" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="75" x="205.48" y="97.0484">2. return err</text></g><!--MD5=[afe70c5be2db8e6ef9f2bb8cbc167c1e]
+link main to JobB--><g id="link_main_JobB"><path d="M258.65,53.97 C267.22,62.99 276.99,73.56 285.48,83.48 C297.04,97 309.28,112.58 319.18,125.53 " fill="none" id="main-to-JobB" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="322.71,129.18,320.4498,119.594,319.6849,125.1989,314.08,124.4341,322.71,129.18" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="134" x="300.48" y="97.0484">4. context.Cause(ctx)</text></g><!--MD5=[0657e127213c01ddcf5c29fa7ba9fddf]
+link main to main--><g id="link_main_main"><path d="M273.89,18.97 C292.22,17.5 308.48,21.26 308.48,30.24 C308.48,38.24 295.58,42.09 279.81,41.8 " fill="none" id="main-to-main" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="274.89,41.5,283.6847,45.9331,279.8841,41.7433,284.074,37.9426,274.89,41.5" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="81" x="314.48" y="35.3084">3. cancel(err)</text></g><!--MD5=[b389d6b809b1ba6611dd23e00dab8377]
+reverse link JobA to JobA1--><g id="link_JobA_JobA1"><path d="M122.16,172.76 C106.06,181.33 88.4,192.83 75.48,206.97 C63.03,220.59 54.9,240.5 50.5,253.75 " fill="none" id="JobA-backto-JobA1" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="126.1,170.19,116.2686,170.7754,121.6597,172.4887,119.9464,177.8798,126.1,170.19" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="75" x="76.48" y="220.5384">1. return err</text></g><!--MD5=[52ea26f93e5b2bb034a0f6bf0a789ecb]
+link JobA to JobA2--><g id="link_JobA_JobA2"><path d="M161.62,177.18 C160.72,190.73 159.94,208.34 160.48,223.97 C160.74,231.68 161.27,240.15 161.81,247.55 " fill="none" id="JobA-to-JobA2" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="162.26,252.49,165.5803,243.2177,161.8885,247.5038,157.6024,243.812,162.26,252.49" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="134" x="161.48" y="220.5384">4. context.Cause(ctx)</text></g><!--MD5=[47955ba8e16bb947cf3c66c587b235fa]
+link JobB to JobB1--><g id="link_JobB_JobB1"><path d="M337.62,177.18 C336.72,190.73 335.94,208.34 336.48,223.97 C336.74,231.68 337.27,240.15 337.81,247.55 " fill="none" id="JobB-to-JobB1" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="338.26,252.49,341.5803,243.2177,337.8885,247.5038,333.6024,243.812,338.26,252.49" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="134" x="337.48" y="220.5384">4. context.Cause(ctx)</text></g><!--MD5=[525edac9a807327fde15f4c71eea373d]
+link JobB to JobB2--><g id="link_JobB_JobB2"><path d="M374.95,161.73 C404.61,169.02 446.73,182.83 476.48,206.97 C490.21,218.12 500.66,235.43 507.27,248.71 " fill="none" id="JobB-to-JobB2" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="509.7,252.76,509.4034,242.9156,507.5326,248.2542,502.1941,246.3834,509.7,252.76" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="134" x="491.48" y="220.5384">4. context.Cause(ctx)</text></g><!--MD5=[1f77945b6e57737289b40cb0542f86d9]
+@startuml context
+
+component main
+
+component JobA
+component JobB
+
+usecase JobA1
+usecase JobA2
+usecase JobB1
+usecase JobB2
+
+main <-down- JobA: 2. return err
+main -down-> JobB: 4. context.Cause(ctx)
+
+main - -> main: 3. cancel(err)
+
+JobA <-down- JobA1: 1. return err
+JobA -down-> JobA2: 4. context.Cause(ctx)
+
+JobB -down-> JobB1: 4. context.Cause(ctx)
+JobB -down-> JobB2: 4. context.Cause(ctx)
+
+@enduml
+
+PlantUML version 1.2022.7(Tue Aug 23 02:01:30 KST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: KR
+--></g></svg>

@@ -1,0 +1,24 @@
+@startuml context
+
+component main
+
+component JobA
+component JobB
+
+usecase JobA1
+usecase JobA2
+usecase JobB1
+usecase JobB2
+
+main <-down- JobA: 2. return err
+main -down-> JobB: 4. context.Cause(ctx)
+
+main --> main: 3. cancel(err)
+
+JobA <-down- JobA1: 1. return err
+JobA -down-> JobA2: 4. context.Cause(ctx)
+
+JobB -down-> JobB1: 4. context.Cause(ctx)
+JobB -down-> JobB2: 4. context.Cause(ctx)
+
+@enduml
