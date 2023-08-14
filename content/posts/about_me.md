@@ -48,6 +48,9 @@ draft: false
 email:
 1. snowmerak@outlook.com
 
+telegram & kakaotalk:
+1. snowmerak
+
 ## external link
 
 - [github](https://github.com/snowmerak)
