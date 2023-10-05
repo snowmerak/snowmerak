@@ -46,6 +46,8 @@ go install github.com/snowmerak/jetti/v2/cmd/jetti@latest
    1. 프로젝트 내에 json이나 yaml 파일이 있을 경우, 마샬링 가능한 고 구조체를 생성합니다.
 7. proto 파일 생성
    1. 프로젝트 내에 proto 파일이 있을 경우, `protoc`를 통해 고 코드를 생성합니다.
+8. 함수형 프로그래밍
+   1. 함수형 프로그래밍을 위한 코드를 생성합니다.
 
 ### 프로젝트 혹은 파일 생성
 
@@ -833,6 +835,24 @@ type Address struct {
 
 자동으로 프로토버퍼와 gRPC 관련 디펜던시를 추가합니다.
 
+### 함수형 프로그래밍
+
+`lib/doc.go`에 다음과 같은 코드를 작성합니다.
+
+```go
+package lib
+
+// jetti:fp
+func init() {}
+```
+
+이 코드를 `jetti generate`를 통해 코드를 생성하면 다음과 같은 종류의 코드와 타입이 생성됩니다.
+
+1. `func If[T, R any](cond bool, trueFn func() T, falseFn func() R) result.Result[T, R]`: if 구문의 함수 버전입니다. `true`일 때 `T`타입 반환, `false`일 때 `R`타입 반환합니다.
+2. `func When[T, R any](criteria T, cond ...Condition[T, R]) option.Option[R]`: `criteria`가 `cond`에 해당하는지 확인합니다. `cond`는 `Condition[T, R]` 타입이며, `T`타입을 받아 `R`타입을 반환합니다.
+3. `type Option[T any] struct {...}`: `Option`은 `T`타입을 가집니다. `Option`은 `Some[T](T)`과 `None[T]()`으로 생성하며, `Unwrap() T`, `UnwrapOr(T) T`, `IsSome() bool`, `IsNone() bool` 등으로 값을 추출합니다.
+4. `type Result[T, R any] struct {...}`: `Result`는 `T`와 `R`타입을 가집니다. `Result`는 `Ok[T, R](T)`, `Err[T, R](R)`으로 생성하며, `Unwrap() T`, `UnwrapOr(T) T`, `UnwrapErr() R`, `UnwrapErrOr(R) R`, `IsOk() bool`, `IsErr() bool` 등으로 값을 추출합니다.
+
 ## 버전
 
-이 글은 `v2.9.1` 기준으로 작성되었습니다.
+이 글은 `v2.11.0` 기준으로 작성되었습니다.
