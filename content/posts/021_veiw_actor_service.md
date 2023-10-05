@@ -1,6 +1,7 @@
 ---
 title: "뭔가 이상한 플러터 프로젝트 구조"
 date: 2023-09-16T14:54:01+09:00
+tags: ["flutter", "riverpod", "grpc", "golang", "protobuf"]
 draft: false
 ---
 
