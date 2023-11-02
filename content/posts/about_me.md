@@ -18,6 +18,7 @@ draft: false
 ![rust](https://img.shields.io/badge/-Rust-e0707e?style=flat&logo=RUST)
 ![python](https://img.shields.io/badge/-Python-eaeff9?style=flat&logo=PYTHON)
 ![dart](https://img.shields.io/badge/-Dart-eaeff9?style=flat&logo=DART)
+![C#](https://img.shields.io/badge/-C%23-eaeff9?style=flat&logo=C-SHARP)
 
 ### frameworks
 
@@ -25,6 +26,8 @@ draft: false
 ![lux](https://img.shields.io/badge/-Lux-eaeff9?style=flat&logo=LUX)
 ![jetti](https://img.shields.io/badge/-Jetti-eaeff9?style=flat&logo=JETTI)
 ![flutter](https://img.shields.io/badge/-Flutter-eaeff9?style=flat&logo=FLUTTER)
+![asp.net core](https://img.shields.io/badge/-ASP.NET%20Core-eaeff9?style=flat&logo=ASP.NET)
+![azure-functions](https://img.shields.io/badge/-Azure%20Functions-eaeff9?style=flat&logo=AZURE-FUNCTIONS)
 
 ### tools
 
@@ -41,6 +44,10 @@ draft: false
 
 ![mssql](https://img.shields.io/badge/-MSSQL-eaeff9?style=flat&logo=MICROSOFT-SQL-SERVER)
 ![postgresql](https://img.shields.io/badge/-PostgreSQL-eaeff9?style=flat&logo=POSTGRESQL)
+
+### Cloud
+
+![azure](https://img.shields.io/badge/-Azure-eaeff9?style=flat&logo=AZURE)
 
 ## contact
 
