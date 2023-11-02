@@ -17,15 +17,14 @@ draft: false
 ![golang](https://img.shields.io/badge/-Go-eaeff9?style=flat&logo=GO)
 ![rust](https://img.shields.io/badge/-Rust-e0707e?style=flat&logo=RUST)
 ![python](https://img.shields.io/badge/-Python-eaeff9?style=flat&logo=PYTHON)
-![typescript](https://img.shields.io/badge/-Typescript-eaeff9?style=flat&logo=TYPESCRIPT)
+![dart](https://img.shields.io/badge/-Dart-eaeff9?style=flat&logo=DART)
 
 ### frameworks
 
 ![svelte](https://img.shields.io/badge/-Svelte-eaeff9?style=flat&logo=SVELTE)
 ![lux](https://img.shields.io/badge/-Lux-eaeff9?style=flat&logo=LUX)
 ![jetti](https://img.shields.io/badge/-Jetti-eaeff9?style=flat&logo=JETTI)
-![fastapi](https://img.shields.io/badge/-FastAPI-eaeff9?style=flat&logo=FASTAPI)
-![nestjs](https://img.shields.io/badge/-NestJS-eaeff9?style=flat&logo=NESTJS)
+![flutter](https://img.shields.io/badge/-Flutter-eaeff9?style=flat&logo=FLUTTER)
 
 ### tools
 
@@ -40,8 +39,8 @@ draft: false
 
 ### Database
 
+![mssql](https://img.shields.io/badge/-MSSQL-eaeff9?style=flat&logo=MICROSOFT-SQL-SERVER)
 ![postgresql](https://img.shields.io/badge/-PostgreSQL-eaeff9?style=flat&logo=POSTGRESQL)
-![mongodb](https://img.shields.io/badge/-MongoDB-eaeff9?style=flat&logo=MONGODB)
 
 ## contact
 
