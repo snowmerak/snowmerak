@@ -233,7 +233,9 @@ export 'src/dart/proto/auth/auth.pbserver.dart';
 // TODO: Export any libraries intended for clients of this package.
 ```
 
-그러면 이제 외부 프로젝트에서 `pubspec.yaml`에 다음과 같이 추가하고, `pub get`을 실행하면 패키지를 설치하여 사용할 수 있습니다.
+마지막으로 `dart pub add protobuf`를 실행해서 프로토버퍼 라이브러리를 추가합니다.
+
+그럼 이제 외부 프로젝트에서 `pubspec.yaml`에 다음과 같이 추가하고, `pub get`을 실행하면 패키지를 설치하여 사용할 수 있습니다.
 
 ```yaml
 dependencies:
