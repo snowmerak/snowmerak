@@ -16,6 +16,7 @@ draft: false
 1. 고 언어 프로젝트 구조에 대해 어느 정도 강제성을 부여합니다.
 2. 코드를 작성할 때, 귀찮은 부분을 최대한 코드 생성을 통해 줄여줍니다.
 3. 까먹고 하지 못 했다는 이유로 해야할 것을 하지 못하는 일을 최대한 줄여줍니다.
+4. cgo 의존성이나 외부 툴 설치에 대한 간단한 지원을 제공합니다.
 
 ## 설치
 
@@ -48,6 +49,13 @@ go install github.com/snowmerak/jetti/v2/cmd/jetti@latest
    1. 프로젝트 내에 proto 파일이 있을 경우, `protoc`를 통해 고 코드를 생성합니다.
 8. 함수형 프로그래밍
    1. 함수형 프로그래밍을 위한 코드를 생성합니다.
+9. cgo 의존성을 위한 폴더 생성
+   1. `cgo` 의존성을 위한 폴더를 생성합니다.
+   2. `jetti run` 명령어를 실행할 때, 해당 폴더를 `CGO_CFLAGS`와 `CGO_LDFLAGS`에 추가합니다.
+10. Pure Go 도구 설치
+    1.  `go install`을 통해 설치할 수 있는 도구를 설치합니다.
+    2.  [`jetti-install`](https://github.com/snowmerak/jetti-install) 레포지토리를 통해 설치할 수 있는 도구를 기록합니다.
+    3.  제티 내에서 해당 레포지토리를 통해 쉽게 목록을 검색하고 설치할 수 있게 도와줍니다.
 
 ### 프로젝트 혹은 파일 생성
 
@@ -852,6 +860,31 @@ func init() {}
 2. `func When[T, R any](criteria T, cond ...Condition[T, R]) option.Option[R]`: `criteria`가 `cond`에 해당하는지 확인합니다. `cond`는 `Condition[T, R]` 타입이며, `T`타입을 받아 `R`타입을 반환합니다.
 3. `type Option[T any] struct {...}`: `Option`은 `T`타입을 가집니다. `Option`은 `Some[T](T)`과 `None[T]()`으로 생성하며, `Unwrap() T`, `UnwrapOr(T) T`, `IsSome() bool`, `IsNone() bool` 등으로 값을 추출합니다.
 4. `type Result[T, R any] struct {...}`: `Result`는 `T`와 `R`타입을 가집니다. `Result`는 `Ok[T, R](T)`, `Err[T, R](R)`으로 생성하며, `Unwrap() T`, `UnwrapOr(T) T`, `UnwrapErr() R`, `UnwrapErrOr(R) R`, `IsOk() bool`, `IsErr() bool` 등으로 값을 추출합니다.
+
+### cgo 의존성을 위한 폴더 생성
+
+`jetti new`로 프로젝트를 생성할 때, `clib` 폴더를 생성합니다.  
+이 폴더는 `cgo` 의존성을 위한 폴더입니다.
+
+이 폴더의 구조는 다음 규칙을 지켜야합니다.
+
+1. `clib` 폴더 바로 아래에는 `GOOS-GOARCH` 형식의 폴더가 있어야합니다.
+2. `GOOS-GOARCH` 폴더 바로 아래에는 `lib` 폴더와 `include` 폴더가 있어야합니다.
+3. `lib`은 컴파일된 라이브러리 파일이 포함됩니다.
+4. `include`는 헤더 파일이 포함됩니다.
+
+그러면 `jetti run`을 통해 실행할 때, `CGO_CFLAGS`와 `CGO_LDFLAGS`에 각 OS 및 아키텍처에 맞는 폴더를 추가합니다.
+
+### Pure Go 도구 설치
+
+`jetti tools`를 사용하여 `go install`을 통해 설치할 수 있는 툴을 설치할 수 있습니다.
+
+`jetti tools`는 `jetti-install` 레포지토리를 통해 툴 목록을 가져옵니다.  
+이 레포지토리에 기록된 툴을 쉽게 검색 및 설치할 수 있습니다.
+
+1. `jetti tools --renew`: `jetti-install` 레포지토리를 갱신합니다. 자동으로 갱신하지 않으므로, 적절히 실행해주어야 합니다.
+2. `jetti tools --install`: `jetti-install` 레포지토리에 기록된 툴을 설치합니다. 한번에 하나씩 여러번 여러 툴을 설치할 수 있습니다.
+3. `jetti tools --multi --install`: `jetti-install` 레포지토리에 기록된 툴을 한번에 여러개 설치합니다.
 
 ## 버전
 
