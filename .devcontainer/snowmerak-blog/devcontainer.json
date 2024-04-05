@@ -1,0 +1,16 @@
+{
+  "name": "snowmerak-blog",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "service": "snowmerak-blog",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "yzhang.markdown-all-in-one"
+      ]
+    }
+  }
+}
