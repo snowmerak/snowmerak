@@ -62,6 +62,17 @@ CMD ["/bin/sh", "-c", "while true; do sleep 30; done;"]
 마지막의 `CMD` 부분은 컨테이너가 종료되지 않도록 하는 설정입니다.  
 이 설정이 없으면 컨테이너가 실행되자마자 종료되어 ssh 접속이 불가능합니다.
 
+만약 `sqlc`와 같은 도구를 사용하는 경우, 해당 도구를 설치하는 설정을 추가합니다.
+
+```dockerfile
+FROM golang:1.22-bookworm
+
+RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest && \
+    echo 'export PATH=$PATH:$HOME/go/bin' >> /etc/profile
+
+CMD ["/bin/sh", "-c", "while true; do sleep 30; done;"]
+```
+
 ### docker-compose 파일 작성
 
 `.devcontainer/practice-go` 폴더 내에 `docker-compose.yml` 파일을 생성합니다.
