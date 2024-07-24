@@ -8,14 +8,15 @@ draft: false
 ## Liskov Substitution Principle with inheritance
 
 리스코프 치환 법칙은 객체지향 프로그래밍에서 중요한 법칙 중 하나입니다.  
-그냥 표현을 들으면 오해할 수 있는 표현이긴 하지만 주 요지는 다음과 같습니다.
 
 > 서브 타입은 언제나 슈퍼 타입으로 대체될 수 있어야 한다.
+
+개인적으로는 살짝 헷갈린 적이 있는 표현이지만, 코드 내의 인스턴스 타입을 교체하는 케이스로 이해하면 쉽습니다.
 
 ### 상속을 활용한 케이스
 
 이 법칙은 일반적인 상속이 존재하는 객체지향 지향 언어에서 쉽게 설명되는 법칙입니다.  
-이를 테면 보통 다음과같은 예시를 많이 사용합니다.
+예를 들어 보통 자바에선 이런 식으로 많이 예제를 작성합니다.
 
 ```java
 class Shape {
@@ -48,7 +49,7 @@ class Square extends Shape {
 
 위 코드에서 `Rectangle`과 `Square`는 `Shape`를 상속받고 있습니다.  
 그리고 `Square`와 `Rectangle`을 주고 받을 수 있는 곳은 `Shape`로 대체할 수 있습니다.  
-이를 테면 다음과 같이 사용할 수 있습니다.
+그리고 상속받은 객체를 다음과 같이 수퍼 타입으로 받을 수 있습니다.
 
 ```java
 class main {
@@ -65,22 +66,29 @@ class main {
 ```
 
 위 코드에서 `setShape` 메소드는 `Shape`를 인자로 받고 있습니다.  
-그리고 `Rectangle`을 넘겨줬지만 문제없이 대체하여 동작할 수 있습니다.
+그리고 `Rectangle`을 넘겨줬지만 수퍼 타입인 `Shape`로 변환되어 문제 없이 동작합니다.
 
 ### LSP의 의의
 
 이렇게 특정 서브 타입을 슈퍼 타입으로 대체할 수 있는 것은 다형성을 활용할 수 있게 해줍니다.  
-이는 코드의 유연성을 높여주고, 코드의 재사용성을 높여줍니다.
+그리고 다형성은 객체의 역할과 책임을 제한하여, 잘못된 동작을 막거나 내부 상태를 숨기는 데에 도움을 줍니다.
 
 ## Listkov Substitution Principle with interface and composite pattern
 
-하지만 이러한 상속을 통한 객체지향은 상속을 지원하는 일부 언어에서만 사용할 수 있으며, 이로 인해 코드 복잡성이 증가하는 문제가 있습니다.
+하지만 이러한 상속을 통한 객체지향은 상속을 지원하는 언어에서만 사용할 수 있습니다.  
+그리고 스프링에서 보다시피, 상속 깊이가 깊어질 수록 상속 구조가 복잡해질 수 있으며,  
+다형성을 위한 행위 뿐만 아니라 내부 상태도 상속 받기 때문에, 개발자가 신경 써야할 부분이 늘어납니다.
 
 ### 객체지향을 다시 생각해서
 
 객체지향의 핵심은 역할과 책임을 기능으로써 객체에게 부여하는 것입니다.  
-우리는 이 기능을 객체에게 부여하기 위해 인터페이스를 사용할 수 있습니다.  
-이를 테면, 고 언어에서 OS의 파일을 다루는 구조체를 생성해보겠습니다.
+우리는 이 기능을 부여하기 위해 인터페이스와 [덕 타이핑](https://ko.wikipedia.org/wiki/%EB%8D%95_%ED%83%80%EC%9D%B4%ED%95%91)을 사용할 수 있습니다.  
+그리고 당연하게도, class 중심이 아니라 interface를 중심으로, 상속이 아니라 합성 관계를 중점으로 다시 생각해볼 수 있습니다.
+
+### 고 언어에서
+
+고 언어에서는 상속 대신 합성(composite)를 이용해서 다형성을 구성합니다.  
+다음 예제를 통해 간단하게 고 언어에서의 합성을 볼 수 있습니다.
 
 ```go
 func main() {
@@ -103,6 +111,14 @@ func main() {
 type WriteCloser interface {
     Writer
     Closer
+}
+
+type Writer interface {
+	Write(p []byte) (n int, err error)
+}
+
+type Closer interface {
+	Close() error
 }
 ```
 
@@ -127,7 +143,6 @@ func main() {
 
 또 위에 있다시피 `io.WriteCloser`는 `io.Writer`와 `io.Closer` 인터페이스를 포함하고 있습니다.  
 그러면 `*os.File`은 `io.Writer`와 `io.Closer` 인터페이스로 대체할 수 있습니다.
-또 이렇게 말이죠!
 
 ```go
 func writeHelloWorld(w io.Writer) {
@@ -151,15 +166,9 @@ func main() {
 
 이 포함 관계, 어쩌면 상속 관계를 이렇게 나타낼 수 있습니다.
 
-```plantuml
-"io.WriteCloser" <|-- "io.Writer"
-"io.WriteCloser" <|-- "io.Closer"
-"*os.File" <|-- "io.WriteCloser"
-```
+![01](/img/023/01.png)
 
-단순한 인터페이스의 포함 관계로 Go 언어는 충분한 기능적 다형성을 구성했으며, 리스코프 치환 법칙을 지켰습니다.
-
-이러한 아이디어는 객체지향의 핵심적인 개념인 메시지 패싱과 다형성을 최대한으로 활용할 수 있습니다. 거디가 다음 규칙을 준수하며, 추가로 몇몇 다른 SOLID 원칙을 지킬 수 있습니다.
+단순한 인터페이스의 포함 관계로 Go 언어는 충분히 객체지향의 핵심적인 개념인 메시지 패싱과 다형성을 활용할 수 있습니다. 거디가 다음 규칙을 준수하며, 추가로 몇몇 다른 SOLID 원칙을 지킬 수 있습니다.
 
 1. 객체는 자신의 내부 구현을 숨기고, 인터페이스를 통해 다른 객체와 소통합니다. 이는 캡슐화 개념과도 연결됩니다.
 2. 객체는 자신이 구현하는 인터페이스의 규약을 반드시 준수해야 합니다. 이는 LSP의 핵심 요구사항과 일치합니다.
@@ -299,14 +308,49 @@ impl WriteCloser for File {
 }
 ```
 
-이렇게 다른 언어에서도 충분히 이러한 패턴을 사용할 수 있습니다.
+- Dart
+
+```dart
+import 'dart:io';
+
+abstract class Writer {
+  void write(List<int> bytes);
+}
+
+abstract class Closer {
+  void close();
+}
+
+abstract class WriteCloser implements Writer, Closer {
+  // 추가적인 메서드는 필요하지 않음
+}
+
+class MyFile implements WriteCloser {
+  final File _file;
+
+  MyFile(String path) : _file = File(path);
+
+  @override
+  void write(List<int> bytes) {
+    _file.writeAsBytesSync(bytes);
+  }
+
+  @override
+  void close() {
+    _file.closeSync();
+  }
+}
+
+void main() {
+  final file = MyFile('example.txt');
+  file.write('Hello, world!'.codeUnits);
+  file.close();
+}
+```
 
 ## 결론
 
 리스코프 치환 법칙은 객체지향 프로그래밍에서 중요한 법칙 중 하나입니다.  
-이를 통해 다형성을 활용할 수 있으며, 코드의 유연성과 재사용성을 높일 수 있습니다.  
-하지만 이를 상속을 통해 구현하는 것은 코드의 복잡성을 높일 수 있으며, 최근 Go나 Rust같은 언어에서는 이를 상속으로 구현할 수 없습니다.  
-이러한 경우 인터페이스와 컴포지트 패턴을 활용하여 리스코프 치환 법칙을 지킬 수 있습니다.
-
-하지만 이러한 패턴을 사용할 때에도 주의할 점이 있습니다.  
-인터페이스를 너무 많이 분리하거나, 인터페이스의 역할을 너무 많이 부여하는 것은 오히려 코드의 복잡성을 높일 수 있으니 적절한 수준에서 사용하는 것이 중요합니다.
+기존의 언어들은 class 기반의 상속을 통해 이를 달성하고자 했지만, 최근의 언어나 패러다임 중에는 interface와 composite 패턴만으로 달성하고자 하는 케이스가 있습니다.  
+이러한 패턴은 무리없이 리스코프 치환 원칙을 지킬 수 있으며, 객체지향을 구성하는 데에 일조할 수 있습니다.
+하지만 인터페이스를 너무 많이 분리하거나, 인터페이스에 역할을 너무 많이 부여하는 것은 오히려 코드의 복잡성을 높일 수 있으니 적절한 수준에서 사용하는 것이 중요합니다.
