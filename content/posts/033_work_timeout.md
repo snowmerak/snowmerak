@@ -49,3 +49,113 @@ draft: false
 ### 그에 대한 대안은?
 
 사실상 모든 논리적 스코프에 `context.Context` 사용 강제와 어느정도의 timeout 수치 적용을 하면 해결할 수 있다고 생각합니다. 그리고 이를 받쳐주기 위해 서비스적으로 각 동작들이 얼마나 빠르게 동작해야하며, 최대 대기 시간이 얼마나 되는 지 등을 세세하게 파악해야할 필요성이 있습니다. 물론 설계 단계에서 이게 되지 않았다는 것에 회의를 느끼기도 합니다.
+
+## 결론
+
+모든 작업에 대한 스코프 적용은 사실 `context.Context`만 잘 사용하면 문제 없이 할 수 있습니다. 모두가 당연히 첫 인자로 `ctx context.Context`를 받고 그에 대한 처리만 빈틈없이 잘 해줄 수 있다면, 사실 문제 없어야 하는 게 맞다고 생각합니다. 하지만 이 글을 쓰는 저도 실수를 통해 더 엄격하게 해야겠다고 느껴 코드 스타일 상으로 강제할 수 있는 방법을 찾아야 했습니다.
+
+그 중 간단한 방법은 linter를 사용하는 것입니다. 하지만 이는 상황에 따라 내가 작성하지 않았거나, 체크하지 않는 게 더 나은 경우에 대해 예외 처리를 하는 게 번거로울 수 있으며, 이것 또한 새로운 스트레스가 될 수 있다는 가능성이 존재합니다. 그렇기에 저는 라이브러리 사용이라는 코드 상의 강제성을 부여할 수 있는 방법을 선택하는 게 어떤가 생각합니다.
+
+### 오랜만에..
+
+제가 작성한 [scope](https://github.com/snowmerak/scope)를 이용하면, 전통적인 `try ... catch ... finally`의 구조를 적용합니다. 어떠한 상태를 만들고, 해당 상태 중심으로 가공, 활용 및 재설정하는 일련의 흐름을 함수로써 작성하여 흐름대로 처리할 수 있게 합니다.
+
+#### example
+
+```go
+// riddle.go
+package riddle
+
+import (
+	"context"
+	"fmt"
+	"github.com/snowmerak/scope"
+	"log"
+	"sync/atomic"
+)
+
+type State struct {
+	number atomic.Int64
+}
+
+func NewState() *State {
+	return &State{}
+}
+
+var _ scope.Work[State] = AddOne
+
+func AddOne(ctx context.Context, state *State) error {
+	state.number.Add(1)
+	return nil
+}
+
+var _ scope.Work[State] = AddTwo
+
+func AddTwo(ctx context.Context, state *State) error {
+	state.number.Add(2)
+	return nil
+}
+
+var _ scope.Work[State] = SubOne
+
+func SubOne(ctx context.Context, state *State) error {
+	state.number.Add(-1)
+	return nil
+}
+
+var _ scope.Work[State] = SetZero
+
+func SetZero(ctx context.Context, state *State) error {
+	state.number.Store(0)
+	return nil
+}
+
+var _ scope.CleanUp[State] = ResetAndPrint
+
+func ResetAndPrint(ctx context.Context, state *State) {
+	log.Printf("State: %d\n", state.number.Load())
+	state.number.Store(0)
+}
+
+var _ scope.CleanUp[State] = JustPrint
+
+func JustPrint(ctx context.Context, state *State) {
+	fmt.Printf("State: %d\n", state.number.Load())
+}
+
+var _ scope.Checker[State] = SimpleChecker
+
+func SimpleChecker(err error, state *State) {
+	log.Printf("SimpleChecker: %v\n", err)
+	state.number.Store(0)
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"github.com/snowmerak/scope"
+	"github.com/snowmerak/scope/prac/riddle"
+)
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	r := riddle.NewState()
+
+	scope.Sequence(ctx, r, riddle.SimpleChecker, riddle.JustPrint, riddle.AddOne, riddle.AddTwo, riddle.SubOne)
+
+	scope.Sequence(ctx, r, riddle.SimpleChecker, riddle.ResetAndPrint, riddle.AddOne, riddle.AddTwo, riddle.SubOne)
+
+	scope.Sequence(ctx, r, riddle.SimpleChecker, riddle.JustPrint, riddle.AddOne, riddle.AddTwo, riddle.SubOne)
+}
+```
+
+```shell
+State: 2
+2024/07/28 16:17:28 State: 4
+State: 2
+```
