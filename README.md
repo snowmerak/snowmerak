@@ -10,36 +10,12 @@ I am a programmer using golang in south korea.
 
 [unsafe-coding-guide-kr](https://unsafe.v8.run)
 
-### Serve it Yourself!
-
-[github-org](https://github.com/unsafe-risk)
-
----
-
-## apps
-
-### follow the metric
-
-[![link](https://img.shields.io/badge/-heroku-e0707e?style=flat&logo=HEROKU)](https://follow-the-metric.herokuapp.com/)
-
----
-
-## tools
-
-### boxes
-
-golang tools for code generating
-
-- [data-box](https://github.com/snowmerak/databox)
-- [enum-box](https://github.com/snowmerak/enumbox)
-
 ---
 
 ## languages
 
 ![golang](https://img.shields.io/badge/-Go-eaeff9?style=flat&logo=GO)
-![rust](https://img.shields.io/badge/-Rust-e0707e?style=flat&logo=RUST)
-![flutter](https://img.shields.io/badge/-Flutter-e0707e?style=flat&logo=FLUTTER)
+![typescript](https://img.shields.io/badge/-Typescript-eaeff9?style=flat&logo=TYPESCRIPT)
 
 ### used languages in myt git
 
@@ -51,8 +27,7 @@ golang tools for code generating
 
 ## OSs
 
-![arch](https://img.shields.io/badge/Arch-Linux-e0707e?style=flat&logo=ARCH-Linux)
-![kubuntu](https://img.shields.io/badge/Kubuntu-e0707e?style=flat&logo=KUBUNTU)
+![windows](https://img.shields.io/badge/Windows-eaeff9?style=flat&logo=WINDOWS)
 ![mac](https://img.shields.io/badge/macOS-eaeff9?style=flat&logo=MAC)
 
 ---
