@@ -19,9 +19,9 @@ I am a programmer using golang in south korea.
 
 ### used languages in myt git
 
-[![Anurag's GitHub stats](https://github-readme-stats-bztztxird-snowmeraks-projects.vercel.app/api?username=snowmerak)](https://github.com/anuraghazra/github-readme-stats)
+[![Anurag's GitHub stats](https://github-readme-stats-pi-ivory-85.vercel.app/api?username=snowmerak)](https://github.com/anuraghazra/github-readme-stats)
 
-[![Top Langs](https://github-readme-stats-bztztxird-snowmeraks-projects.vercel.app/api/top-langs/?username=snowmerak)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Langs](https://github-readme-stats-pi-ivory-85.vercel.app/api/top-langs/?username=snowmerak)](https://github.com/anuraghazra/github-readme-stats)
 
 ---
 
