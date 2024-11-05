@@ -21,6 +21,7 @@
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
       # "vscodevim.vim"
+      "yzhang.markdown-all-in-one"
     ];
 
     # Enable previews
