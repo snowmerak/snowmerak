@@ -13,6 +13,7 @@
     # pkgs.nodePackages.nodemon
     pkgs.go
     pkgs.hugo
+    pkgs.grpahql
   ];
 
   # Sets environment variables in the workspace
