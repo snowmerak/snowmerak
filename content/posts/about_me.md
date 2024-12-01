@@ -15,19 +15,11 @@ draft: false
 ### languages
 
 ![golang](https://img.shields.io/badge/-Go-eaeff9?style=flat&logo=GO)
-![rust](https://img.shields.io/badge/-Rust-e0707e?style=flat&logo=RUST)
 ![python](https://img.shields.io/badge/-Python-eaeff9?style=flat&logo=PYTHON)
-![dart](https://img.shields.io/badge/-Dart-eaeff9?style=flat&logo=DART)
-![C#](https://img.shields.io/badge/-C%23-eaeff9?style=flat&logo=C-SHARP)
 
 ### frameworks
 
 ![svelte](https://img.shields.io/badge/-Svelte-eaeff9?style=flat&logo=SVELTE)
-![lux](https://img.shields.io/badge/-Lux-eaeff9?style=flat&logo=LUX)
-![jetti](https://img.shields.io/badge/-Jetti-eaeff9?style=flat&logo=JETTI)
-![flutter](https://img.shields.io/badge/-Flutter-eaeff9?style=flat&logo=FLUTTER)
-![asp.net core](https://img.shields.io/badge/-ASP.NET%20Core-eaeff9?style=flat&logo=ASP.NET)
-![azure-functions](https://img.shields.io/badge/-Azure%20Functions-eaeff9?style=flat&logo=AZURE-FUNCTIONS)
 
 ### tools
 
@@ -35,19 +27,10 @@ draft: false
 ![code](https://img.shields.io/badge/-VSCode-eaeff9?style=flat&logo=VISUAL-STUDIO-CODE)
 ![git](https://img.shields.io/badge/-Git-eaeff9?style=flat&logo=GIT)
 
-### OSs
-
-![arch](https://img.shields.io/badge/Arch-Linux-e0707e?style=flat&logo=ARCH-Linux)
-![macOS](https://img.shields.io/badge/macOS-eaeff9?style=flat&logo=MAC)
-
 ### Database
 
-![mssql](https://img.shields.io/badge/-MSSQL-eaeff9?style=flat&logo=MICROSOFT-SQL-SERVER)
 ![postgresql](https://img.shields.io/badge/-PostgreSQL-eaeff9?style=flat&logo=POSTGRESQL)
 
-### Cloud
-
-![azure](https://img.shields.io/badge/-Azure-eaeff9?style=flat&logo=AZURE)
 
 ## contact
 
