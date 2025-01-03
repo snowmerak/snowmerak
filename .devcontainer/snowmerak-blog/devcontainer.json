@@ -9,7 +9,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "yzhang.markdown-all-in-one"
+        "yzhang.markdown-all-in-one",
+        "jebbs.plantuml"
       ]
     }
   }
