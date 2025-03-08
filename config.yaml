@@ -2,7 +2,6 @@ languageCode: "en-us"
 baseUrl: ""
 title: "snowmerak"
 theme: "PaperMod"
-paginate: 10
 googleAnalytics: "G-1MV53Q3MRL"
 
 menu:
