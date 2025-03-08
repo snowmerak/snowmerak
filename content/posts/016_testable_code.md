@@ -2,6 +2,8 @@
 title: "테스트 가능한 코드"
 date: 2023-04-01T20:08:12+09:00
 tags: ["test", "arch", "project"]
+author: "snowmerak"
+categories: ["Philosophy"]
 draft: false
 ---
 

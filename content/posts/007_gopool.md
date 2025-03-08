@@ -2,6 +2,8 @@
 title: "고루틴 풀링"
 date: 2022-01-21T01:16:36+09:00
 tags: ["go", "goroutine", "pool"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: falst
 ---
 

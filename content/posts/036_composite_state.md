@@ -1,6 +1,8 @@
 ---
 title: "합성과 상태"
 date: 2024-08-15T18:39:30+09:00
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: true
 ---
 

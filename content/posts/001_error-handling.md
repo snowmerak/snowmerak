@@ -2,6 +2,8 @@
 title: "에러 처리 in go"
 date: 2021-12-26T13:12:58+09:00
 tags: ["go", "error"]
+author: "snowmerak"
+categories: ["Information"]
 draft: false
 ---
 

@@ -2,6 +2,8 @@
 title: "고 언어의 의존성 주입을 위한 Provider"
 date: 2024-02-09T01:10:20+09:00
 tag: ["go", "dependency injection", "dependency inversion"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: false
 ---
 

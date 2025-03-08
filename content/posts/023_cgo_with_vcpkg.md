@@ -2,6 +2,8 @@
 title: "vcpkg를 cgo에 사용하기"
 date: 2023-10-12T00:21:28+09:00
 tags: ["cgo", "vcpkg"]
+author: "snowmerak"
+categories: ["Information"]
 draft: false
 ---
 

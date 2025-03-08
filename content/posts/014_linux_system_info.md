@@ -2,6 +2,8 @@
 title: "리눅스 서버 및 앱 모니터링하기"
 date: 2022-12-14T21:25:02+09:00
 tags: ["linux", "socket"]
+author: "snowmerak"
+categories: ["Information"]
 draft: true
 ---
 

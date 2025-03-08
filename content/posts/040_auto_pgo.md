@@ -2,6 +2,8 @@
 title: "PGO를 쉽게 하는 방법이 있을까?"
 date: 2024-10-12T16:16:46+09:00
 tags: ["go", "pgo", "minio", "s3"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: false
 ---
 

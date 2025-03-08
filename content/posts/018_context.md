@@ -2,6 +2,8 @@
 title: "Context 패키지 (이론)"
 date: 2023-05-26T14:14:06+09:00
 tags: ["go", "context"]
+author: "snowmerak"
+categories: ["Information"]
 draft: false
 ---
 

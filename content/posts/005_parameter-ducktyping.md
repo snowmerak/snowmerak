@@ -2,6 +2,8 @@
 title: "스마트폰 파괴 방법과 매개변수 덕타핑"
 date: 2022-01-04T18:54:54+09:00
 tags: ["go"]
+author: "snowmerak"
+categories: ["Philosophy"]
 draft: false
 ---
 

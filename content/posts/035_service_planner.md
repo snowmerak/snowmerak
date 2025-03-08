@@ -2,6 +2,8 @@
 title: "소..솔직히 유지보수는 아키텍트의 책임이라고 생각해요..."
 date: 2024-08-12T00:08:12+09:00
 tags: ["architecture", "service", "plan", "api", "aggregater", "MSA"]
+author: "snowmerak"
+categories: ["Philosophy"]
 draft: false
 ---
 

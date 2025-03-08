@@ -2,6 +2,8 @@
 title: "git, buf, 그리고 패키지 매니저로 프로토버퍼 관리하기"
 date: 2023-12-13T21:42:22+09:00
 tags: ["protobuf", "buf", "npm", "pub", "go", "node", "dart"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: false
 ---
 

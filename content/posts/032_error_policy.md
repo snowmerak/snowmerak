@@ -2,6 +2,8 @@
 title: "로그 정책에 대한 고찰"
 date: 2024-07-26T18:24:08+09:00
 tags: ["error"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: false
 ---
 

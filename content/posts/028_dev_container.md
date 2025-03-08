@@ -2,6 +2,8 @@
 title: "DevContainer로 개발환경 구성하기"
 date: 2024-04-05T19:30:42Z
 tags: ["devcontainer", "go", "docker", "docker-compose"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: false
 ---
 

@@ -2,6 +2,8 @@
 title: "강한 일관성과 최종 일관성"
 date: 2025-03-08T21:33:08+09:00
 tags: [ "data-consistency", "msa" ]
+author: "snowmerak"
+categories: ["Information"]
 draft: false
 ---
 

@@ -2,6 +2,8 @@
 title: "더 나은 제안, Kemtls"
 date: 2021-12-21T12:07:02+09:00
 tags: ["go", "tls", "sidh", "sike", "kem"]
+author: "snowmerak"
+categories: ["Translation"]
 draft: false
 ---
 

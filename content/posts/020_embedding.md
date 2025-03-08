@@ -2,6 +2,8 @@
 title: "구조체 임베딩과 프로모션, 그리고 상속"
 date: 2023-08-14T19:01:08+09:00
 tags: ["go", "embedding", "promotion"]
+author: "snowmerak"
+categories: ["Philosophy"]
 draft: false
 ---
 

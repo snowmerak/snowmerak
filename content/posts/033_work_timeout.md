@@ -2,6 +2,8 @@
 title: "라이프타임에 대한 고찰"
 date: 2024-07-27T23:59:19+09:00
 tags: ["ttl", "timeout", "lifetime"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: false
 ---
 

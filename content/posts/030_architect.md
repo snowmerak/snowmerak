@@ -2,6 +2,8 @@
 title: "프로젝트 설계에 대해"
 date: 2024-06-19T16:45:37+09:00
 tags: ["architecture", "coding"]
+author: "snowmerak"
+categories: ["Philosophy"]
 draft: false
 ---
 

@@ -2,6 +2,8 @@
 title: "러스트로 알고리즘 테스트를 풀어봅시다"
 date: 2022-04-12T00:08:40+09:00
 tags: ["rust", "cp", "fast io"]
+author: "snowmerak"
+categories: ["Information"]
 draft: false
 ---
 

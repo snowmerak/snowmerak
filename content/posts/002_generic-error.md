@@ -2,6 +2,8 @@
 title: "Result를 활용한 에러처리"
 date: 2021-12-30T19:21:53+09:00
 tags: ["go", "generic", "error", "result"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: false
 ---
 

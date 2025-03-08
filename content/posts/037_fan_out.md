@@ -2,6 +2,8 @@
 title: "빠르게 메시지를 전파하고 싶어"
 date: 2024-09-27T23:20:37+09:00
 tags: ["golang", "go", "channel", "fan-out", "concurrency"]
+author: "snowmerak"
+categories: ["Design"]
 draft: false
 ---
 

@@ -2,6 +2,8 @@
 title: "logstream"
 date: 2022-01-06T13:08:40+09:00
 tags: ["go", "log"]
+author: "snowmerak"
+categories: ["Design"]
 draft: false
 ---
 

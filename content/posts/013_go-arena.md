@@ -2,6 +2,8 @@
 title: "고랭과 아레나"
 date: 2022-05-19T18:25:26+09:00
 tags: ["go", "arena", "mimalloc", "tcmalloc", "heap alloc"]
+author: "snowmerak"
+categories: ["Suggestions"]
 draft: false
 ---
 

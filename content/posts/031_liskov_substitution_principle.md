@@ -2,6 +2,8 @@
 title: "리스코프 치환 법칙에 대한 고찰"
 date: 2024-07-23T18:54:27+09:00
 tags: ["architecture", "coding", "liskov_substitution_principle", "go", "interface", "composite"]
+author: "snowmerak"
+categories: [ "Philosophy"]
 draft: false
 ---
 

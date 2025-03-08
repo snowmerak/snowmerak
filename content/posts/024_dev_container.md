@@ -2,6 +2,8 @@
 title: "도커 컴포즈와 함께 쓰는 devcontainer"
 date: 2023-10-20T21:57:19+09:00
 tag: ["devcontainer", "go", "docker", "docker-compose"]
+author: "snowmerak"
+categories: ["Information"]
 draft: true
 ---
 

@@ -1,0 +1,86 @@
+baseURL = 'https://snowmerak.pages.dev/'
+languageCode = 'ko-kr'
+title = 'SNOWMERAK'
+theme = 'LoveIt'
+
+[taxonomies]
+tag = "tags"
+category = "categories"
+
+[author]
+name = "snowmerak"
+email = "snowmerak@outlook.com"
+link = "https://snowmerak.pages.dev"
+
+[menu]
+[[menu.main]]
+weight = 1
+identifier = "posts"
+pre = ""
+post = ""
+name = "Posts"
+url = "/posts/"
+title = ""
+[[menu.main]]
+weight = 2
+identifier = "tags"
+pre = ""
+post = ""
+name = "Tags"
+url = "/tags/"
+title = ""
+[[menu.main]]
+weight = 3
+identifier = "categories"
+pre = ""
+post = ""
+name = "Categories"
+url = "/categories/"
+title = ""
+
+[params]
+defaultTheme = "auto"
+gitRepo = "https://github.com/snowmerak"
+dateFormat = "2006-01-02"
+title = "SNOWMERAK"
+description = "snowmerak's personal"
+images = []
+
+[params.header]
+desktopMode = "fixed"
+mobileMode = "auto"
+
+[params.header.title]
+logo = ""
+name = "SNOWMERAK"
+
+[params.footer]
+enable = true
+hugo = true
+copyright = true
+author = true
+
+[params.section]
+paginate = 16
+dateFormat = "01-02"
+
+[params.app]
+title = "SNOWMERAK"
+noFavicon = true
+svgFavicon = ""
+
+[params.home]
+
+[params.home.profile]
+enable = true
+gravatarEmail = ""
+avatarURL = "/img/avatar.jpg"
+title = ""
+subtitle = "thinking of SNOWMERAK"
+typeit = true
+social = true
+disclaimer = ""
+
+[params.home.posts]
+enable = true
+paginate = 8

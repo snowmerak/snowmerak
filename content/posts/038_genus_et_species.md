@@ -2,6 +2,8 @@
 title: "대는 소를 포함한다"
 date: 2024-10-03T21:40:46+09:00
 tags: ["go", "redis", "structure", "project"]
+author: "snowmerak"
+categories: ["Design"]
 draft: false
 ---
 
