@@ -43,7 +43,7 @@ identifier = "search"
 pre = ""
 post = ""
 name = "Search"
-url = "https://www.google.com/search?q=site%3Ahttps%3A%2F%2Fsnowmerak.pages.dev"
+url = "/search/"
 title = ""
 
 [params]
