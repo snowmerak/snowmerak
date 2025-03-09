@@ -68,6 +68,17 @@ hugo = true
 copyright = true
 author = true
 
+[params.page.comment]
+enable = true
+
+[params.page.comment.utterances]
+enable = true
+repo = "snowmerak/snowmerak"
+issueTerm = "pathname"
+label = "Comments"
+lightTheme = "github-light"
+darkTheme = "github-dark"
+
 [params.section]
 paginate = 16
 dateFormat = "01-02"
