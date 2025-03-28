@@ -118,15 +118,6 @@ try {
     Write-Warning "임시 파일 '$tempDownloadPath' 삭제 실패: $($_.Exception.Message)"
 }
 
-# --- 완료 메시지 및 다음 단계 안내 ---
-Write-Host "--------------------------------------------------" -ForegroundColor Cyan
-Write-Host "Flutter SDK v$($flutterVersionInput) 설치 스크립트가 완료되었습니다." -ForegroundColor Cyan
-Write-Host "다음 단계를 진행하세요:"
-Write-Host "1. 환경 변수 PATH에 '$($extractDestination)\flutter\bin' 경로를 추가하세요."
-Write-Host "   (예: PowerShell에서 \$env:Path += ';$($extractDestination)\flutter\bin' 임시 추가 또는 시스템 환경 변수 편집)"
-Write-Host "2. 새 PowerShell 창을 열고 'flutter doctor' 명령어를 실행하여 설치 상태를 확인하세요."
-Write-Host "--------------------------------------------------" -ForegroundColor Cyan
-
 # 추가할 경로 정의
 $flutterBinPathToAdd = Join-Path $HOME "flutter\bin"
 $variableName = "Path"
@@ -149,6 +140,13 @@ if ($currentUserPath -split ';' -notcontains $flutterBinPathToAdd) {
 } else {
     Write-Host "'$flutterBinPathToAdd' 경로는 이미 사용자 '$variableName' 환경 변수에 존재합니다." -ForegroundColor Yellow
 }
+
+# --- 완료 메시지 및 다음 단계 안내 ---
+Write-Host "--------------------------------------------------" -ForegroundColor Cyan
+Write-Host "Flutter SDK v$($flutterVersionInput) 설치 스크립트가 완료되었습니다." -ForegroundColor Cyan
+Write-Host "다음 단계를 진행하세요:"
+Write-Host "- 새 PowerShell 창을 열고 'flutter doctor' 명령어를 실행하여 설치 상태를 확인하세요."
+Write-Host "--------------------------------------------------" -ForegroundColor Cyan
 ```
 
 이 방식을 사용할 경우에는 수동으로 환경 변수를 수정해야합니다.
