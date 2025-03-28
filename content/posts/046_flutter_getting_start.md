@@ -149,8 +149,6 @@ Write-Host "- 새 PowerShell 창을 열고 'flutter doctor' 명령어를 실행�
 Write-Host "--------------------------------------------------" -ForegroundColor Cyan
 ```
 
-이 방식을 사용할 경우에는 수동으로 환경 변수를 수정해야합니다.
-
 #### scoop을 이용해서
 
 [Scoop](https://scoop.sh/)은 windows에서 사용할 수 있는 패키지 매니저입니다. PowerShell에서 편하게 쓸 수 있습니다.
@@ -322,3 +320,7 @@ exit 0
 ### Linux
 
 우분투 개발자십니까? snap 쓰십시오.
+
+```sh
+sudo snap install flutter --classic
+```
