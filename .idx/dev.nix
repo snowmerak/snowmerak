@@ -14,6 +14,7 @@
     pkgs.go
     pkgs.hugo
     pkgs.graphviz
+    pkgs.github-cli
   ];
 
   # Sets environment variables in the workspace
