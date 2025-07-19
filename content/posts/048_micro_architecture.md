@@ -1,6 +1,7 @@
 ---
 title: "Introduce to Quantum Modular Architecture"
 date: 2025-07-19T13:33:18+09:00
+author: snowmerak
 tags: ["architecture"]
 categories: ["Information"]
 draft: false
