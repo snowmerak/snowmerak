@@ -77,6 +77,41 @@ Rx 패킷이 드랍되는 건 `ifconfig`를 통해 `Rx Dropped` 카운트가 증
 
 여기서 새로운 `Leaf Qdisc`가 추가되었는데, 이는 `mq` 내에 존재하는 소프트웨어적인 큐입니다. 이후 즉시 `Tx Ring Buffer`로 패킷이 이동하여 전송됩니다. 백로그와 그 역할을 유사하다고 생각하시면 됩니다.
 
+여기까지 Rx와 Tx에 대한 대략적인 구성도입니다.
+
+```
++---------------------+
+|   User Application  |
++----------+----------+
+           | (Tx Data)
+           v
++---------------------+
+|    Socket Buffer    |
++----------+----------+
+           |
+           v
++---------------------+        (1) Requeue Loop & Lock Contention
+|  Qdisc (pfifo_fast) | <===================+
++----------+----------+                     |
+           | (2) Tx Packet                  | (3) NETDEV_TX_BUSY
+           v                                |
++-------------------------------------------+---------+
+|      Driver / SoftIRQ (Specific CPU Core)           | <--- CPU Resource Exhausted!
++----------+--------------------------------+---------+
+           |                                ^
+           | (Tx)                           | (Rx Poll Attempt - Fail)
+           v                                | x
++---------------------+           +---------+-----------+
+|    Tx Ring Buffer   |           |    Rx Ring Buffer   |
++----------+----------+           +---------+-----------+
+           |                                ^
+           |                                |
+  [ Network Wire ]                 [ Network Wire ]
+                                            |
+                                            | (Rx Packet Arrived)
+                                    (Packet Dropped here due to Full Buffer)
+```
+
 이제 Tx 경로에서도 각 구간의 유실 여부를 확인할 수 있는 팩터를 알아보겠습니다:
 - Kernel Socket Buffer: 어플리케이션에서 에러(`EAGAIN`)가 발생합니다. 그리고 `netstat -s`나 `ss -s`를 통해 각 섹션의 에러 카운트로 확인할 수도 있습니다.
 - Multiqueue
