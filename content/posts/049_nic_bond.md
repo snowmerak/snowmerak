@@ -184,6 +184,12 @@ ethtool -G <interface> tx 4096 rx 4096
 ethtool -L <interface> combined <Number of CPU Core>
 ```
 
+또한 `ifcnfig` 상에서 `txqueuelen`을 수정해서 기본적으로 1000인 수치를 10000으로 늘려주면 더 오래 버틸 수 있습니다.
+
+```shell
+sudo ifconfig <interface> txqueuelen 10000
+```
+
 ##### 판올림
 
 `centos7`와 `bnxt_en 1.10.0`은 생각보다 문제가 많은 시기에 멈춰 있음을 확인했습니다. 지원 종료까지 기다리지 않고 `rocky9`로의 마이그레이션을 준비하는 것이 여러면에서 현명해보입니다.
