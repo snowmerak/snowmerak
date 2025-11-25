@@ -1,7 +1,7 @@
 ---
 title: "왜 NIC Bonding 했는데 왜 네트워크 성능이 안 좋아지죠?"
 date: 2025-11-22T14:45:13+09:00
-draft: true
+draft: false
 author: snowmerak
 tags: ["network", "nic", "bond", "linux", "kernel"]
 categories: ["Information"]
