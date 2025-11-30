@@ -3,7 +3,7 @@ title: "폴리글랏이란 무엇인가"
 date: 2025-12-01T00:22:21+09:00
 author: snowmerak
 tags: ["architecture", "sidecar", "polyglot"]
-categories: ["Philosophy"]
+categories: ["Design"]
 draft: false
 ---
 
