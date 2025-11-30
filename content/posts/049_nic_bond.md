@@ -1,7 +1,7 @@
 ---
-title: "왜 NIC Bonding 했는데 왜 네트워크 성능이 안 좋아지죠?"
+title: "왜 더 좋은 NIC로 바꿨는데, 네트워크 성능이 안 좋아지죠?"
 date: 2025-11-22T14:45:13+09:00
-draft: true
+draft: false
 author: snowmerak
 tags: ["network", "nic", "bond", "linux", "kernel"]
 categories: ["Information"]
@@ -62,6 +62,14 @@ Rx 패킷이 드랍되는 건 `ifconfig`를 통해 `Rx Dropped` 카운트가 증
 이에 대해서는 두가지 명령어로 확인할 수 있습니다만, 실시간으로 확인해야하는 단점이 있습니다:
 - `/proc/interrupts`: 현재 인터럽트가 각 코어 당 몇회씩 수행되고 있는 지 확인할 수 있습니다.
 - `mpstat`: 각 코어가 어떤 일에 힘을 쓰고 있는 지 확인할 수 있습니다. 이 경우에선 `%irq`, `%soft`를 확인하면 됩니다.
+
+#### 그래도 혹시?
+
+만약 브로드컴 NIC를 사용하면서 별 다른 징조 없이 Rx 패킷에 대한 드랍 카운트가 서서히 올라간다면, `TPA` 기능을 꺼보는 것도 추천드립니다. 다만, 이 기능을 끌 경우 SoftIRQ가 증가하여 CPU 사용량이 증가할 수 있으니 사양에 따라 결정해야합니다.
+
+```
+ethtool -K <interface> lro off rx-gro-hw off
+```
 
 ### Tx 패킷에 대한 재시도!
 
