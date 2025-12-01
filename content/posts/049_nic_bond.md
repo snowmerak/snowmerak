@@ -237,7 +237,7 @@ sysctl -w net.ipv4.tcp_window_scaling=1
   - `net.ipv4.ip_local_port_range="1024 65535"`: 외부 서버와 연결할 때 사용할 수 있는 로컬 임시 포트(Ephemeral Port)의 범위를 최대한 넓게 설정합니다.
   - `net.ipv4.tcp_timestamps=1`: 정밀한 패킷 왕복 시간(RTT) 측정과 패킷 순서 오류 방지(PAWS)를 위해 타임스탬프 기능을 켭니다.
   - `net.ipv4.tcp_tw_reuse=1`: TIME_WAIT 상태로 남아있는 소켓을 새로운 연결 요청(Outbound)에 재사용할 수 있게 허용합니다.
-  - `net.ipv4.tcp_tw_recycle=0`: NAT 환경에서 연결 실패 문제를 일으킬 수 있는 TIME_WAIT 소켓의 빠른 재활용 기능을 비활성화합니다. (최신 커널에서는 제거된 옵션일 수 있습니다)
+  - `net.ipv4.tcp_tw_recycle=0`: NAT 환경에서 연결 실패 문제를 일으킬 수 있는 TIME_WAIT 소켓의 빠른 재활용 기능을 비활성화합니다.
 - 메모리 버퍼 튜닝 (TCP Buffer Sizes)
   - `net.core.rmem_default=253952`: 모든 소켓에 대해 기본적으로 할당되는 수신(Receive) 버퍼 크기를 설정합니다.
   - `net.core.wmem_default=253952`: 모든 소켓에 대해 기본적으로 할당되는 송신(Write) 버퍼 크기를 설정합니다.
