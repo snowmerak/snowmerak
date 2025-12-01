@@ -201,3 +201,49 @@ sudo ifconfig <interface> txqueuelen 10000
 ##### 판올림
 
 `centos7`와 `bnxt_en 1.10.0`은 생각보다 문제가 많은 시기에 멈춰 있음을 확인했습니다. 지원 종료까지 기다리지 않고 `rocky9`로의 마이그레이션을 준비하는 것이 여러면에서 현명해보입니다.
+
+##### 커널 패러미터 튜닝
+
+커널 패러미터를 튜닝함으로도 이러한 이슈에 대응할 수 있습니다. 아래 명령어는 전체 리스트입니다:
+
+```sh
+sysctl -w net.core.somaxconn=65535
+sysctl -w net.ipv4.tcp_max_syn_backlog=32768
+sysctl -w net.core.netdev_max_backlog=32768
+sysctl -w fs.file-max=2097152
+sysctl -w net.ipv4.tcp_max_tw_buckets=1800000
+sysctl -w net.ipv4.ip_local_port_range="1024 65535"
+sysctl -w net.ipv4.tcp_timestamps=1
+sysctl -w net.ipv4.tcp_tw_reuse=1
+sysctl -w net.ipv4.tcp_tw_recycle=0
+sysctl -w net.core.rmem_default=253952
+sysctl -w net.core.wmem_default=253952
+sysctl -w net.core.rmem_max=33554432
+sysctl -w net.core.wmem_max=33554432
+sysctl -w net.ipv4.tcp_rmem="8192 87380 33554432"
+sysctl -w net.ipv4.tcp_wmem="8192 87380 33554432"
+sysctl -w net.ipv4.tcp_window_scaling=1
+```
+
+각 항목에 대한 설명은 다음과 같습니다:
+
+- 연결 대기열 및 파일 제한 (Connection Queues & File Limits)
+  - `net.core.somaxconn=65535`: 애플리케이션이 연결을 수락(accept)하기를 기다리는 소켓의 최대 대기열(Backlog) 크기를 늘립니다.
+  - `net.ipv4.tcp_max_syn_backlog=32768`: 연결 요청은 왔으나 아직 완전히 연결되지 않은(SYN 수신) 상태의 요청을 저장할 최대 대기열 크기를 설정합니다.
+  - `net.core.netdev_max_backlog=32768`: 네트워크 카드로 들어온 패킷이 커널로 전달되기 전 대기하는 큐의 최대 크기를 설정합니다.
+  - `fs.file-max=2097152`: 시스템 전체에서 동시에 열 수 있는 파일(소켓 포함)의 최대 개수를 설정합니다.
+- 포트 및 TIME_WAIT 상태 관리 (Ports & TIME_WAIT)
+  - `net.ipv4.tcp_max_tw_buckets=1800000`: 시스템이 동시에 유지할 수 있는 TIME_WAIT 상태 소켓의 최대 개수를 설정합니다.
+  - `net.ipv4.ip_local_port_range="1024 65535"`: 외부 서버와 연결할 때 사용할 수 있는 로컬 임시 포트(Ephemeral Port)의 범위를 최대한 넓게 설정합니다.
+  - `net.ipv4.tcp_timestamps=1`: 정밀한 패킷 왕복 시간(RTT) 측정과 패킷 순서 오류 방지(PAWS)를 위해 타임스탬프 기능을 켭니다.
+  - `net.ipv4.tcp_tw_reuse=1`: TIME_WAIT 상태로 남아있는 소켓을 새로운 연결 요청(Outbound)에 재사용할 수 있게 허용합니다.
+  - `net.ipv4.tcp_tw_recycle=0`: NAT 환경에서 연결 실패 문제를 일으킬 수 있는 TIME_WAIT 소켓의 빠른 재활용 기능을 비활성화합니다. (최신 커널에서는 제거된 옵션일 수 있습니다)
+- 메모리 버퍼 튜닝 (TCP Buffer Sizes)
+  - `net.core.rmem_default=253952`: 모든 소켓에 대해 기본적으로 할당되는 수신(Receive) 버퍼 크기를 설정합니다.
+  - `net.core.wmem_default=253952`: 모든 소켓에 대해 기본적으로 할당되는 송신(Write) 버퍼 크기를 설정합니다.
+  - `net.core.rmem_max=33554432`: OS 수준에서 허용하는 소켓당 최대 수신 버퍼 크기를 설정합니다.
+  - `net.core.wmem_max=33554432`: OS 수준에서 허용하는 소켓당 최대 송신 버퍼 크기를 설정합니다.
+  - `net.ipv4.tcp_rmem="8192 87380 33554432"`: TCP 연결 시 수신 버퍼가 상황에 따라 자동 조절될 범위(최소, 기본, 최대)를 지정합니다.
+  - `net.ipv4.tcp_wmem="8192 87380 33554432"`: TCP 연결 시 송신 버퍼가 상황에 따라 자동 조절될 범위(최소, 기본, 최대)를 지정합니다.
+- 기타 성능 옵션 (Other)
+  - `net.ipv4.tcp_window_scaling=1`: 64KB 이상의 대용량 전송 윈도우를 사용하여 네트워크 대역폭 효율을 높이는 윈도우 스케일링 기능을 켭니다.
