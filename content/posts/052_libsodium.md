@@ -4,7 +4,7 @@ date: 2025-12-14T23:18:05+09:00
 author: snowmerak
 tags: ["libsodium", "memory", "network", "security", "go", "memguard", "secret"]
 categories: ["Information"]
-draft: true
+draft: false
 ---
 
 ## 소듐이요?
