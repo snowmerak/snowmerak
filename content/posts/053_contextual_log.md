@@ -120,7 +120,12 @@ func (l *StateLogger) Snapshot(entity string, data interface{}) {
 
 ### Trend
 
-자잘하거나 불필요한 개별 이벤트를 모두 기록하기보다 앱 내에서 어느 정도 집계하여 제공하는 역할을 합니다.
+자잘하거나 불필요한 개별 이벤트를 모두 기록하기보다 앱 내에서 어느 정도 집계하여 제공하는 역할을 합니다. 아래 코드는 다음 몇가지 메트릭 유형을 지원합니다:
+1. Counter: 누적 값 (예: 요청 수, 에러 수, 캐시 히트/미스 등)
+2. Gauge: 현재 상태 값 (예: CPU/메모리 사용량, 고루틴 수, 큐 크기 등)
+3. Histogram: 분포 (예: 요청 레이턴시, 응답 크기 등) - 버킷별 카운팅
+4. Summary: 요약 통계 (예: p50, p90, p99 등) - Histogram에서 파생 가능
+   1. 그래서 아래 코드에는 포함하지 않았습니다.
 
 ```go
 type TrendCollector struct {
@@ -242,3 +247,18 @@ func (t *TrendCollector) StartFlushLoop(ctx context.Context, interval time.Durat
     }
 }
 ```
+
+### Context
+
+로그의 연관성을 확보하기 위해 Go 언어에서는 `context.Context`를 적극적으로 활용합니다. 단순히 취소 신호나 데드라인 전파용으로만 쓰는 것이 아니라, 요청의 고유 식별자(Request ID)와 서비스 식별자(Service Name)를 운반하는 컨테이너로 사용합니다.
+
+주요 특징은 다음과 같습니다:
+1. 생성 및 주입: 요청이 진입하는 시점(예: HTTP Middleware)에서 UUID v7 기반의 고유한 Request ID를 생성하여 Context에 주입합니다.
+2. 전파 (Propagation):
+    - In-Process: 함수 호출 시 `ctx`를 첫 번째 인자로 전달하여 고루틴 간에도 ID를 공유합니다.
+    - Cross-Process: 마이크로서비스 간 통신 시 HTTP Header(`X-Request-ID`) 등을 통해 ID를 전파하여 분산 추적(Distributed Tracing)을 가능하게 합니다.
+3. 활용: 모든 로거(Span, State, Trend)는 Context에서 이 ID를 추출하여 로그에 포함시킵니다. 이를 통해 수만 건의 로그 속에서 특정 요청의 전체 흐름을 한 번에 검색할 수 있습니다.
+
+## 마치며
+
+원본 설계에는 Kafka와 Clickhouse를 포함한 
