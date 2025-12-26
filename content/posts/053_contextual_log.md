@@ -124,30 +124,92 @@ func (l *StateLogger) Snapshot(entity string, data interface{}) {
 
 ```go
 type TrendCollector struct {
-    // 동시성 처리를 위한 Atomic Counter 사용
+    // 1. Counter: 누적 값 (요청 수, 에러 수, 캐시 히트/미스 등)
     counters map[string]*atomic.Uint64
-    gauges   map[string]*atomic.Int64
+    counterMetrics map[string]struct{}
+    // 2. Gauge: 현재 상태 값 (CPU/메모리 사용량, 고루틴 수, 큐 크기 등)
+    gauges map[string]*atomic.Int64
+    gaugeMetrics map[string]struct{}
+    // 3. Histogram: 분포 (요청 레이턴시, 응답 크기 등) - 버킷별 카운팅
+    histograms map[string]*Histogram
+    histogramsLock sync.RWMutex
 }
 
-func NewTrendCollector(metrics ...string) *TrendCollector {
-    counters := make(map[string]*atomic.Uint64, len(metrics))
-    for _, metric := range metrics {
-        counters[metric] = &atomic.Uint64{}
+type Histogram struct {
+    buckets []float64
+    counts  []*atomic.Uint64
+}
+
+func NewTrendCollector(cm []string, gm []string) *TrendCollector {
+    counterMetrics := make(map[string]struct{}, len(cm))
+    counters := make(map[string]*atomic.Uint64, len(cm))
+    for _, m := range cm {
+        counterMetrics[m] = struct{}{}
+        counters[m] = &atomic.Uint64{}
     }
-    gauges := make(map[string]*atomic.Int64, len(metrics))
-    for _, metric := range metrics {
-        gauges[metric] = &atomic.Int64{}
+
+    gaugeMetrics := make(map[string]struct{}, len(gm))
+    gauges := make(map[string]*atomic.Int64, len(gm))
+    for _, m := range gm {
+        gaugeMetrics[m] = struct{}{}
+        gauges[m] = &atomic.Int64{}
     }
 
     return &TrendCollector{
-        counters: counters,
-        gauges:   gauges,
+        counters:      counters,
+        counterMetrics: counterMetrics,
+        gauges:        gauges,
+        gaugeMetrics:  gaugeMetrics,
+        histograms:    make(map[string]*Histogram),
     }
 }
 
-// 호출 시점에는 I/O가 발생하지 않음 (Zero Allocation, Lock-free 지향)
-func (t *TrendCollector) Increment(metric string) {
+// Counter: 단순히 1씩 증가 (예: http_requests_total, cache_hits)
+func (t *TrendCollector) IncCounter(metric string) {
+    if _, ok := t.counterMetrics[metric]; !ok {
+        return
+    }
+
     t.counters[metric].Add(1)
+}
+
+// Gauge: 특정 값으로 설정 (예: memory_usage_bytes, active_goroutines)
+func (t *TrendCollector) SetGauge(metric string, value int64) {
+    if _, ok := t.gaugeMetrics[metric]; !ok {
+        return
+    }
+
+    t.gauges[metric].Store(value)
+}
+
+// Histogram: 관측된 값을 버킷에 기록 (예: request_duration_ms)
+func (t *TrendCollector) ObserveHistogram(metric string, value float64) {
+    t.histogramsLock.RLock()
+    hist, ok := t.histograms[metric]
+    t.histogramsLock.RUnlock()
+
+    if !ok {
+        t.histogramsLock.Lock()
+        if hist, ok = t.histograms[metric]; !ok {
+            // 예시를 위해 고정된 버킷 사용 (실제로는 설정 필요)
+            hist = &Histogram{
+                buckets: []float64{10, 50, 100, 500, 1000},
+                counts:  make([]*atomic.Uint64, 5),
+            }
+            for i := range hist.counts {
+                hist.counts[i] = &atomic.Uint64{}
+            }
+            t.histograms[metric] = hist
+        }
+        t.histogramsLock.Unlock()
+    }
+
+    for i, bound := range hist.buckets {
+        if value <= bound {
+            hist.counts[i].Add(1)
+            break
+        }
+    }
 }
 
 // 별도의 고루틴에서 주기적으로(예: 1분) 집계된 데이터를 로그로 배출(Flush)
@@ -156,8 +218,22 @@ func (t *TrendCollector) StartFlushLoop(ctx context.Context, interval time.Durat
     for {
         select {
         case <-ticker.C:
-            // Log format: {"type":"trend", "service":"{Service}", "window":"1m", "metrics":{"req_total":15000, "err_rate":0.01}}
-            t.resetCounters()
+            t.mu.Lock()
+            // 맵을 교체하여 스냅샷 생성 (Reset)
+            // currentCounters := t.counters
+            // t.counters = make(map[string]*atomic.Uint64)
+            // ... (Gauge, Histogram도 동일하게 처리)
+            t.mu.Unlock()
+
+            // Log format example:
+            // {
+            //   "type": "trend",
+            //   "service": "payment-service",
+            //   "window": "1m",
+            //   "counters": { "http_req_total": 1500, "cache_hit": 1450, "cache_miss": 50 },
+            //   "gauges": { "goroutines": 120, "heap_alloc_bytes": 52428800 },
+            //   "histograms": { "latency_ms": { "p50": 15, "p99": 120 } }
+            // }
         case <-ctx.Done():
             return
         }
