@@ -43,7 +43,7 @@ draft: true
 
 ### Span
 
-OpenTelemetry의 그것과 유사합니다. 마찬가지로 하나의 요청이나 메서드, API 호출의 라이프 사이클을 추적합니다.
+OpenTelemetry의 그것과 유사합니다. 마찬가지로 하나의 요청이나 메서드, API 호출의 라이프 사이클을 추적합니다. 이 구조를 통해 전체 요청은 얼마나 오래 걸렸고, 해당 요청이 실행되는 동안 각 메서드나 API 중 무엇이 오래 걸렸는지 등을 추적하여 서비스 개선이나 인프라 확장을 선제적으로 수행할 수 있습니다.
 
 ```go
 type Span struct {
@@ -74,19 +74,21 @@ func (s *Span) Start() *Span {
 // 작업 완료 시 호출: 소요 시간(Duration)을 자동 계산하여 기록
 func (s *Span) Complete() {
     duration := time.Since(s.StartTime)
-    // Log format: [INFO] {Service} | {Scope}::{Method} | {RequestID} | Completed | {Duration}
+    // Log format: {"level":"INFO", "service":"{Service}", "scope":"{Scope}", "method":"{Method}", "request_id":"{RequestID}", "status":"completed", "duration_ms":{Duration}}
 }
 
 // 작업 실패 시 호출: 에러 원인과 소요 시간을 함께 기록
 func (s *Span) Fail(err error) {
     duration := time.Since(s.StartTime)
-    // Log format: [ERROR] {Service} | {Scope}::{Method} | {RequestID} | Failed({Error}) | {Duration}
+    // Log format: {"level":"ERROR", "service":"{Service}", "scope":"{Scope}", "method":"{Method}", "request_id":"{RequestID}", "status":"failed", "error":"{Error}", "duration_ms":{Duration}}
 }
 ```
 
 ### State
 
-조금 특이한 형태일 수 있으나, 어떠한 행동의 결과로 상태가 변화되었을 때 그 결과를 로그로 남기기 위해 존재합니다.
+조금 특이한 형태일 수 있으나, 어떠한 행동의 결과로 상태가 변화되었을 때 그 결과를 로그로 남기기 위해 존재합니다. 평시에는 그다지 유용하지 않을 로그지만, 어떠한 장애가 발생했을 경우에 유용하게 사용될 수 있습니다. 아래 코드에는 두가지 상태 로그를 남길 수 있도록 되어 있습니다:
+1. Transition: 상태 전이에 대해 기록합니다. 로직이 실행되는 도중에 DB에서 데이터를 읽거나, 삭제되거나, 필터링 등을 거치면서 수정된 내용에 대해 작성합니다.
+2. Snapshot: 현재 상태 자체를 기록합니다. 처음 실행되거나 종료되었을 때 초기 상태와 최종 상태를 로깅할 때 쓰입니다.
 
 ```go
 type StateLogger struct {
@@ -106,13 +108,13 @@ func NewStateLogger(service, scope, requestID string) *StateLogger {
 // 상태 전이(Transition): 이전 상태(From)와 이후 상태(To)를 명시적으로 기록
 // 버그 추적 시 "어떤 상태에서 넘어왔는가"를 파악하는 데 핵심적임
 func (l *StateLogger) Transition(entity string, from, to string, reason string) {
-    // Log format: [STATE] {Service} | {RequestID} | {Entity}: {From} -> {To} ({Reason})
+    // Log format: {"type":"transition", "service":"{Service}", "request_id":"{RequestID}", "entity":"{Entity}", "from":"{From}", "to":"{To}", "reason":"{Reason}"}
 }
 
 // 상태 스냅샷(Snapshot): 특정 시점의 객체 상태 전체를 덤프
 // 데이터 정합성 확인이나 디버깅 시점의 데이터 확인용
 func (l *StateLogger) Snapshot(entity string, data interface{}) {
-    // Log format: [STATE] {Service} | {RequestID} | {Entity}: {JSON_Dump}
+    // Log format: {"type":"snapshot", "service":"{Service}", "request_id":"{RequestID}", "entity":"{Entity}", "data":{JSON_Dump}}
 }
 ```
 
@@ -154,7 +156,7 @@ func (t *TrendCollector) StartFlushLoop(ctx context.Context, interval time.Durat
     for {
         select {
         case <-ticker.C:
-            // Log format: [TREND] {Service} | Window: 1m | req_total: 15000 | err_rate: 0.01%
+            // Log format: {"type":"trend", "service":"{Service}", "window":"1m", "metrics":{"req_total":15000, "err_rate":0.01}}
             t.resetCounters()
         case <-ctx.Done():
             return
