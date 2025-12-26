@@ -4,7 +4,7 @@ date: 2025-12-26T13:16:49+09:00
 author: snowmerak
 tags: ["log", "logging", "context"]
 categories: ["Design"]
-draft: true
+draft: false
 ---
 
 ## 배경
@@ -261,4 +261,14 @@ func (t *TrendCollector) StartFlushLoop(ctx context.Context, interval time.Durat
 
 ## 마치며
 
-원본 설계에는 Kafka와 Clickhouse를 포함한 
+원본 설계에서는 이 뿐만 아니라 로그 전달과 저장에 대한 부분도 포함되어 있습니다.
+
+전체 그림은 다음과 같습니다:
+1. Logos (App): 어플리케이션 내에서 `Span`, `State`, `Trend` 형태의 구조화된 로그를 생성합니다.
+2. Kafka: 생성된 로그를 실시간으로 수집하고 버퍼링합니다.
+3. ClickHouse: 대용량 로그를 컬럼 기반으로 저장하여 초고속 검색과 집계를 지원합니다.
+4. Grafana: 저장된 데이터를 시각화하여 대시보드로 제공합니다.
+
+하지만 아무리 좋은 파이프라인과 저장소가 있어도, 그 안에 담기는 데이터가 정제되지 않았다면(Garbage In) 결과물 또한 의미가 없습니다(Garbage Out). 그래서 인프라 구축에 앞서 "무엇을, 어떤 형태로, 왜 남겨야 하는가?"에 대한 고민을 먼저 해결하고자 했습니다.
+
+이 글이 여러분의 로깅 전략 수립에 작은 영감이 되었기를 바랍니다.
