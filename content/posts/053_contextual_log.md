@@ -218,13 +218,15 @@ func (t *TrendCollector) StartFlushLoop(ctx context.Context, interval time.Durat
     for {
         select {
         case <-ticker.C:
-            t.mu.Lock()
-            // 맵을 교체하여 스냅샷 생성 (Reset)
-            // currentCounters := t.counters
-            // t.counters = make(map[string]*atomic.Uint64)
-            // ... (Gauge, Histogram도 동일하게 처리)
-            t.mu.Unlock()
+            // Histogram은 맵 교체가 필요하므로 Lock 사용
+            t.histogramsLock.Lock()
+            // currentHistograms := t.histograms
+            // t.histograms = make(map[string]*Histogram)
+            t.histogramsLock.Unlock()
 
+            // Counter와 Gauge는 Atomic 연산이므로 Lock 없이 값만 읽고 초기화 가능
+            // (단, 엄밀한 일관성이 필요하다면 Lock 사용 고려)
+            
             // Log format example:
             // {
             //   "type": "trend",
