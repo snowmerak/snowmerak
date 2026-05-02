@@ -2,7 +2,7 @@
 title: "ElasticSearch/OpenSearch에서 ClickHouse로의 로그 마이그레이션: 성능과 경제성의 전환점"
 date: 2026-05-02T13:08:40+09:00
 tags: ["clickhouse", "elasticsearch", "opensearch", "logging", "data-warehouse", "migration"]
-author: "ayla"
+author: "rileyhalo"
 categories: ["Infrastructure", "Data Engineering"]
 draft: false
 ---
