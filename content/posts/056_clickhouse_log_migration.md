@@ -2,8 +2,8 @@
 title: "ElasticSearch/OpenSearch에서 ClickHouse로의 로그 마이그레이션: 성능과 경제성의 전환점"
 date: 2026-05-02T13:08:40+09:00
 tags: ["clickhouse", "elasticsearch", "opensearch", "logging", "data-warehouse", "migration"]
-author: "rileyhalo"
-categories: ["Design"]
+author: "snowmerak"
+categories: ["Infrastructure", "Data Engineering"]
 draft: false
 ---
 
@@ -306,14 +306,59 @@ clickhouse-client --query="INSERT INTO logs FORMAT JSONEachRow" < es_dump.json
 
 ---
 
+## 텍스트 검색: ClickHouse의 한계와 ElasticSearch/OpenSearch의 가치
+
+ClickHouse는 로그 분석에서 압도적인 성능을 보이지만, **텍스트 검색** 측면에서는 ES/OS와 명확한 차이가 있습니다. 마이그레이션을 고려할 때 이 차이를 정확히 이해해야 합니다.
+
+### BM25 관련성 스코어링 부재
+
+ES가 제공하는 가장 강력한 기능 중 하나는 **BM25(Best Matching 25) 알고리즘**을 통한 문서의 관련성 스코링입니다. ES는 각 문서 내 키워드의 빈도, 문서 길이, 전체 컬렉션에서의 희소성 등을 종합하여 "이 문서가 검색어와 얼마나 관련 있는가"를 점수로 매깁니다.
+
+ClickHouse에는 **내장된 관련성 스코링 기능이 없습니다**. `hasToken()`, `LIKE` 등으로 텍스트 패턴을 매칭할 수는 있지만, 결과가 "관련성 순"으로 정렬되지 않습니다.
+
+```sql
+-- ClickHouse: 텍스트 패턴 매칭 (순서 보장 없음)
+SELECT * FROM logs 
+WHERE hasToken(message, 'connection timeout')
+ORDER BY event_time DESC  -- 시간 기준 정렬만 가능
+```
+
+### 자연어 검색에서 ES가 얻는 것
+
+BM25와 관련성 스코링은 단순한 "기능"이 아닙니다. **사용자 대상 검색 서비스**에서 다음과 같은 가치를 제공합니다:
+
+- **검색 결과의 품질**: 사용자가 "connection timeout"을 검색했을 때, 가장 관련성이 높은 로그가 먼저 보입니다
+- **오타 허용(Fuzzy Matching)**: `connnection timeout` (오타)이라도 자연스럽게 찾아줍니다
+- **언어별 토크나이저**: 한국어(kkma), 영어(stemming) 등 언어 특화 처리로 정확한 매칭
+
+### 하지만 로그 분석에서는 이것이 큰 문제가 되지 않는 이유
+
+위 기능들이 모두 **사용자 대상 검색 서비스**(쇼핑몰 상품 검색, 뉴스 검색 등)에서 중요한 요소들입니다. 반면 로그 분석 워크로드에서는 다음과 같은 이유로 ClickHouse가 여전히 적합합니다:
+
+1. **정확한 매칭이 대부분**: 로그는 구조화된 데이터이므로 `status_code=500`, `service_name=api-gateway` 등 정확한 필드 값으로 필터링하는 경우가 압도적입니다
+2. **Relevance ranking이 필요 없는 경우**: 에러 패턴 검색은 "어떤 순서로 결과가 나오는지"보다 "모든 에러를 찾는 것"이 중요합니다
+3. **시간 기반 정렬이 일반적**: 로그는 대부분 `ORDER BY event_time DESC`로 최신순 정렬하므로, 관련성 스코링의 필요성이 낮습니다
+
+### ES/OS가 희생한 것 vs 얻은 것
+
+ES/OS가 BM25, fuzzy matching, geo-search 등을 제공하는 대가로 **희생한 것**이 있습니다:
+
+- **스토리지 오버헤드**: 인덱스 구축으로 인해 ClickHouse보다 10~20배 많은 디스크 공간 사용
+- **메모리 사용량**: JVM 힙 메모리 관리의 복잡성, GC 압력
+- **집계 쿼리 성능**: 샤드 간 집계(shard-level aggregation)로 인한 느린 응답 시간
+
+ES/OS는 **"검색 엔진"**으로서의 가치를 위해 이 trade-off를 감수했습니다. 반면 ClickHouse는 **"분석 데이터베이스"**로서 가치를 위해 검색 기능을 희생했습니다.
+
+---
+
 ## 결론
 
 ElasticSearch/OpenSearch는 로그 분석의 초기 단계에서 매우 유용한 도구였습니다. 하지만 로그 데이터의 규모가 증가하고 실시간 분석에 대한 요구가 복잡해지면서, 그 한계가 명확해지고 있습니다. [^5]
 
 ClickHouse로의 마이그레이션은 다음과 같은 이점을 제공합니다:
 
-✅ **성능**: 집계 쿼리 *10~25배* 빠른 응답 시간 (OTel 50B rows 벤치마크 기준)  
-✅ **경제성**: 스토리지 비용 *10~20배* 절감 [^4]  
+✅ **성능**: 집계 쿼리 10~25배 빠른 응답 시간 (OTel 50B rows 벤치마크 기준)  
+✅ **경제성**: 스토리지 비용 10~20x 절감 [^4]  
 ✅ **운영 단순화**: 클러스터 관리 부담 감소  
 ✅ **확장성**: 단일 노드에서도 대용량 처리 가능  
 
