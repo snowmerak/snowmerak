@@ -1,6 +1,7 @@
 ---
 title: "바이브코딩에 대한 생각"
 tags: ["ai", "developer"]
+date: 2026-06-21T14:45:20+09:00
 author: "snowmerak"
 categories: ["Philosophy"]
 draft: false
