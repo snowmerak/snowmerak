@@ -12,6 +12,9 @@ name = "snowmerak"
 email = "snowmerak@outlook.com"
 link = "https://snowmerak.pages.dev"
 
+# [security]
+# allowContent = ['^text/html$','^text/markdown$', 'image/png', 'image/svg', 'image/webp', 'image/jpeg']
+
 [menu]
 [[menu.main]]
 weight = 1
