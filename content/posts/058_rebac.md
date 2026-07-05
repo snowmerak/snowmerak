@@ -1,6 +1,6 @@
 ---
 title: "Opinionated Zanzibar"
-tags: ["ladder", "graphdb", "authenication"]
+tags: ["rebac", "zanzibar", "authorization", "graphdb"]
 date: 2026-07-04T16:45:20+09:00
 author: "snowmerak"
 categories: ["Design"]
@@ -11,7 +11,7 @@ draft: false
 
 ### 개요
 
-Zanzibar(이하 잔지바)는 구글에서 실제 사용하고 있으며, 수년 전에 논문을 통해 공개된 권한 관리 시스템입니다. 잔지바는 주로 그래프 튜플이란 것에 의해 권한 관계가 정의됩니다. 각각의 사용자, 권한 관계, 객체에 대해서 튜플 이용하여 아래와 같이 정의합니다.
+Zanzibar(이하 잔지바)는 구글에서 실제 사용하고 있으며, 수년 전에 논문을 통해 공개된 권한 관리 시스템입니다. 잔지바는 주로 관계 튜플이란 것에 의해 권한 관계가 정의됩니다. 각각의 사용자, 권한 관계, 객체에 대해서 튜플 이용하여 아래와 같이 정의합니다.
 
 ```
 document:roadmap#owner@user:alice
