@@ -120,5 +120,5 @@
   font-size: 0.82rem;
   white-space: pre-wrap;
   overflow-x: auto;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
