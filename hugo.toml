@@ -1,4 +1,4 @@
-baseURL = 'https://snowmerak.pages.dev/'
+baseURL = 'https://merak.saturday.ne.kr/'
 locale = 'ko-KR'
 title = 'SNOWMERAK'
 
@@ -59,6 +59,7 @@ url = "/search/"
 title = ""
 
 [params]
+locale = "ko-KR"
 defaultTheme = "auto"
 gitRepo = "https://github.com/snowmerak"
 dateFormat = "2006-01-02"
