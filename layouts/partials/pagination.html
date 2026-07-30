@@ -1,0 +1,36 @@
+{{- if gt .TotalPages 1 -}}
+  <nav class="mp-pagination blog-pagination" aria-label="페이지 이동">
+    <ul class="mp-pagination__list">
+      <li class="mp-pagination__item">
+        {{ if .HasPrev }}
+          <a class="mp-pagination__control" href="{{ .Prev.URL }}" aria-label="이전 페이지">
+            {{ partial "icon.html" (dict "name" "chevron-left") }}
+          </a>
+        {{ else }}
+          <span class="mp-pagination__control" aria-disabled="true">
+            {{ partial "icon.html" (dict "name" "chevron-left") }}
+          </span>
+        {{ end }}
+      </li>
+      {{ range .Pagers }}
+        <li class="mp-pagination__item">
+          <a class="mp-pagination__page" href="{{ .URL }}"{{ if eq .PageNumber $.PageNumber }} aria-current="page"{{ end }}>
+            {{ .PageNumber }}
+          </a>
+        </li>
+      {{ end }}
+      <li class="mp-pagination__item">
+        {{ if .HasNext }}
+          <a class="mp-pagination__control" href="{{ .Next.URL }}" aria-label="다음 페이지">
+            {{ partial "icon.html" (dict "name" "chevron-right") }}
+          </a>
+        {{ else }}
+          <span class="mp-pagination__control" aria-disabled="true">
+            {{ partial "icon.html" (dict "name" "chevron-right") }}
+          </span>
+        {{ end }}
+      </li>
+    </ul>
+    <span class="mp-pagination__meta">{{ .PageNumber }} / {{ .TotalPages }}</span>
+  </nav>
+{{- end -}}

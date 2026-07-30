@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <div class="archive-layout">
+    <header class="archive-header">
+      <p class="archive-header__context">{{ .Data.Singular }}</p>
+      <h1>{{ .Title }}</h1>
+      <p>{{ len .Pages }}개의 글</p>
+    </header>
+    {{ $paginator := .Paginate .Pages }}
+    <section class="post-list" aria-label="{{ .Title }}">
+      {{ range $paginator.Pages.ByDate.Reverse }}
+        {{ partial "post-entry.html" . }}
+      {{ end }}
+    </section>
+    {{ partial "pagination.html" $paginator }}
+  </div>
+{{ end }}

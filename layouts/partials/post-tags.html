@@ -1,0 +1,12 @@
+{{- with .Params.tags -}}
+  <ul class="post-tags" aria-label="태그">
+    {{- range . -}}
+      <li>
+        <a href="{{ printf "/tags/%s/" (. | urlize) | relLangURL }}">
+          {{ partial "icon.html" (dict "name" "tag") }}
+          <span>{{ . }}</span>
+        </a>
+      </li>
+    {{- end -}}
+  </ul>
+{{- end -}}

@@ -1,0 +1,97 @@
+.mp-card {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  padding: var(--space-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--mp-bg-surface);
+  box-shadow: var(--mp-shadow-soft);
+}
+
+.mp-card--oracle {
+  background: color-mix(in srgb, var(--mp-bg-surface) 86%, var(--mp-accent-400) 14%);
+}
+
+.mp-card--trace {
+  background: color-mix(in srgb, var(--mp-bg-surface) 86%, var(--mp-info-base) 14%);
+}
+
+.mp-card--gate {
+  background: color-mix(in srgb, var(--mp-bg-surface) 86%, var(--mp-success-base) 14%);
+}
+
+.mp-card--relic {
+  background: color-mix(in srgb, var(--mp-bg-surface) 86%, var(--mp-warning-base) 14%);
+}
+
+.mp-card--oracle .mp-card__eyebrow,
+.mp-card--oracle .mp-card__meta,
+.mp-card--trace .mp-card__eyebrow,
+.mp-card--trace .mp-card__meta,
+.mp-card--gate .mp-card__eyebrow,
+.mp-card--gate .mp-card__meta,
+.mp-card--relic .mp-card__eyebrow,
+.mp-card--relic .mp-card__meta {
+  color: var(--mp-text-tertiary);
+}
+
+.mp-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.mp-card__eyebrow {
+  margin-bottom: var(--space-1);
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mp-card__title {
+  color: var(--mp-text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mp-card__body {
+  font-size: 0.92rem;
+}
+
+.mp-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+
+.mp-card__actions {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: var(--space-1);
+}
+
+.mp-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--mp-accent-line);
+  background: var(--mp-bg-interactive);
+  line-height: 0;
+}
+
+.mp-icon .mp-symbol {
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}

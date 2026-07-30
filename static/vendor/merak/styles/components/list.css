@@ -1,0 +1,66 @@
+.mp-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-inline-start: var(--space-6);
+  color: var(--mp-text-secondary);
+}
+
+.mp-list li {
+  padding-inline-start: var(--space-1);
+}
+
+.mp-list li::marker {
+  color: var(--mp-accent-line);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.mp-list .mp-list {
+  margin-top: var(--space-2);
+}
+
+.mp-list--compact {
+  gap: var(--space-1);
+}
+
+.mp-list--task {
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.mp-list--task li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--mp-bg-inset);
+}
+
+.mp-list--task label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.mp-list--task input[type="checkbox"] {
+  flex: 0 0 auto;
+  margin: 0.2rem 0 0;
+}
+
+.mp-list__task-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.mp-list--task input[type="checkbox"]:checked + span,
+.mp-list--task input[type="checkbox"]:checked + .mp-list__task-body {
+  color: var(--mp-text-muted);
+  text-decoration: line-through;
+}

@@ -1,0 +1,124 @@
+.mp-command-shell {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--mp-bg-base);
+}
+
+.mp-command-shell:focus-within {
+  border-color: var(--mp-accent-line);
+  box-shadow: 0 0 0 3px var(--mp-signal-ring);
+}
+
+.mp-command-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mp-command-prefix {
+  color: var(--mp-accent-line);
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+.mp-command {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  color: var(--mp-text-primary);
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  font-family: var(--font-mono);
+}
+
+.mp-command::placeholder {
+  color: var(--mp-text-muted);
+}
+
+.mp-command-panel {
+  display: grid;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 0;
+}
+
+.mp-command-panel__label {
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mp-command-suggestions {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.mp-command-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 32px;
+  padding: 0 var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--mp-text-secondary);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.mp-command-suggestion:hover,
+.mp-command-suggestion.is-active {
+  border-color: transparent;
+  color: var(--mp-accent);
+  background: var(--mp-bg-selected);
+}
+
+.mp-command-suggestion__meta {
+  color: var(--mp-text-muted);
+  font-size: 0.7rem;
+}
+
+.mp-command-hint {
+  color: var(--mp-text-muted);
+  font-size: 0.82rem;
+}
+
+.mp-command-result {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--mp-bg-inset);
+}
+
+.mp-command-result__label {
+  color: var(--mp-accent-line);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mp-command-result__value {
+  color: var(--mp-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  word-break: break-word;
+}

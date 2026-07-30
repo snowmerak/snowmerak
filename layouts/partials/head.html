@@ -1,0 +1,26 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#12161f">
+{{ $pageTitle := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) }}
+{{ $description := .Description | default site.Params.description | default site.Title }}
+{{ if and (not .IsHome) .Summary }}
+  {{ $description = .Summary | plainify | htmlUnescape | strings.TrimSpace | truncate 160 }}
+{{ end }}
+<title>{{ $pageTitle }}</title>
+<meta name="description" content="{{ $description }}">
+<link rel="canonical" href="{{ .Permalink }}">
+<meta property="og:title" content="{{ $pageTitle }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+{{ with site.Params.author.name }}<meta name="author" content="{{ . }}">{{ end }}
+<link rel="stylesheet" href="{{ "vendor/merak/style.css" | relURL }}">
+{{ with resources.Get "css/blog.css" }}
+  {{ $styles := . | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
+{{ end }}
+{{ with .OutputFormats.Get "rss" }}
+  <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}">
+{{ end }}

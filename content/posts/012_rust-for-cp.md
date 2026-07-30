@@ -59,11 +59,11 @@ let mut a = 123;
 
 ## 패턴 매칭
 
-### Option<T>
+### Option&lt;T&gt;
 
 `Option<T>`은 타입 `T`를 가질 수도 있는 객체입니다. `Some(value)` 함수를 통해 입력받은 값을 가지는 `Option<T>` 객체를 반환합니다. `Some()` 대신 `None`을 반환하면 값을 가지지 않는 `Option<T>` 객체를 반환합니다.
 
-### Result<T, R>
+### Result&lt;T, R&gt;
 
 `Result<T, R>`은 타입 `T`와 `R`을 각각 결과값과 에러값으로 가지는 객체입니다. `Ok(value)` 함수를 통해 입력받은 값을 결과값으로 가지는 `Result<T, R>`을 반환합니다. `Err(value)` 함수를 사용하면 입력받은 값을 에러값으로 가지는 `Result<T, R>`을 반환합니다. 
 
@@ -81,7 +81,7 @@ let a = (1, 2.2, "str")
 
 `match` 문법은 다른 언어의 `switch`나 `when`과 비슷한 역할을 합니다. 하지만 러스트의 `match`는 그보다 훨씬 풍부한 기능을 가지고 있으며 유용하게 쓰입니다.
 
-#### Option<T>
+#### Option&lt;T&gt;
 
 ```rust
 fn main() {
@@ -101,7 +101,7 @@ fn main() {
 
 `match`는 `Option<T>`의 `Some`과 `None`을 분해할 수 있습니다. `Some(value)` 분기를 통해 값이 있다면 값을 받아오고 `None` 분기를 통해 값이 없을 때의 처리를 할 수 있습니다.
 
-#### Result<T, R>
+#### Result&lt;T, R&gt;
 
 ```rust
 fn main() {

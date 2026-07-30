@@ -1,0 +1,49 @@
+.mp-divider {
+  display: flex;
+  align-items: center;
+  border: none;
+  margin: var(--space-4) 0;
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mp-divider::before,
+.mp-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--mp-line-soft);
+}
+
+.mp-divider:not(:empty) {
+  gap: var(--space-3);
+}
+
+.mp-divider:empty {
+  height: 1px;
+  background-color: var(--mp-line-soft);
+}
+
+/* Vertical divider */
+.mp-divider--vertical {
+  display: inline-flex;
+  align-self: stretch;
+  width: 1px;
+  height: auto;
+  min-height: 1em;
+  margin: 0 var(--space-4);
+  background-color: var(--mp-line-soft);
+  border: none;
+  padding: 0;
+}
+
+/* Variants */
+.mp-divider--accent::before,
+.mp-divider--accent::after,
+.mp-divider--accent:empty {
+  background-color: var(--mp-line-muted);
+}

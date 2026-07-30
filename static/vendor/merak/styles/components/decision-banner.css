@@ -1,0 +1,123 @@
+.mp-decision-banner {
+  --banner-color: var(--mp-neutral-text);
+  --banner-bg: var(--mp-bg-inset);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--mp-text-secondary);
+  background: var(--banner-bg);
+  box-shadow: inset 3px 0 0 var(--banner-color);
+}
+
+.mp-decision-banner__icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border: 0;
+  border-radius: var(--radius-full);
+  color: var(--banner-color);
+  background: rgb(from var(--banner-color) r g b / 0.12);
+}
+
+.mp-decision-banner__icon .mp-symbol {
+  width: 12px;
+  height: 12px;
+  color: inherit;
+}
+
+.mp-decision-banner__body {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.mp-decision-banner__title {
+  color: var(--mp-text-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.mp-decision-banner__reason {
+  color: var(--mp-text-secondary);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.mp-decision-banner__meta {
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+.mp-decision-banner__aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.mp-decision-banner--granted {
+  --banner-color: var(--mp-success-base);
+}
+
+.mp-decision-banner--denied {
+  --banner-color: var(--mp-danger-base);
+}
+
+.mp-decision-banner--partial {
+  --banner-color: var(--mp-warning-base);
+}
+
+.mp-decision-banner--unknown {
+  --banner-color: var(--mp-neutral-base);
+}
+
+.mp-decision-banner--approval {
+  --banner-color: var(--mp-info-base);
+}
+
+.mp-decision-banner--compact {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  padding-block: var(--space-2);
+}
+
+.mp-decision-banner--compact .mp-decision-banner__icon {
+  margin-top: 0;
+}
+
+.mp-decision-banner--compact .mp-decision-banner__reason {
+  display: none;
+}
+
+.mp-decision-banner--compact .mp-decision-banner__meta {
+  display: none;
+}
+
+.mp-decision-banner-stack {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (max-width: 860px) {
+  .mp-decision-banner,
+  .mp-decision-banner--compact {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .mp-decision-banner__aside {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+}

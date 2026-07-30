@@ -1,0 +1,41 @@
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a class="site-brand" href="{{ site.Home.RelPermalink }}" aria-label="{{ site.Title }} 홈">
+      {{ site.Title }}
+    </a>
+    <button
+      class="site-menu-toggle mp-button mp-button--icon"
+      type="button"
+      aria-label="메뉴 열기"
+      aria-controls="site-navigation"
+      aria-expanded="false"
+      data-menu-toggle
+    >
+      <span class="site-menu-toggle__open">{{ partial "icon.html" (dict "name" "menu") }}</span>
+      <span class="site-menu-toggle__close">{{ partial "icon.html" (dict "name" "close") }}</span>
+    </button>
+    <nav id="site-navigation" class="site-navigation" aria-label="주 메뉴" data-site-navigation>
+      <ul class="site-navigation__list">
+        {{ range site.Menus.main }}
+          {{ $active := false }}
+          {{ if and $.IsHome (eq .Identifier "posts") }}
+            {{ $active = true }}
+          {{ else if eq .Identifier "posts" }}
+            {{ $active = eq $.Section "posts" }}
+          {{ else if eq .Identifier "tags" }}
+            {{ $active = eq $.Data.Singular "tag" }}
+          {{ else if eq .Identifier "categories" }}
+            {{ $active = eq $.Data.Singular "category" }}
+          {{ else if eq .Identifier "search" }}
+            {{ $active = eq $.Section "search" }}
+          {{ end }}
+          <li>
+            <a class="site-navigation__link{{ if $active }} is-active{{ end }}" href="{{ .URL | relLangURL }}"{{ if $active }} aria-current="page"{{ end }}>
+              {{ .Name }}
+            </a>
+          </li>
+        {{ end }}
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,34 @@
+<article class="post-entry">
+  <h2 class="post-entry__title">
+    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+  </h2>
+  {{ partial "post-meta.html" (dict "page" .) }}
+  {{ $quotes := findRESubmatch `(?s)\A\s*>[ \t]?([^\r\n]+)` .RawContent 1 }}
+  {{ $quoteText := "" }}
+  {{ if gt (len $quotes) 0 }}
+    {{ $firstQuote := index $quotes 0 }}
+    {{ $quoteText = index $firstQuote 1 | markdownify | plainify | strings.TrimSpace }}
+    <blockquote class="post-entry__quote">{{ $quoteText }}</blockquote>
+  {{ end }}
+  {{ $headings := findRESubmatch `(?m)^#{1,6}[ \t]+(.+)$` .RawContent 1 }}
+  {{ if gt (len $headings) 0 }}
+    {{ $firstHeading := index $headings 0 }}
+    <p class="post-entry__section">
+      <span aria-hidden="true">#</span> {{ index $firstHeading 1 | markdownify | plainify }}
+    </p>
+  {{ end }}
+  {{ $summary := .Summary | plainify | htmlUnescape | strings.TrimSpace }}
+  {{ with $quoteText }}
+    {{ $summary = strings.TrimPrefix . $summary | strings.TrimSpace }}
+  {{ end }}
+  <p class="post-entry__summary">
+    {{ $summary | truncate 240 }}
+  </p>
+  <div class="post-entry__footer">
+    <a class="post-entry__more" href="{{ .RelPermalink }}">
+      <span>Read more</span>
+      {{ partial "icon.html" (dict "name" "arrow-right") }}
+    </a>
+    {{ partial "post-tags.html" . }}
+  </div>
+</article>

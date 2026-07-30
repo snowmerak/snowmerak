@@ -1,0 +1,22 @@
+{{ define "main" }}
+  <div class="home-layout">
+    <section class="home-profile" aria-label="프로필">
+      {{ with site.Params.home.profile.avatarURL }}
+        <img class="home-profile__avatar" src="{{ . | relURL }}" width="112" height="128" alt="">
+      {{ end }}
+      {{ with site.Params.home.profile.subtitle }}
+        <p class="home-profile__subtitle">{{ . }}</p>
+      {{ end }}
+    </section>
+
+    {{ $posts := where site.RegularPages "Section" "posts" }}
+    {{ $posts = $posts.ByDate.Reverse }}
+    {{ $paginator := .Paginate $posts (site.Params.home.posts.paginate | default 8) }}
+    <section class="post-list" aria-label="최근 글">
+      {{ range $paginator.Pages }}
+        {{ partial "post-entry.html" . }}
+      {{ end }}
+    </section>
+    {{ partial "pagination.html" $paginator }}
+  </div>
+{{ end }}

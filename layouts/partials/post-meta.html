@@ -1,0 +1,52 @@
+{{- $page := .page -}}
+{{- $detailed := default false .detailed -}}
+<div class="post-meta{{ if $detailed }} post-meta--detailed{{ end }}" aria-label="글 정보">
+  {{ if $detailed }}
+    <div class="post-meta__row">
+      <span class="post-meta__item">
+        {{ partial "icon.html" (dict "name" "user") }}
+        <span>{{ $page.Params.author | default site.Params.author.name }}</span>
+      </span>
+      {{ with index $page.Params.categories 0 }}
+        <span class="post-meta__separator" aria-hidden="true">·</span>
+        <a class="post-meta__item" href="{{ printf "/categories/%s/" (. | urlize) | relLangURL }}">
+          {{ partial "icon.html" (dict "name" "folder") }}
+          <span>{{ . }}</span>
+        </a>
+      {{ end }}
+    </div>
+    <div class="post-meta__row">
+      <time class="post-meta__item" datetime="{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}">
+        {{ partial "icon.html" (dict "name" "calendar") }}
+        <span>{{ $page.Date.Format "2006-01-02" }}</span>
+      </time>
+      <span class="post-meta__separator post-meta__detail" aria-hidden="true">·</span>
+      <span class="post-meta__item post-meta__detail">
+        {{ partial "icon.html" (dict "name" "book") }}
+        <span>{{ $page.WordCount }} words</span>
+      </span>
+      <span class="post-meta__separator post-meta__detail" aria-hidden="true">·</span>
+      <span class="post-meta__item post-meta__detail">
+        {{ partial "icon.html" (dict "name" "clock") }}
+        <span>{{ $page.ReadingTime }} minutes</span>
+      </span>
+    </div>
+  {{ else }}
+    <span class="post-meta__item">
+      {{ partial "icon.html" (dict "name" "user") }}
+      <span>{{ $page.Params.author | default site.Params.author.name }}</span>
+    </span>
+    <span class="post-meta__separator" aria-hidden="true">·</span>
+    <time class="post-meta__item" datetime="{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}">
+      {{ partial "icon.html" (dict "name" "calendar") }}
+      <span>{{ $page.Date.Format "2006-01-02" }}</span>
+    </time>
+    {{ with index $page.Params.categories 0 }}
+      <span class="post-meta__separator" aria-hidden="true">·</span>
+      <a class="post-meta__item" href="{{ printf "/categories/%s/" (. | urlize) | relLangURL }}">
+        {{ partial "icon.html" (dict "name" "folder") }}
+        <span>{{ . }}</span>
+      </a>
+    {{ end }}
+  {{ end }}
+</div>

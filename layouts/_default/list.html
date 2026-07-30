@@ -1,0 +1,19 @@
+{{ define "main" }}
+  <div class="archive-layout">
+    <header class="archive-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}<p>{{ . }}</p>{{ end }}
+    </header>
+    {{ $paginator := .Paginate .RegularPages }}
+    <section class="post-list" aria-label="{{ .Title }}">
+      {{ range $paginator.Pages.ByDate.Reverse }}
+        {{ partial "post-entry.html" . }}
+      {{ else }}
+        <div class="mp-empty-state">
+          <p class="mp-empty-state__title">아직 글이 없습니다.</p>
+        </div>
+      {{ end }}
+    </section>
+    {{ partial "pagination.html" $paginator }}
+  </div>
+{{ end }}

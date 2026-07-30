@@ -1,0 +1,123 @@
+:root {
+  color-scheme: dark;
+
+  /*
+   * Brighter lavender-gray pastel dark.
+   * Structure = surface tiers + soft ambient lift.
+   * Signal = Alice Blue scale (slightly higher chroma).
+   */
+
+  /* Surfaces: deeper canvas so panels lift more clearly */
+  --mp-bg-canvas: #12161f;
+  --mp-bg-base: #181e2a;
+  --mp-bg-surface: #2a3142;
+  --mp-bg-inset: #161c28;
+  --mp-bg-elevated: #353d52;
+  --mp-bg-interactive: rgb(214 220 255 / 0.06);
+  --mp-bg-hover: rgb(214 220 255 / 0.1);
+  --mp-bg-selected: rgb(from var(--mp-accent-200) r g b / 0.08);
+
+  /* Dividers */
+  --mp-line-soft: rgb(214 220 255 / 0.06);
+  --mp-line-muted: rgb(214 220 255 / 0.1);
+
+  /* Text */
+  --mp-text-primary: #eef2fa;
+  --mp-text-secondary: #c9d1e2;
+  --mp-text-tertiary: #b0b9ce;
+  --mp-text-muted: #a0abc2;
+  --mp-text-disabled: #6f7a91;
+  --mp-text-inverse: #151925;
+
+  /* Alice Blue scale — slightly higher chroma */
+  --mp-accent-50: #f7fbff;
+  --mp-accent-100: #ebf4ff;
+  --mp-accent-200: #d7e9ff;
+  --mp-accent-300: #b9d6fa;
+  --mp-accent-400: #94bcec;
+  --mp-accent-500: #74a3da;
+  --mp-accent-600: #5a87be;
+  --mp-accent-700: #486c99;
+
+  /* Accent roles */
+  --mp-accent-strong: var(--mp-accent-100);
+  --mp-accent-soft: var(--mp-accent-200);
+  --mp-accent: var(--mp-accent-300);
+  --mp-accent-line: var(--mp-accent-400);
+  --mp-accent-deep: var(--mp-accent-600);
+  --mp-signal-wash: rgb(from var(--mp-accent-200) r g b / 0.14);
+  --mp-signal-ring: rgb(from var(--mp-accent-line) r g b / 0.26);
+
+  /* Success — pastel, a bit fresher */
+  --mp-success-weak: #1f322c;
+  --mp-success-soft: #2b463c;
+  --mp-success-base: #6db894;
+  --mp-success-text: #b6e4cb;
+
+  /* Warning */
+  --mp-warning-weak: #32291c;
+  --mp-warning-soft: #4a3b24;
+  --mp-warning-base: #c9a45a;
+  --mp-warning-text: #ecd09a;
+
+  /* Danger — dusty rose, slightly clearer */
+  --mp-danger-weak: #322225;
+  --mp-danger-soft: #4a2f34;
+  --mp-danger-base: #cc767c;
+  --mp-danger-text: #efb2b6;
+
+  /* Info = accent family, solid recessed washes (not translucent alpha) */
+  --mp-info-weak: #1c2738;
+  --mp-info-soft: #243448;
+  --mp-info-base: var(--mp-accent-400);
+  --mp-info-text: var(--mp-accent-200);
+
+  /* Neutral */
+  --mp-neutral-weak: #232937;
+  --mp-neutral-soft: #31384a;
+  --mp-neutral-base: #8b95ab;
+  --mp-neutral-text: #c2cadb;
+
+  /* Elevation — contact (near) + ambient (far); no bright edge stroke */
+  --mp-shadow-soft:
+    0 1px 2px rgb(0 0 0 / 0.42),
+    0 10px 24px rgb(0 0 0 / 0.28);
+  --mp-shadow-panel:
+    0 2px 4px rgb(0 0 0 / 0.46),
+    0 16px 36px rgb(0 0 0 / 0.34);
+  --mp-shadow-float:
+    0 4px 8px rgb(0 0 0 / 0.5),
+    0 28px 56px rgb(0 0 0 / 0.4);
+
+  /* Typography / space / radius / motion */
+  --font-sans: Pretendard, Inter, "Noto Sans KR", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Geist Mono", "SFMono-Regular", Consolas,
+    monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 999px;
+
+  --ease-system: cubic-bezier(0.2, 0, 0, 1);
+
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--mp-text-primary);
+  background: var(--mp-bg-canvas);
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

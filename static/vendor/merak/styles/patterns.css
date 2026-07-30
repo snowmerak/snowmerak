@@ -1,0 +1,66 @@
+.mp-section-heading,
+.section-heading {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 680px;
+}
+
+.mp-eyebrow,
+.eyebrow {
+  color: var(--mp-accent-line);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mp-grid,
+.example-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.mp-grid--wide,
+.example-grid--wide {
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+}
+
+.mp-grid--start {
+  align-items: start;
+}
+
+.mp-button-row,
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mp-badge-row,
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.mp-text--secondary {
+  color: var(--mp-text-secondary);
+}
+
+.mp-text--muted {
+  color: var(--mp-text-muted);
+}
+
+.mp-heading--section {
+  font-size: 1rem;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+@media (max-width: 860px) {
+  .mp-grid,
+  .mp-grid--wide { grid-template-columns: 1fr; }
+}

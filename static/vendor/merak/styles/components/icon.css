@@ -1,0 +1,119 @@
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.icon-sample {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  min-height: 144px;
+  padding: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--mp-bg-inset);
+}
+
+.icon-sample__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.icon-sample__title {
+  color: var(--mp-text-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.icon-sample__meaning {
+  color: var(--mp-text-muted);
+  font-size: 0.82rem;
+}
+
+.mp-symbol {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  color: var(--mp-accent-line);
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.mp-symbol--sm {
+  width: 18px;
+  height: 18px;
+}
+
+.mp-symbol--lg {
+  width: 32px;
+  height: 32px;
+}
+
+.mp-symbol--muted {
+  color: var(--mp-text-muted);
+}
+
+.mp-symbol--success {
+  color: var(--mp-success-base);
+}
+
+.mp-symbol--warning {
+  color: var(--mp-warning-base);
+}
+
+.mp-symbol--danger {
+  color: var(--mp-danger-base);
+}
+
+.icon-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.mp-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--mp-text-secondary);
+  background: var(--mp-bg-inset);
+  transition:
+    background-color 180ms var(--ease-system),
+    border-color 180ms var(--ease-system),
+    color 180ms var(--ease-system),
+    transform 120ms var(--ease-system);
+}
+
+.mp-icon-button:hover {
+  border-color: transparent;
+  color: var(--mp-text-primary);
+  background: var(--mp-bg-hover);
+  transform: translateY(-1px);
+}
+
+.mp-icon-button--danger:hover {
+  border-color: var(--mp-danger-base);
+  color: var(--mp-danger-text);
+  background: var(--mp-danger-soft);
+}
+
+@media (max-width: 860px) {
+  .icon-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .icon-grid {
+    grid-template-columns: 1fr;
+  }
+}

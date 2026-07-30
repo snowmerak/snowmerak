@@ -1,0 +1,179 @@
+.graph-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  min-height: 420px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--mp-bg-inset);
+}
+
+.graph-canvas {
+  position: relative;
+  min-height: 420px;
+  overflow: hidden;
+  background-image: none;
+}
+
+.mp-graph {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+}
+
+.mp-graph__edge {
+  stroke: var(--mp-bg-selected);
+  stroke-width: 1.35;
+  fill: none;
+}
+
+.mp-graph__edge--muted {
+  stroke: rgb(from var(--mp-neutral-base) r g b / 0.24);
+}
+
+.mp-graph__edge--selected {
+  stroke: var(--mp-accent-line);
+  stroke-width: 2;
+}
+
+.mp-graph__edge--risk {
+  stroke: var(--mp-danger-base);
+  stroke-dasharray: 4 4;
+}
+
+.mp-graph__node {
+  cursor: grab;
+  touch-action: none;
+}
+
+.mp-graph__node circle,
+.mp-graph__node rect {
+  stroke: var(--mp-line-muted);
+  stroke-width: 1.5;
+  fill: var(--mp-bg-surface);
+  transition:
+    fill 160ms var(--ease-system),
+    stroke 160ms var(--ease-system),
+    filter 160ms var(--ease-system),
+    transform 160ms var(--ease-system);
+}
+
+.mp-graph__node text {
+  fill: var(--mp-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  text-anchor: middle;
+}
+
+.mp-graph__node:hover circle,
+.mp-graph__node:hover rect {
+  stroke: var(--mp-accent-line);
+  fill: var(--mp-bg-elevated);
+}
+
+.mp-graph__node.is-dragging {
+  cursor: grabbing;
+}
+
+.mp-graph__node.is-dragging circle,
+.mp-graph__node.is-dragging rect {
+  stroke: var(--mp-accent);
+}
+
+.mp-graph__node--selected circle,
+.mp-graph__node--selected rect {
+  stroke: var(--mp-accent);
+  fill: var(--mp-bg-selected);
+}
+
+.mp-graph__node--selected text {
+  fill: var(--mp-accent);
+}
+
+.mp-graph__node--verified circle,
+.mp-graph__node--verified rect {
+  stroke: var(--mp-success-base);
+  fill: var(--mp-success-soft);
+}
+
+.mp-graph__node--risk circle,
+.mp-graph__node--risk rect {
+  stroke: var(--mp-danger-base);
+  fill: var(--mp-danger-soft);
+}
+
+.graph-inspector {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-left: 0;
+  background: var(--mp-bg-inset);
+}
+
+.graph-inspector__section {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.graph-inspector__label {
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.graph-inspector__value {
+  color: var(--mp-text-primary);
+  font-size: 0.92rem;
+}
+
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.graph-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.graph-legend__swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--mp-neutral-base);
+}
+
+.graph-legend__swatch--selected {
+  background: var(--mp-accent-line);
+}
+
+.graph-legend__swatch--verified {
+  background: var(--mp-success-base);
+}
+
+.graph-legend__swatch--risk {
+  background: var(--mp-danger-base);
+}
+
+@media (max-width: 860px) {
+  .graph-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-inspector {
+    border-top: 0;
+    border-left: 0;
+  }
+}

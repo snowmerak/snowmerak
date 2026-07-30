@@ -1,0 +1,69 @@
+{{ define "main" }}
+  <div class="article-layout">
+    <article class="article">
+      <header class="article-header">
+        {{ partial "post-meta.html" (dict "page" . "detailed" true) }}
+        <h1>{{ .Title }}</h1>
+      </header>
+
+      {{ if .TableOfContents }}
+        <details class="article-toc-mobile mp-card">
+          <summary>이 글의 목차</summary>
+          {{ .TableOfContents | replaceRE `id="TableOfContents"` `id="TableOfContentsMobile"` | safeHTML }}
+        </details>
+      {{ end }}
+
+      <div class="article-content mp-markdown" data-article-content>
+        {{ .Content }}
+      </div>
+
+      <div class="article-end-tags">
+        {{ partial "post-tags.html" . }}
+      </div>
+
+      <nav class="article-nav" aria-label="이전 및 다음 글">
+        <div class="article-nav__item">
+          {{ with .PrevInSection }}
+            <a href="{{ .RelPermalink }}">
+              <span class="article-nav__label">{{ partial "icon.html" (dict "name" "arrow-left") }} 이전 글</span>
+              <strong>{{ .Title }}</strong>
+            </a>
+          {{ end }}
+        </div>
+        <div class="article-nav__item article-nav__item--next">
+          {{ with .NextInSection }}
+            <a href="{{ .RelPermalink }}">
+              <span class="article-nav__label">다음 글 {{ partial "icon.html" (dict "name" "arrow-right") }}</span>
+              <strong>{{ .Title }}</strong>
+            </a>
+          {{ end }}
+        </div>
+      </nav>
+
+      {{ if and site.Params.page.comment.enable (not hugo.IsServer) }}
+        {{ with site.Params.page.comment.utterances }}
+          {{ if .enable }}
+            <section class="article-comments" aria-label="댓글">
+              <script
+                src="https://utteranc.es/client.js"
+                repo="{{ .repo }}"
+                issue-term="{{ .issueTerm }}"
+                label="{{ .label }}"
+                theme="github-dark"
+                crossorigin="anonymous"
+                async
+              ></script>
+            </section>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    </article>
+
+    {{ if .TableOfContents }}
+      <aside class="article-toc" aria-label="이 글의 목차">
+        <p class="article-toc__title">ON THIS PAGE</p>
+        {{ .TableOfContents }}
+      </aside>
+    {{ end }}
+  </div>
+{{ end }}

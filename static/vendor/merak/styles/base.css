@@ -1,0 +1,161 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--mp-bg-canvas);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--mp-bg-canvas);
+}
+
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+a {
+  color: var(--mp-accent-line);
+  text-decoration: none;
+  transition:
+    color 180ms var(--ease-system),
+    border-color 180ms var(--ease-system),
+    background-color 180ms var(--ease-system);
+}
+
+a:hover {
+  color: var(--mp-accent);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--mp-accent-line);
+  outline-offset: 2px;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+merak-tabs,
+merak-command,
+merak-graph,
+merak-inspector,
+merak-gate-card,
+merak-agent-panel,
+merak-timeline,
+merak-toast-region {
+  display: block;
+}
+
+merak-sidebar:not(.mp-sidebar) {
+  display: contents;
+}
+
+merak-sidebar.mp-sidebar {
+  display: block;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-block: 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+p {
+  color: var(--mp-text-secondary);
+}
+
+code {
+  padding: 0.15rem 0.35rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--mp-accent-soft);
+  background: var(--mp-bg-inset);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+
+@media (forced-colors: active) {
+  .mp-card,
+  .mp-button,
+  .mp-alert,
+  .mp-toast,
+  .mp-decision-banner,
+  .mp-filter-bar,
+  .mp-dialog,
+  .mp-drawer,
+  .mp-popover,
+  .mp-dropdown-menu,
+  .mp-command-palette,
+  .mp-context-menu,
+  .table-shell,
+  .graph-shell,
+  .app-shell-preview,
+  .agent-panel,
+  .gate-card,
+  .mp-confidence-meter,
+  .mp-evidence-list__item,
+  .mp-input,
+  .mp-textarea,
+  .mp-select,
+  .mp-search,
+  .mp-tabs__tab {
+    border: 1px solid CanvasText;
+  }
+
+  .mp-button:focus-visible,
+  .mp-input:focus-visible,
+  .mp-textarea:focus-visible,
+  .mp-select:focus-visible,
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,21 @@
+{{ define "main" }}
+  <div class="terms-layout">
+    <header class="archive-header">
+      <h1>{{ .Title }}</h1>
+      <p>주제별로 기록을 탐색합니다.</p>
+    </header>
+    <ul class="mp-link-list terms-list">
+      {{ range .Data.Terms.Alphabetical }}
+        <li class="mp-link-list__item">
+          <a class="mp-link-list__link" href="{{ .Page.RelPermalink }}">
+            <span class="mp-link-list__content">
+              <strong class="mp-link-list__title">{{ .Page.Title }}</strong>
+              <span class="mp-link-list__meta">{{ .Count }} posts</span>
+            </span>
+            {{ partial "icon.html" (dict "name" "chevron-right") }}
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+  </div>
+{{ end }}

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale | default "ko-KR" }}">
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body class="kind-{{ .Kind }}{{ if .IsHome }} is-home{{ end }}">
+    <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
+    {{ partial "header.html" . }}
+    <main id="main-content" class="site-main">
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{ partial "footer.html" . }}
+    <button class="back-to-top mp-button mp-button--icon" type="button" aria-label="맨 위로 이동" data-back-to-top hidden>
+      {{ partial "icon.html" (dict "name" "arrow-up") }}
+    </button>
+    {{ with resources.Get "js/site.js" }}
+      {{ $script := . | minify | fingerprint }}
+      <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}" defer></script>
+    {{ end }}
+  </body>
+</html>

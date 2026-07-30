@@ -1,0 +1,89 @@
+.gate-card {
+  --gate-color: var(--mp-success-base);
+
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--mp-bg-surface);
+  box-shadow: var(--mp-shadow-soft), inset 3px 0 0 var(--gate-color);
+}
+
+.gate-card--denied {
+  --gate-color: var(--mp-danger-base);
+}
+
+.gate-card__equation {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, auto));
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.gate-card__node {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--mp-bg-inset);
+}
+
+.gate-card__label {
+  color: var(--mp-text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gate-card__value {
+  overflow: hidden;
+  color: var(--mp-text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gate-card__arrow {
+  display: grid;
+  place-items: center;
+  color: var(--mp-accent-line);
+  line-height: 0;
+}
+
+.gate-card__arrow .mp-symbol {
+  width: 14px;
+  height: 14px;
+  color: inherit;
+}
+
+.gate-card__details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.gate-card__detail {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--mp-bg-inset);
+}
+
+@media (max-width: 860px) {
+  .gate-card__equation,
+  .gate-card__details {
+    grid-template-columns: 1fr;
+  }
+
+  .gate-card__arrow {
+    display: none;
+  }
+}

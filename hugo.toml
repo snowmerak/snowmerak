@@ -1,7 +1,16 @@
 baseURL = 'https://snowmerak.pages.dev/'
-languageCode = 'ko-kr'
+locale = 'ko-KR'
 title = 'SNOWMERAK'
-theme = 'LoveIt'
+
+[markup]
+[markup.highlight]
+codeFences = true
+guessSyntax = true
+lineNos = false
+noClasses = false
+
+[pagination]
+pagerSize = 8
 
 [taxonomies]
 tag = "tags"

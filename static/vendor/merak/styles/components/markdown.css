@@ -1,0 +1,74 @@
+/* Scoped rhythm for renderMerakMarkdown() output. CommonMark softbreaks stay spaces. */
+.mp-markdown {
+  display: grid;
+  gap: var(--space-4);
+  color: var(--mp-text-secondary);
+  line-height: 1.65;
+}
+
+.mp-markdown > :first-child {
+  margin-block-start: 0;
+}
+
+.mp-markdown > :last-child {
+  margin-block-end: 0;
+}
+
+.mp-markdown h1,
+.mp-markdown h2,
+.mp-markdown h3,
+.mp-markdown h4,
+.mp-markdown h5,
+.mp-markdown h6 {
+  color: var(--mp-text-primary);
+  line-height: 1.3;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.mp-markdown h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.mp-markdown h2 {
+  font-size: 1.2rem;
+  font-weight: 650;
+}
+
+.mp-markdown h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.mp-markdown h4,
+.mp-markdown h5,
+.mp-markdown h6 {
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.mp-markdown p {
+  margin-block: 0;
+  line-height: 1.65;
+}
+
+.mp-markdown li > p {
+  margin-block: 0;
+}
+
+.mp-markdown li > p + p {
+  margin-block-start: var(--space-2);
+}
+
+.mp-markdown .mp-list {
+  gap: var(--space-2);
+}
+
+.mp-markdown .mp-divider {
+  margin-block: 0;
+}
+
+.mp-markdown .mp-command-result__value {
+  display: block;
+}

@@ -1,0 +1,598 @@
+.form-grid,
+.mp-form-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.form-grid--two,
+.mp-form-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Field shell — public BEM; field-group remains a legacy alias */
+.mp-field,
+.field-group {
+  --field-message-color: var(--mp-text-muted);
+
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+fieldset.mp-field {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+}
+
+fieldset.mp-field > legend.mp-field__label {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.mp-field--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.field-row,
+.mp-field__control-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.mp-field__label,
+.mp-label {
+  color: var(--mp-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mp-field__hint,
+.mp-help {
+  color: var(--mp-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.mp-field__message,
+.mp-error {
+  color: var(--field-message-color, var(--mp-danger-text));
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.mp-field__message--error,
+.mp-error {
+  --field-message-color: var(--mp-danger-text);
+
+  color: var(--mp-danger-text);
+}
+
+.mp-field__message--warning {
+  --field-message-color: var(--mp-warning-text);
+
+  color: var(--mp-warning-text);
+}
+
+.mp-field__message--success {
+  --field-message-color: var(--mp-success-text);
+
+  color: var(--mp-success-text);
+}
+
+.mp-field--invalid {
+  --field-control-border: rgb(from var(--mp-danger-base) r g b / 0.8);
+  --field-control-ring: rgb(from var(--mp-danger-base) r g b / 0.1);
+  --field-message-color: var(--mp-danger-text);
+}
+
+.mp-field--warning {
+  --field-control-border: rgb(from var(--mp-warning-base) r g b / 0.85);
+  --field-control-ring: rgb(from var(--mp-warning-base) r g b / 0.12);
+  --field-message-color: var(--mp-warning-text);
+}
+
+.mp-field--success {
+  --field-control-border: rgb(from var(--mp-success-base) r g b / 0.85);
+  --field-control-ring: rgb(from var(--mp-success-base) r g b / 0.12);
+  --field-message-color: var(--mp-success-text);
+}
+
+.mp-field--disabled {
+  opacity: 1;
+}
+
+.mp-field--disabled .mp-field__label,
+.mp-field--disabled .mp-label,
+.mp-field--disabled .mp-field__hint,
+.mp-field--disabled .mp-help {
+  color: var(--mp-text-muted);
+}
+
+.mp-field--disabled .mp-input,
+.mp-field--disabled .mp-textarea,
+.mp-field--disabled .mp-select {
+  color: var(--mp-text-muted);
+  background: var(--mp-bg-inset);
+  opacity: 0.85;
+}
+
+/* Text controls */
+.mp-input,
+.mp-textarea,
+.mp-select {
+  width: 100%;
+  border: 1px solid transparent;
+
+  /* form shell uses sunken fill; validation/focus still use ring + border-color */
+  border-radius: var(--radius-sm);
+  color: var(--mp-text-primary);
+  background: var(--mp-bg-inset);
+  transition:
+    background-color 180ms var(--ease-system),
+    border-color 180ms var(--ease-system),
+    box-shadow 180ms var(--ease-system);
+}
+
+.mp-input,
+.mp-select {
+  min-height: 40px;
+  padding: 0 var(--space-3);
+}
+
+.mp-textarea {
+  min-height: 112px;
+  padding: var(--space-3);
+  resize: vertical;
+  height: 100%;
+}
+
+.mp-input::placeholder,
+.mp-textarea::placeholder {
+  color: var(--mp-text-muted);
+}
+
+.mp-input:hover:not(:disabled),
+.mp-textarea:hover:not(:disabled),
+.mp-select:hover:not(:disabled) {
+  border-color: var(--field-control-border, transparent);
+  background: var(--mp-bg-base);
+}
+
+.mp-input:focus,
+.mp-textarea:focus,
+.mp-select:focus,
+.mp-input:focus-visible,
+.mp-textarea:focus-visible,
+.mp-select:focus-visible {
+  border-color: var(--mp-accent-line);
+  background: var(--mp-bg-base);
+  box-shadow: 0 0 0 3px var(--mp-signal-ring);
+  outline: none;
+}
+
+.mp-field--invalid .mp-input:focus,
+.mp-field--invalid .mp-textarea:focus,
+.mp-field--invalid .mp-select:focus,
+.mp-field--invalid .mp-input:focus-visible,
+.mp-field--invalid .mp-textarea:focus-visible,
+.mp-field--invalid .mp-select:focus-visible,
+.mp-field--warning .mp-input:focus,
+.mp-field--warning .mp-textarea:focus,
+.mp-field--warning .mp-select:focus,
+.mp-field--warning .mp-input:focus-visible,
+.mp-field--warning .mp-textarea:focus-visible,
+.mp-field--warning .mp-select:focus-visible,
+.mp-field--success .mp-input:focus,
+.mp-field--success .mp-textarea:focus,
+.mp-field--success .mp-select:focus,
+.mp-field--success .mp-input:focus-visible,
+.mp-field--success .mp-textarea:focus-visible,
+.mp-field--success .mp-select:focus-visible {
+  border-color: var(--field-control-border);
+  box-shadow: 0 0 0 3px var(--field-control-ring);
+}
+
+.mp-input:disabled,
+.mp-textarea:disabled,
+.mp-select:disabled {
+  cursor: not-allowed;
+  color: var(--mp-text-muted);
+  background: var(--mp-neutral-weak);
+  opacity: 0.72;
+}
+
+.mp-input[aria-invalid="true"],
+.mp-textarea[aria-invalid="true"],
+.mp-select[aria-invalid="true"],
+.mp-input.mp-input--invalid,
+.mp-textarea.mp-textarea--invalid,
+.mp-select.mp-select--invalid {
+  border-color: rgb(from var(--mp-danger-base) r g b / 0.8);
+  box-shadow: 0 0 0 3px rgb(from var(--mp-danger-base) r g b / 0.1);
+}
+
+.mp-input.mp-input--warning,
+.mp-textarea.mp-textarea--warning,
+.mp-select.mp-select--warning,
+.mp-input[data-state="warning"],
+.mp-textarea[data-state="warning"],
+.mp-select[data-state="warning"] {
+  border-color: rgb(from var(--mp-warning-base) r g b / 0.85);
+  box-shadow: 0 0 0 3px rgb(from var(--mp-warning-base) r g b / 0.12);
+}
+
+.mp-input.mp-input--success,
+.mp-textarea.mp-textarea--success,
+.mp-select.mp-select--success,
+.mp-input[data-state="success"],
+.mp-textarea[data-state="success"],
+.mp-select[data-state="success"] {
+  border-color: rgb(from var(--mp-success-base) r g b / 0.85);
+  box-shadow: 0 0 0 3px rgb(from var(--mp-success-base) r g b / 0.12);
+}
+
+.mp-select {
+  appearance: none;
+  padding-right: 36px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--mp-text-muted) 50%),
+    linear-gradient(135deg, var(--mp-text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 17px) 17px,
+    calc(100% - 12px) 17px;
+  background-repeat: no-repeat;
+  background-size: 5px 5px;
+  cursor: pointer;
+}
+
+.mp-select:disabled {
+  cursor: not-allowed;
+}
+
+.mp-select option {
+  color: var(--mp-text-primary);
+  background: var(--mp-bg-surface);
+}
+
+.mp-select option:checked {
+  color: var(--mp-bg-base);
+  background: var(--mp-accent-line);
+}
+
+/* Search */
+.mp-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--mp-text-muted);
+  background: var(--mp-bg-inset);
+  transition:
+    background-color 180ms var(--ease-system),
+    border-color 180ms var(--ease-system),
+    box-shadow 180ms var(--ease-system);
+}
+
+.mp-search:hover {
+  border-color: transparent;
+  background: var(--mp-bg-base);
+}
+
+.mp-search:focus-within {
+  border-color: var(--mp-accent-line);
+  background: var(--mp-bg-base);
+  box-shadow: 0 0 0 3px var(--mp-signal-ring);
+}
+
+.mp-search__icon,
+.mp-search .mp-symbol {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.mp-search .mp-input {
+  flex: 1 1 auto;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  color: var(--mp-text-primary);
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+.mp-search .mp-input:hover,
+.mp-search .mp-input:focus,
+.mp-search .mp-input:focus-visible {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Choice row (checkbox / radio labels) */
+.mp-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--mp-text-secondary);
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.mp-choice:has(:disabled) {
+  cursor: not-allowed;
+  color: var(--mp-text-muted);
+  opacity: 0.72;
+}
+
+.mp-checkbox,
+.mp-radio {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 0;
+  background: var(--mp-bg-base);
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color 180ms var(--ease-system),
+    border-color 180ms var(--ease-system),
+    box-shadow 180ms var(--ease-system);
+}
+
+.mp-checkbox {
+  border-radius: var(--radius-sm);
+}
+
+.mp-radio {
+  border-radius: var(--radius-full);
+}
+
+.mp-checkbox:hover:not(:disabled),
+.mp-radio:hover:not(:disabled) {
+  border-color: var(--mp-text-muted);
+  background: var(--mp-bg-base);
+}
+
+.mp-checkbox:focus-visible,
+.mp-radio:focus-visible {
+  outline: none;
+  border-color: var(--mp-accent-line);
+  box-shadow: 0 0 0 3px var(--mp-signal-ring);
+}
+
+.mp-checkbox:checked,
+.mp-radio:checked {
+  border-color: var(--mp-accent-line);
+  background: var(--mp-accent);
+}
+
+.mp-checkbox:checked::before {
+  width: 8px;
+  height: 5px;
+  content: "";
+  border-bottom: 2px solid var(--mp-bg-base);
+  border-left: 2px solid var(--mp-bg-base);
+  transform: translateY(-1px) rotate(-45deg);
+}
+
+.mp-radio:checked::before {
+  width: 6px;
+  height: 6px;
+  content: "";
+  border-radius: var(--radius-full);
+  background: var(--mp-bg-base);
+}
+
+.mp-checkbox:disabled,
+.mp-radio:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.mp-checkbox[aria-invalid="true"],
+.mp-radio[aria-invalid="true"],
+.mp-checkbox.mp-checkbox--invalid,
+.mp-radio.mp-radio--invalid {
+  border-color: rgb(from var(--mp-danger-base) r g b / 0.85);
+}
+
+.mp-checkbox[aria-invalid="true"]:checked,
+.mp-radio[aria-invalid="true"]:checked,
+.mp-checkbox.mp-checkbox--invalid:checked,
+.mp-radio.mp-radio--invalid:checked {
+  border-color: var(--mp-danger-base);
+  background: rgb(from var(--mp-danger-base) r g b / 0.85);
+}
+
+.mp-checkbox.mp-checkbox--warning,
+.mp-radio.mp-radio--warning {
+  border-color: rgb(from var(--mp-warning-base) r g b / 0.85);
+}
+
+.mp-checkbox.mp-checkbox--warning:checked,
+.mp-radio.mp-radio--warning:checked {
+  border-color: var(--mp-warning-base);
+  background: var(--mp-warning-base);
+}
+
+.mp-checkbox.mp-checkbox--success,
+.mp-radio.mp-radio--success {
+  border-color: rgb(from var(--mp-success-base) r g b / 0.85);
+}
+
+.mp-checkbox.mp-checkbox--success:checked,
+.mp-radio.mp-radio--success:checked {
+  border-color: var(--mp-success-base);
+  background: var(--mp-success-base);
+}
+
+/* Switch — public API; mp-toggle remains a legacy alias */
+.mp-switch,
+.mp-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--mp-text-secondary);
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.mp-switch:has(:disabled),
+.mp-toggle:has(:disabled) {
+  cursor: not-allowed;
+  color: var(--mp-text-muted);
+  opacity: 0.72;
+}
+
+.mp-switch > input[type="checkbox"],
+.mp-switch__input,
+.mp-toggle > input[type="checkbox"] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: -1px;
+}
+
+.mp-switch__track,
+.mp-toggle__track {
+  position: relative;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--mp-bg-base);
+  transition:
+    background-color 180ms var(--ease-system),
+    border-color 180ms var(--ease-system),
+    box-shadow 180ms var(--ease-system);
+}
+
+.mp-switch__track::before,
+.mp-toggle__track::before {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  content: "";
+  border-radius: var(--radius-full);
+  background: var(--mp-text-muted);
+  transition:
+    background-color 180ms var(--ease-system),
+    transform 180ms var(--ease-system);
+}
+
+.mp-switch:hover:not(:has(:disabled)) .mp-switch__track,
+.mp-toggle:hover:not(:has(:disabled)) .mp-toggle__track {
+  border-color: var(--mp-text-muted);
+}
+
+.mp-switch > input[type="checkbox"]:checked + .mp-switch__track,
+.mp-switch__input:checked + .mp-switch__track,
+.mp-toggle > input[type="checkbox"]:checked + .mp-toggle__track {
+  border-color: var(--mp-accent-line);
+  background: var(--mp-bg-selected);
+}
+
+.mp-switch > input[type="checkbox"]:checked + .mp-switch__track::before,
+.mp-switch__input:checked + .mp-switch__track::before,
+.mp-toggle > input[type="checkbox"]:checked + .mp-toggle__track::before {
+  background: var(--mp-accent);
+  transform: translateX(18px);
+}
+
+.mp-switch > input[type="checkbox"]:focus-visible + .mp-switch__track,
+.mp-switch__input:focus-visible + .mp-switch__track,
+.mp-toggle > input[type="checkbox"]:focus-visible + .mp-toggle__track {
+  outline: none;
+  border-color: var(--mp-accent-line);
+  box-shadow: 0 0 0 3px var(--mp-signal-ring);
+}
+
+.mp-switch > input[type="checkbox"]:disabled + .mp-switch__track,
+.mp-switch__input:disabled + .mp-switch__track,
+.mp-toggle > input[type="checkbox"]:disabled + .mp-toggle__track {
+  opacity: 0.6;
+}
+
+.mp-switch--invalid > input[type="checkbox"] + .mp-switch__track,
+.mp-switch > input[type="checkbox"][aria-invalid="true"] + .mp-switch__track {
+  border-color: rgb(from var(--mp-danger-base) r g b / 0.85);
+}
+
+.mp-switch--invalid > input[type="checkbox"]:checked + .mp-switch__track,
+.mp-switch > input[type="checkbox"][aria-invalid="true"]:checked + .mp-switch__track {
+  border-color: var(--mp-danger-base);
+  background: rgb(from var(--mp-danger-base) r g b / 0.16);
+}
+
+.mp-switch--invalid > input[type="checkbox"]:checked + .mp-switch__track::before,
+.mp-switch > input[type="checkbox"][aria-invalid="true"]:checked + .mp-switch__track::before {
+  background: var(--mp-danger-base);
+}
+
+.mp-switch--warning > input[type="checkbox"] + .mp-switch__track {
+  border-color: rgb(from var(--mp-warning-base) r g b / 0.85);
+}
+
+.mp-switch--warning > input[type="checkbox"]:checked + .mp-switch__track {
+  border-color: var(--mp-warning-base);
+  background: rgb(from var(--mp-warning-base) r g b / 0.16);
+}
+
+.mp-switch--warning > input[type="checkbox"]:checked + .mp-switch__track::before {
+  background: var(--mp-warning-base);
+}
+
+.mp-switch--success > input[type="checkbox"] + .mp-switch__track {
+  border-color: rgb(from var(--mp-success-base) r g b / 0.85);
+}
+
+.mp-switch--success > input[type="checkbox"]:checked + .mp-switch__track {
+  border-color: var(--mp-success-base);
+  background: rgb(from var(--mp-success-base) r g b / 0.16);
+}
+
+.mp-switch--success > input[type="checkbox"]:checked + .mp-switch__track::before {
+  background: var(--mp-success-base);
+}
+
+.mp-switch__label {
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .form-grid--two,
+  .mp-form-grid--two {
+    grid-template-columns: 1fr;
+  }
+}

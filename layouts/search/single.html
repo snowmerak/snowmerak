@@ -1,0 +1,46 @@
+{{ define "main" }}
+  <div class="search-layout" data-search>
+    <header class="archive-header">
+      <h1>Search</h1>
+      <p>제목, 본문 요약, 카테고리와 태그에서 찾습니다.</p>
+    </header>
+    <div class="search-panel mp-card">
+      <label class="mp-field" for="blog-search">
+        <span class="mp-field__label">검색어</span>
+        <span class="mp-search">
+          {{ partial "icon.html" (dict "name" "search") }}
+          <input
+            id="blog-search"
+            class="mp-input"
+            type="search"
+            autocomplete="off"
+            placeholder="예: Go, architecture, AI"
+            data-search-input
+          >
+        </span>
+      </label>
+      <p class="search-panel__status" aria-live="polite" data-search-status>
+        검색어를 입력하면 글을 바로 필터링합니다.
+      </p>
+    </div>
+
+    <section class="search-results" aria-label="검색 결과" data-search-results>
+      {{ range (where site.RegularPages "Section" "posts").ByDate.Reverse }}
+        {{ $searchText := printf "%s %s %s %s" .Title (.Summary | plainify) (delimit (.Params.tags | default slice) " ") (delimit (.Params.categories | default slice) " ") }}
+        <article class="search-result" data-search-item data-search-text="{{ $searchText | lower | htmlEscape }}" hidden>
+          <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          {{ partial "post-meta.html" (dict "page" .) }}
+          <p>{{ .Summary | plainify | htmlUnescape | strings.TrimSpace | truncate 180 }}</p>
+        </article>
+      {{ end }}
+    </section>
+    <noscript>
+      <div class="mp-alert mp-alert--warning">
+        <div class="mp-alert__content">
+          <p class="mp-alert__title">JavaScript가 필요합니다.</p>
+          <p class="mp-alert__message">이 검색은 브라우저에서 글 목록을 필터링합니다.</p>
+        </div>
+      </div>
+    </noscript>
+  </div>
+{{ end }}

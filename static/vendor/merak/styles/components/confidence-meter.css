@@ -1,0 +1,112 @@
+.mp-confidence-meter {
+  --meter-color: var(--mp-neutral-base);
+  --meter-bg: var(--mp-bg-inset);
+  --mp-confidence: 0%;
+
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--meter-bg);
+}
+
+.mp-confidence-meter__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.mp-confidence-meter__label {
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mp-confidence-meter__value {
+  color: var(--mp-text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.mp-confidence-meter__track {
+  height: 6px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--mp-bg-base);
+}
+
+.mp-confidence-meter__fill {
+  width: var(--mp-confidence);
+  height: 100%;
+  background: var(--meter-color);
+  transition: width 180ms var(--ease-system);
+}
+
+.mp-confidence-meter__meta {
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+.mp-confidence-meter__scale {
+  display: flex;
+  justify-content: space-between;
+  color: var(--mp-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mp-confidence-meter--high {
+  --meter-color: var(--mp-success-base);
+}
+
+.mp-confidence-meter--medium {
+  --meter-color: var(--mp-warning-base);
+}
+
+.mp-confidence-meter--low {
+  --meter-color: var(--mp-danger-base);
+}
+
+.mp-confidence-meter--partial {
+  --meter-color: var(--mp-info-base);
+}
+
+.mp-confidence-meter--unknown {
+  --meter-color: var(--mp-neutral-base);
+}
+
+.mp-confidence-meter--compact {
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+}
+
+.mp-confidence-meter--compact .mp-confidence-meter__track {
+  height: 4px;
+}
+
+.mp-confidence-meter--compact .mp-confidence-meter__label {
+  font-size: 0.62rem;
+}
+
+.mp-confidence-meter--compact .mp-confidence-meter__value {
+  font-size: 0.74rem;
+}
+
+.mp-confidence-meter-stack {
+  display: grid;
+  gap: var(--space-3);
+}
